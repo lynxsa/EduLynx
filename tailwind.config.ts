@@ -13,6 +13,15 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        LYNXPurple: "#3726a6",
+        LYNXLight: "#a096e7",
+        LYNXLavendar: "#E6E6FA",
+        LYNXThistle: "#D8BFD8",
+        LYNXMauve: "#E0B0FF",
+        LYNXLightLavendar: "#F3E5F5",
+        LYNXHelio:"#DF73FF"
+      },
     },
   },
   plugins: [],
