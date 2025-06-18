@@ -1,5 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken } from './src/lib/auth'
+
+function parseJwt(token: string) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -40,11 +57,19 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const payload = verifyToken(token)
+    const payload = parseJwt(token)
     
-    if (!payload) {
-      console.log(`🔒 Invalid token, redirecting to sign-in from: ${pathname}`)
+    if (!payload || !payload.userId || !payload.role) {
+      console.log(`🔒 Invalid token payload, redirecting to sign-in from: ${pathname}`)
       // Clear invalid cookie
+      const response = NextResponse.redirect(new URL('/sign-in', request.url))
+      response.cookies.delete('auth-token')
+      return response
+    }
+
+    // Check token expiration
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      console.log(`🔒 Token expired, redirecting to sign-in from: ${pathname}`)
       const response = NextResponse.redirect(new URL('/sign-in', request.url))
       response.cookies.delete('auth-token')
       return response

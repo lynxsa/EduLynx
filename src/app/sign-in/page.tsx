@@ -26,31 +26,42 @@ export default function CustomLoginPage() {
     setError("");
     setLoading(true);
     
+    console.log('🚀 Sign-in attempt started', { email, passwordLength: password.length });
+    
     // Client-side validation
     if (!email.trim() && !password.trim()) {
-      setError("Email is required. Password is required.");
+      const errorMsg = "Email is required. Password is required.";
+      console.log('❌ Validation error:', errorMsg);
+      setError(errorMsg);
       setLoading(false);
       return;
     }
     if (!email.trim()) {
-      setError("Email is required");
+      const errorMsg = "Email is required";
+      console.log('❌ Validation error:', errorMsg);
+      setError(errorMsg);
       setLoading(false);
       return;
     }
     if (!password.trim()) {
-      setError("Password is required");
+      const errorMsg = "Password is required";
+      console.log('❌ Validation error:', errorMsg);
+      setError(errorMsg);
       setLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
-      setError("Please enter a valid email address");
+      const errorMsg = "Please enter a valid email address";
+      console.log('❌ Email validation error:', errorMsg);
+      setError(errorMsg);
       setLoading(false);
       return;
     }
     
     try {
+      console.log('📡 Making API request to /api/auth/login');
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -63,7 +74,19 @@ export default function CustomLoginPage() {
         credentials: 'include'
       });
 
+      console.log('📡 API response status:', response.status);
+      
+      if (!response.ok) {
+        console.log('❌ API response not ok:', response.status, response.statusText);
+      }
+
       const data = await response.json();
+      console.log('📡 API response data:', { 
+        success: data.success, 
+        hasUser: !!data.user, 
+        redirectTo: data.redirectTo,
+        error: data.error 
+      });
 
       if (response.ok && data.success) {
         // Store user info in sessionStorage for immediate use
@@ -72,18 +95,21 @@ export default function CustomLoginPage() {
           sessionStorage.setItem("userId", data.user.id);
           sessionStorage.setItem("userEmail", data.user.email);
           sessionStorage.setItem("userName", data.user.fullName);
+          console.log('💾 Stored user data in sessionStorage');
         }
         
         console.log(`✅ Login successful: ${data.user.fullName} (${data.user.role})`);
+        console.log('🚀 Redirecting to:', data.redirectTo);
         
         // Small delay for better UX
         await new Promise(resolve => setTimeout(resolve, 200));
         
         // Redirect to role-specific dashboard
-        router.push(data.redirectTo);
-        router.refresh(); // Force refresh to update middleware
+        window.location.href = data.redirectTo; // Use window.location for more reliable redirect
       } else {
-        setError(data.error || data.message || 'Invalid credentials');
+        const errorMsg = data.error || data.message || 'Invalid credentials';
+        console.log('❌ Login failed:', errorMsg);
+        setError(errorMsg);
       }
     } catch (error) {
       console.error('❌ Login error:', error);
@@ -148,24 +174,29 @@ export default function CustomLoginPage() {
           className="bg-white/95 backdrop-blur-sm shadow-2xl rounded-xl p-6 w-full flex flex-col items-center border border-white/20"
           autoComplete="off"
         >
-          <div className="mb-4 flex items-center justify-center">
-            <Image 
-              src="/logo.png" 
-              alt="EduLynx Logo" 
-              width={60} 
-              height={60} 
-              className="object-contain drop-shadow-lg"
-              priority
-              onError={(e) => {
-                console.log('Logo failed to load, using fallback');
-                e.currentTarget.style.display = 'none';
-              }}
-            />
+          <div className="mb-6 text-center">
+            <div className="mb-3 flex justify-center">
+              <div className="relative w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center shadow-lg">
+                <Image 
+                  src="/logo.png" 
+                  alt="EduLynx Logo" 
+                  width={64} 
+                  height={64} 
+                  className="object-contain"
+                  priority
+                  onLoad={() => console.log('Logo loaded successfully')}
+                  onError={(e) => {
+                    console.error('Logo failed to load from /logo.png');
+                    // Keep the purple background, no fallback text
+                    const target = e.currentTarget;
+                    target.style.display = 'none';
+                  }}
+                />
+              </div>
+            </div>
+            <h1 className="text-2xl font-bold text-purple-700">EduLynx</h1>
+            <p className="text-sm text-gray-600 mt-1">School Management Platform</p>
           </div>
-          
-          <h1 className="text-2xl font-bold mb-1 text-purple-700 text-center">EduLynx</h1>
-          <p className="mb-4 text-gray-600 text-center text-sm">School Management Platform</p>
-        
           <div className="w-full mb-3">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email

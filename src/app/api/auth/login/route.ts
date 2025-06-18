@@ -9,11 +9,14 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
   
   try {
+    console.log('🔍 Login API called');
     const body = await request.json();
     const { email, password } = body;
+    console.log('📧 Login attempt for:', email);
 
     // Input validation
     if (!email || !password) {
+      console.log('❌ Missing email or password');
       return NextResponse.json(
         { 
           success: false,
@@ -26,6 +29,7 @@ export async function POST(request: NextRequest) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      console.log('❌ Invalid email format:', email);
       return NextResponse.json(
         { 
           success: false,
@@ -35,6 +39,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('🔍 Searching for user in database...');
     // Find user in database with optimized query
     const user = await prisma.user.findUnique({
       where: {
@@ -52,7 +57,10 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    console.log('🔍 User found:', !!user, user ? `(${user.role})` : '');
+    
     if (!user) {
+      console.log('❌ User not found for email:', email);
       // Add artificial delay to prevent timing attacks
       await new Promise(resolve => setTimeout(resolve, 100));
       return NextResponse.json(
@@ -66,6 +74,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user is active
     if (!user.isActive) {
+      console.log('❌ User account deactivated:', email);
       return NextResponse.json(
         { 
           success: false,
@@ -75,6 +84,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('🔐 Verifying password...');
     // Enhanced password verification
     let isPasswordValid = false;
     if (user.password) {
@@ -82,12 +92,15 @@ export async function POST(request: NextRequest) {
         // Check if password is hashed (bcrypt format)
         if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$') || user.password.startsWith('$2y$')) {
           isPasswordValid = await bcrypt.compare(password, user.password);
+          console.log('🔐 Bcrypt password check:', isPasswordValid);
         } else {
           // Legacy plain text password (for backwards compatibility)
           isPasswordValid = user.password === password;
+          console.log('🔐 Plain text password check:', isPasswordValid);
           
           // If plain text password matches, hash it for security
           if (isPasswordValid) {
+            console.log('🔐 Upgrading plain text password to bcrypt...');
             const hashedPassword = await bcrypt.hash(password, 12);
             await prisma.user.update({
               where: { id: user.id },
@@ -96,7 +109,7 @@ export async function POST(request: NextRequest) {
           }
         }
       } catch (error) {
-        console.error('Password verification error:', error);
+        console.error('❌ Password verification error:', error);
         isPasswordValid = false;
       }
     }

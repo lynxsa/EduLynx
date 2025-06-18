@@ -189,9 +189,9 @@ model MedicalRecord {
   student Student @relation(fields: [studentId], references: [id])
   studentId String @unique
   bloodType String?
-  allergies String[]
-  medications String[]
-  conditions String[]
+  allergies String[] // PostgreSQL supports arrays
+  medications String[] // PostgreSQL supports arrays  
+  conditions String[] // PostgreSQL supports arrays
   emergencyContactName String?
   emergencyContactPhone String?
   emergencyContactRelationship String?
