@@ -1,125 +1,125 @@
-"use client"
-import Image from 'next/image';
-import React, { PureComponent } from 'react';
+"use client";
+import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+interface FinanceData {
+  month?: string;
+  name?: string;
+  income: number;
+  expense: number;
+  amt?: number;
+}
 
-const data = [
+interface FinanceChartProps {
+  data?: FinanceData[];
+}
+
+const defaultData: FinanceData[] = [
   {
     name: 'Jan',
-    income: 4000,
-    expense: 2400,
-    amt: 2400,
+    income: 400000,
+    expense: 240000,
+    amt: 160000,
   },
   {
     name: 'Feb',
-    income: 3000,
-    expense: 1398,
-    amt: 2210,
+    income: 380000,
+    expense: 280000,
+    amt: 100000,
   },
   {
     name: 'Mar',
-    income: 2000,
-    expense: 9800,
-    amt: 2290,
+    income: 420000,
+    expense: 320000,
+    amt: 100000,
   },
   {
     name: 'Apr',
-    income: 2780,
-    expense: 3908,
-    amt: 2000,
+    income: 450000,
+    expense: 350000,
+    amt: 100000,
   },
   {
     name: 'May',
-    income: 1890,
-    expense: 4800,
-    amt: 2181,
+    income: 480000,
+    expense: 330000,
+    amt: 150000,
   },
   {
     name: 'Jun',
-    income: 2390,
-    expense: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Jul',
-    income: 3490,
-    expense: 4300,
-    amt: 2100,
-  },
-  {
-    name: 'Aug',
-    income: 2780,
-    expense: 3908,
-   
-  },
-  {
-    name: 'Sep',
-    income: 1890,
-    expense: 4800,
-   
-  },
-  {
-    name: 'Oct',
-    income: 2390,
-    expense: 3800,
-  
-  },
-  {
-    name: 'Nov',
-    income: 3490,
-    expense: 4300,
- 
-  },
-  {
-    name: 'Dec',
-    income: 3490,
-    expense: 4300,
-   
+    income: 520000,
+    expense: 380000,
+    amt: 140000,
   },
 ];
 
+const FinanceChart = ({ data = defaultData }: FinanceChartProps) => {
+    // Format values for South African Rand
+    const formatZAR = (value: number) => {
+        return new Intl.NumberFormat('en-ZA', {
+            style: 'currency',
+            currency: 'ZAR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(value);
+    };
 
-const FinanceChart= () => {
-
-
-
-    return(
-        <div className="bg-white rounded-2xl w-full h-full p-8">
-        <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Finances</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20}/>
-    </div>
-
-
-    <div className="w-full h-full pt-8">
-      <ResponsiveContainer width="100%" height="90%">
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" tickLine={false} />
-          <YAxis tickLine={false}  />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="income" stroke="#8884d8" activeDot={{ r: 8 }} />
-          <Line type="monotone" dataKey="expense" stroke="#82ca9d" />
-        </LineChart>
-      </ResponsiveContainer>
-      </div>
-
-            
-
+    return (
+        <div className="w-full h-full">
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                    data={data}
+                    margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                    }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis 
+                        dataKey={data[0]?.month ? "month" : "name"} 
+                        tickLine={false} 
+                        stroke="#6b7280"
+                        fontSize={12}
+                    />
+                    <YAxis 
+                        tickLine={false} 
+                        stroke="#6b7280"
+                        fontSize={12}
+                        tickFormatter={(value) => `R${(value / 1000).toFixed(0)}K`}
+                    />
+                    <Tooltip 
+                        contentStyle={{
+                            backgroundColor: 'white',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                            color: '#1f2937',
+                        }}
+                        formatter={(value: number, name: string) => [
+                            formatZAR(value),
+                            name === 'income' ? 'Income' : 'Expense'
+                        ]}
+                    />
+                    <Legend />
+                    <Line 
+                        type="monotone" 
+                        dataKey="income" 
+                        stroke="#10b981" 
+                        strokeWidth={3}
+                        activeDot={{ r: 6, fill: '#10b981' }} 
+                    />
+                    <Line 
+                        type="monotone" 
+                        dataKey="expense" 
+                        stroke="#ef4444" 
+                        strokeWidth={3}
+                        activeDot={{ r: 6, fill: '#ef4444' }}
+                    />
+                </LineChart>
+            </ResponsiveContainer>
         </div>
-    )
-}
+    );
+};
 
-export default FinanceChart
+export default FinanceChart;

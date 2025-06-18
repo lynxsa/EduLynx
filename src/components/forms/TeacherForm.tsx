@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from 'postcss';
 import { useForm } from 'react-hook-form';
@@ -36,9 +36,10 @@ type Inputs = z.infer<typeof schema>;
 
 
 
-const TeacherForm = ({ type, data }: {
+const TeacherForm = ({ type, data, onSuccess }: {
     type: "create" | "update";
-    data?: any
+    data?: any;
+    onSuccess?: () => void;
 }) => {
     
     const {
@@ -49,7 +50,23 @@ const TeacherForm = ({ type, data }: {
         resolver: zodResolver(schema),
     });
 
-    const onSubmit = handleSubmit((data) => {console.log(data)});
+    const onSubmit = handleSubmit(async (formData) => {
+        // Convert birthdate to ISO string
+        const payload = {
+            ...formData,
+            birthdate: formData.birthdate instanceof Date ? formData.birthdate.toISOString() : formData.birthdate,
+            sex: formData.sex?.toUpperCase(),
+            bloodtype: formData.bloodtype,
+            img: typeof formData.img === 'string' ? formData.img : undefined // handle file upload elsewhere
+        };
+        // TODO: handle file upload and get URL for img if needed
+        await fetch(`/api/teachers${type === 'update' && data?.id ? `/${data.id}` : ''}`, {
+            method: type === 'create' ? 'POST' : 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        if (onSuccess) onSuccess();
+    });
 
 
     return (
@@ -129,9 +146,13 @@ const TeacherForm = ({ type, data }: {
                 error={errors.address}
             />
                 <div className='flex flex-col gap-2 w-full md:w-1/4'>
-                    <label className='text-xs text-gray-500'>Blood Type</label>
-                    <select className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full" {...register("bloodtype")} defaultValue={data?.sex}>
-
+                    <label htmlFor="bloodtype" className='text-xs text-gray-500'>Blood Type</label>
+                    <select id="bloodtype" className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full" {...register("bloodtype")}
+                        defaultValue={data?.bloodtype}
+                        aria-invalid={!!errors.bloodtype}
+                        aria-describedby={errors.bloodtype ? `bloodtype-error` : undefined}
+                    >
+                        <option value="">Select Blood Type</option>
                         <option value="A+">A+ </option>
                         <option value="A-">A- </option>
                         <option value="B+">B+ </option>
@@ -140,10 +161,9 @@ const TeacherForm = ({ type, data }: {
                         <option value="AB-">AB- </option>
                         <option value="O+">O+ </option>
                         <option value="O-">O- </option>
-
                     </select>
                     {errors?.bloodtype && (
-                        <p className="text-xs text-red-700">{errors.bloodtype.toString()}</p>)}
+                        <p id="bloodtype-error" className="text-xs text-red-700">{errors.bloodtype.toString()}</p>)}
                 </div>
             < InputField
                 label="Birth Date"
@@ -155,23 +175,31 @@ const TeacherForm = ({ type, data }: {
             />
            
             <div className='flex flex-col gap-2 w-full md:w-1/4'>
-                <label className='text-xs text-gray-500'>Sex</label>
-                <select className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full" {...register("sex")} defaultValue={data?.sex}>
+                <label htmlFor="sex" className='text-xs text-gray-500'>Sex</label>
+                <select id="sex" className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full" {...register("sex")}
+                    defaultValue={data?.sex}
+                    aria-invalid={!!errors.sex}
+                    aria-describedby={errors.sex ? `sex-error` : undefined}
+                >
+                    <option value="">Select Sex</option>
                     <option value="male">Male </option>
                     <option value="female">Female </option>
               </select>
                 {errors?.sex && (
-                    <p className="text-xs text-red-700">{errors.sex.toString()}</p>)}
+                    <p id="sex-error" className="text-xs text-red-700">{errors.sex.toString()}</p>)}
                 </div>
-                
                 <div className='flex flex-col gap-2 w-full md:w-1/4 justify-center mt-8 items-center'>
-                    <label className='text-xs text-gray-500 flex items-cener gap-2 cursor-pointer' htmlFor='img'>
-                        <Image src="/upload.png" alt="" width={28} height={28} />
+                    <label htmlFor='img' className='text-xs text-gray-500 flex items-cener gap-2 cursor-pointer'>
+                        <Image src="/upload.png" alt="Upload" width={28} height={28} />
                         <span>Upload Image</span>
                     </label>
-                   <input type="file" id="img" {...register("img")} className='hidden'/>
-                    {errors?.sex && (
-                        <p className="text-xs text-red-700">{errors.sex.toString()}</p>)}
+                   <input type="file" id="img" {...register("img")}
+                        className='hidden'
+                        aria-invalid={!!errors.img}
+                        aria-describedby={errors.img ? `img-error` : undefined}
+                   />
+                    {errors?.img && (
+                        <p id="img-error" className="text-xs text-red-700">{errors.img.toString()}</p>)}
                 </div>
 
 

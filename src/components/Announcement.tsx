@@ -1,6 +1,16 @@
 import React, { PureComponent } from 'react';
 import Image from 'next/image';
 
+export interface Announcement {
+    id: number;
+    title: string;
+    time: string;
+    description: string;
+}
+
+interface AnnouncementsProps {
+    announcements?: Announcement[];
+}
 
 const announcements = [
     {
@@ -33,29 +43,28 @@ const announcements = [
 ]
 
 
-const Announcements =() => {
+const Announcements =({ announcements = [] }: AnnouncementsProps) => {
 return(
     <div className="bg-white p-3 rounded-2xl">
 
 
         <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold my-4"> Announcements</h1>
-            <span className="text-xs text-gray-500">View All</span>
+            <span className="text-xs text-gray-500 cursor-pointer hover:underline transition-all duration-150">View All</span>
         </div>
 
         <div className="flex flex-col gap-4">
-        {announcements.map((announcement)=>
-        (
-            <div className="p-5 rounded-md border-2 border-gray-100-t-4 odd: border-l-LYNXPurple even:border-t-LYNXLight text-xs" key={announcement.id}>
+        {(announcements || []).length === 0 ? (
+          <div className="animate-pulse h-16 bg-gray-200 rounded-md" />
+        ) : (announcements || []).map((announcement)=>(
+            <div className="p-5 rounded-md border-2 border-gray-100-t-4 odd:border-l-LYNXPurple even:border-t-LYNXLight text-xs transition-shadow duration-200 hover:shadow-lg animate-fade-in" key={announcement.id} tabIndex={0} aria-label={announcement.title}>
                 <div className="flex items-center justify-between">
                     <div className="font-semibold text-gray-600">{announcement.title}</div>
                     <span className="text-xs text-gray-400">{announcement.time}</span>  
                 </div>
                 <p className="text-s text-gray-400">{announcement.description}</p>
             </div>
-
         ))}
-
         </div>
 
     </div>

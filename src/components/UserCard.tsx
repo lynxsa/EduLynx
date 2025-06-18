@@ -11,7 +11,7 @@ const UserCard = ({ type, count }: UserCardProps) => {
         
         <div className="rounded-2xl odd:bg-LYNXPurple even:bg-LYNXLight text-white p-4 flex-1 gap-4 min-w-[130px]">
             <div className="flex justify-between items-center">
-                <span className="text-[10px] bg-white text-black rounded-full font-bold px-2 py-1">04 Oct '24</span>
+                <span className="text-[10px] bg-white text-black rounded-full font-bold px-2 py-1">04 Oct &apos;24</span>
                 <Image src="/more.png" alt="" width={20} height={20}/>
             </div>
             {/* Use count dynamically */}

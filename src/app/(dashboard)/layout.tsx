@@ -1,40 +1,47 @@
 import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
+import ProfLynx from "@/components/ProfLynx";
 import Image from "next/image";
 import Link from "next/link";
-import { Component } from "react";
-
 
 export default function DashboardLayout({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
-    return <div className="h-screen flex">
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // TODO: Replace with real user context/session
+  const userName = "Derah Manyelo";
+  const userRole = "Admin";
+  const avatarUrl = "/avatar.png";
 
-    {/* Left */}
-      <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] overflow-scroll">
-
-        <Link href="/" className="flex items-center justify-center lg:justify-start gap-1 py-2 mx-4 mt-2">
-           <Image src="/logo.png" alt="logo" width={32} height={32}/>
-           <span className="hidden lg:block font-bold text-purple-950">LYNX Academy</span>
+  return (
+    <div className="h-screen flex bg-gray-50">
+      {/* Sidebar */}
+      <aside className="w-20 md:w-24 lg:w-64 xl:w-72 flex-shrink-0 flex flex-col py-6 px-4 border-r border-gray-200 min-h-screen bg-white">
+        <Link href="/" className="flex items-center justify-center gap-3 mb-6 px-2">
+          <Image src="/logo.png" alt="EduLynx" width={40} height={40} className="rounded-lg" />
+          <span className="hidden lg:block font-bold text-purple-600 text-xl tracking-tight">EduLynx</span>
         </Link>
-        <Menu/>
-      </div>
-    
-    {/* Right */}
-      <div className="w-[92%] md:w-[92%] lg:w-[100%] xl:w-[100%] bg-[#F7F8FA] overflow-scroll ">
-        <Navbar/>
-   
+        
+        <div className="flex-1 overflow-y-auto">
+          <Menu />
+        </div>
+      </aside>
 
-        {children}
-     
-      
-    
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col min-h-screen overflow-hidden">
+        {/* Enhanced Navbar */}
+        <Navbar userName={userName} userRole={userRole} avatarUrl={avatarUrl} />
+        
+        {/* Page Content */}
+        <div className="flex-1 overflow-y-auto bg-gray-100">
+          {children}
+        </div>
+      </main>
 
-      </div>
-    
+      {/* Prof Lynx AI Assistant */}
+      <ProfLynx userRole={userRole} userName={userName} />
     </div>
-  }
+  );
+}
 
-  

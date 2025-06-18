@@ -20,9 +20,21 @@ enum Day {
   FRIDAY
 }
 
+enum UserRole {
+  ADMIN
+  TEACHER
+  STUDENT
+  PARENT
+}
+
+enum FinanceType {
+  Income
+  Expense
+}
+
 model Admin {
-  id       String   @id
-  username String   @unique
+  id       String @id
+  username String @unique
 }
 
 model Parent {
@@ -35,8 +47,15 @@ model Parent {
   address   String
   img       String?
   sex       UserSex
+  occupation String?
+  employer   String?
+  relationshipToStudent String?
   createdAt DateTime  @default(now())
   students  Student[]
+  school    School?   @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  schoolId  Int?
+  user      User?     @relation("ParentUser", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?   @unique
 }
 
 model Grade {
@@ -44,81 +63,143 @@ model Grade {
   level    Int       @unique
   classes  Class[]
   students Student[]
+  school   School?   @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  schoolId Int?
 }
 
 model Class {
-  id            Int             @id @default(autoincrement())
-  name          String          @unique
-  capacity      Int
-  supervisor    Teacher?        @relation("SupervisorClasses", fields: [supervisorId], references: [id])
-  supervisorId  String?
-  grade         Grade           @relation(fields: [gradeId], references: [id])
-  gradeId       Int
-  lessons       Lesson[]
-  students      Student[]
-  events        Event[]
-  announcements Announcement[]
-  teachers      Teacher[]       @relation("ClassTeachers")
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  capacity     Int
+  roomNumber   String?
+  timetable    String?
+  classTeacher String?
+  supervisor   Teacher? @relation("SupervisorClasses", fields: [supervisorId], references: [id], onDelete: SetNull)
+  supervisorId String?
+  grade        Grade?   @relation(fields: [gradeId], references: [id], onDelete: SetNull)
+  gradeId      Int?
+  school       School?  @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  schoolId     Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt @default(now())
+
+  students      Student[]      @relation("ClassStudents")
+  teachers      Teacher[]      @relation("ClassTeachers")
+  lessons       Lesson[]       @relation("ClassLessons")
+  events        Event[]        @relation("ClassEvents")
+  announcements Announcement[] @relation("ClassAnnouncements")
 }
 
 model Subject {
-  id        Int               @id @default(autoincrement())
-  name      String            @unique
+  id        Int                @id @default(autoincrement())
+  name      String             @unique
   teachers  SubjectToTeacher[]
   lessons   Lesson[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt @default(now())
 }
 
 model Teacher {
-  id           String            @id
-  username     String            @unique
-  name         String
-  surname      String
-  email        String            @unique
-  phone        String            @unique
-  address      String
-  img          String?
-  bloodType    String
-  sex          UserSex
-  createdAt    DateTime          @default(now())
-  birthday     DateTime
-  subjects     SubjectToTeacher[]
-  lessons      Lesson[]
-  class        Class             @relation("ClassTeachers", fields: [classId], references: [id])
-  classId      Int
-  supervised   Class[]           @relation("SupervisorClasses")
+  id         String             @id
+  username   String             @unique
+  name       String
+  surname    String
+  email      String             @unique
+  phone      String             @unique
+  address    String
+  img        String?
+  bloodType  String
+  sex        UserSex
+  gender     String?
+  nationality String?
+  idNumber   String?
+  qualifications String?
+  yearsExperience Int?
+  employmentStatus String? // permanent, contract, etc.
+  nextOfKinName String?
+  nextOfKinPhone String?
+  createdAt  DateTime           @default(now())
+  birthday   DateTime
+  subjects   SubjectToTeacher[]
+  lessons    Lesson[]
+  class      Class?             @relation("ClassTeachers", fields: [classId], references: [id], onDelete: SetNull)
+  classId    Int?
+  supervised Class[]            @relation("SupervisorClasses")
+  school     School?            @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  schoolId   Int?
+  user       User?              @relation("TeacherUser", fields: [userId], references: [id], onDelete: Cascade)
+  userId     String?            @unique
 }
 
 model SubjectToTeacher {
   subject   Subject @relation(fields: [subjectId], references: [id])
-  subjectId Int      @map("A")
+  subjectId Int     @map("A")
   teacher   Teacher @relation(fields: [teacherId], references: [id])
-  teacherId String   @map("B")
+  teacherId String  @map("B")
 
   @@id([subjectId, teacherId])
   @@map("_SubjectToTeacher")
 }
 
 model Student {
-  id          String       @id
-  username    String       @unique
-  name        String
-  surname     String
-  email       String       @unique
-  phone       String       @unique
-  address     String
-  img         String?
-  bloodType   String
-  sex         UserSex
-  createdAt   DateTime     @default(now())
-  birthday    DateTime
-  parent      Parent       @relation(fields: [parentId], references: [id])
-  parentId    String
-  class       Class        @relation(fields: [classId], references: [id])
-  classId     Int
-  grade       Grade        @relation(fields: [gradeId], references: [id])
-  gradeId     Int
-  attendances Attendance[]
-  results     Result[]
+  id        String   @id @default(uuid())
+  username  String   @unique
+  name      String
+  surname   String
+  email     String   @unique
+  phone     String   @unique
+  address   String
+  img       String?
+  bloodType String
+  sex       UserSex
+  gender    String   // 'Male' | 'Female'
+  homeLanguage String?
+  allergies  String?
+  medicalInfo String?
+  emergencyContactName String?
+  emergencyContactPhone String?
+  guardianRelationship String?
+  specialNeeds String?
+  extracurriculars String?
+  admissionYear Int?
+  status     String?   // 'active', 'graduated', 'expelled', etc.
+  profileImage String?
+  createdAt DateTime @default(now())
+  birthday  DateTime
+  parent    Parent?  @relation(fields: [parentId], references: [id], onDelete: SetNull)
+  parentId  String?
+  class     Class?   @relation("ClassStudents", fields: [classId], references: [id], onDelete: SetNull)
+  classId   Int?
+  grade     Grade?   @relation(fields: [gradeId], references: [id], onDelete: SetNull)
+  gradeId   Int?
+  school    School?  @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  schoolId  Int?
+  user      User?    @relation("StudentUser", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?  @unique
+
+  results      Result[]      @relation("StudentResults")
+  attendances  Attendance[]  @relation("StudentAttendances")
+  submissions  Submission[]  @relation("StudentSubmissions")
+  quizAttempts QuizAttempt[] @relation("StudentQuizAttempts")
+  medicalRecord MedicalRecord? 
+}
+
+model MedicalRecord {
+  id String @id @default(uuid())
+  student Student @relation(fields: [studentId], references: [id])
+  studentId String @unique
+  bloodType String?
+  allergies String[]
+  medications String[]
+  conditions String[]
+  emergencyContactName String?
+  emergencyContactPhone String?
+  emergencyContactRelationship String?
+  doctorName String?
+  doctorPhone String?
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Lesson {
@@ -129,71 +210,212 @@ model Lesson {
   endTime     DateTime
   subject     Subject      @relation(fields: [subjectId], references: [id])
   subjectId   Int
-  class       Class        @relation(fields: [classId], references: [id])
+  class       Class        @relation("ClassLessons", fields: [classId], references: [id])
   classId     Int
   teacher     Teacher      @relation(fields: [teacherId], references: [id])
   teacherId   String
   exams       Exam[]
   assignments Assignment[]
   attendances Attendance[]
+  quizzes     Quiz[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
 }
 
 model Exam {
-  id         Int      @id @default(autoincrement())
-  title      String
-  startTime  DateTime
-  endTime    DateTime
-  lesson     Lesson   @relation(fields: [lessonId], references: [id])
-  lessonId   Int
-  results    Result[]
+  id        Int      @id @default(autoincrement())
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  lessonId  Int
+  results   Result[]
 }
 
 model Assignment {
-  id         Int      @id @default(autoincrement())
-  title      String
-  startDate  DateTime
-  dueDate    DateTime
-  lesson     Lesson   @relation(fields: [lessonId], references: [id])
-  lessonId   Int
-  results    Result[]
+  id          Int          @id @default(autoincrement())
+  title       String
+  startDate   DateTime
+  dueDate     DateTime
+  lesson      Lesson       @relation(fields: [lessonId], references: [id])
+  lessonId    Int
+  results     Result[]
+  submissions Submission[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
 }
 
 model Result {
-  id           Int        @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   score        Int
-  exam         Exam?      @relation(fields: [examId], references: [id])
+  exam         Exam?       @relation(fields: [examId], references: [id])
   examId       Int?
-  assignment   Assignment?@relation(fields: [assignmentId], references: [id])
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
   assignmentId Int?
-  student      Student    @relation(fields: [studentId], references: [id])
+  student      Student     @relation("StudentResults", fields: [studentId], references: [id])
   studentId    String
 }
 
 model Attendance {
-  id         Int       @id @default(autoincrement())
-  date       DateTime  @default(now())
-  present    Boolean
-  student    Student   @relation(fields: [studentId], references: [id])
-  studentId  String
-  lesson     Lesson    @relation(fields: [lessonId], references: [id])
-  lessonId   Int
+  id        Int      @id @default(autoincrement())
+  date      DateTime @default(now())
+  present   Boolean
+  student   Student  @relation("StudentAttendances", fields: [studentId], references: [id])
+  studentId String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  lessonId  Int
 }
 
 model Event {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   startTime   DateTime
   endTime     DateTime
-  class       Class?    @relation(fields: [classId], references: [id])
+  class       Class?   @relation("ClassEvents", fields: [classId], references: [id])
   classId     Int?
 }
 
 model Announcement {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
-  date        DateTime  @default(now())
-  class       Class?    @relation(fields: [classId], references: [id])
+  date        DateTime @default(now())
+  class       Class?   @relation("ClassAnnouncements", fields: [classId], references: [id])
   classId     Int?
+}
+
+model Submission {
+  id           Int        @id @default(autoincrement())
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId Int
+  student      Student    @relation("StudentSubmissions", fields: [studentId], references: [id])
+  studentId    String
+  fileUrl      String?
+  text         String?
+  submittedAt  DateTime   @default(now())
+  grade        Int?
+  feedback     String?
+}
+
+model Quiz {
+  id        Int           @id @default(autoincrement())
+  title     String
+  lesson    Lesson        @relation(fields: [lessonId], references: [id])
+  lessonId  Int
+  questions Question[]
+  attempts  QuizAttempt[]
+  startDate DateTime      @default(now())
+  endDate   DateTime      @updatedAt @default(now())
+}
+
+model Question {
+  id      Int          @id @default(autoincrement())
+  quiz    Quiz         @relation(fields: [quizId], references: [id])
+  quizId  Int
+  prompt  String
+  type    QuestionType
+  options Option[]
+  answer  String? // correct answer for auto-grading
+  answers Answer[]
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+}
+
+model Option {
+  id         Int      @id @default(autoincrement())
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
+  text       String
+}
+
+model QuizAttempt {
+  id          Int       @id @default(autoincrement())
+  quiz        Quiz      @relation(fields: [quizId], references: [id])
+  quizId      Int
+  student     Student   @relation("StudentQuizAttempts", fields: [studentId], references: [id])
+  studentId   String
+  startedAt   DateTime  @default(now())
+  submittedAt DateTime?
+  answers     Answer[]
+  score       Int?
+  feedback    String?
+}
+
+model Answer {
+  id         Int         @id @default(autoincrement())
+  attempt    QuizAttempt @relation(fields: [attemptId], references: [id])
+  attemptId  Int
+  question   Question    @relation(fields: [questionId], references: [id])
+  questionId Int
+  response   String
+  isCorrect  Boolean?
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?
+  firstName     String
+  lastName      String
+  preferredName String?
+  dateOfBirth   DateTime?
+  gender        String?
+  phone         String?
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  province      String?
+  postalCode    String?
+  country       String    @default("South Africa")
+  role          UserRole
+  school        School?   @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  schoolId      Int?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Role-specific
+  student Student? @relation("StudentUser")
+  teacher Teacher? @relation("TeacherUser")
+  parent  Parent?  @relation("ParentUser")
+}
+
+model School {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  address  String
+  city     String
+  province String
+  country  String
+  principal String?
+  schoolType String? // public, private
+  registrationNumber String?
+  logo     String?
+  motto    String?
+  website  String?
+  grades   Grade[]
+  classes  Class[]
+  teachers Teacher[]
+  students Student[]
+  parents  Parent[]
+  users    User[]
+}
+
+model FinanceEntry {
+  id         String      @id @default(uuid())
+  title      String
+  amount     Float
+  type       FinanceType
+  category   String?
+  reference  String?
+  notes      String?
+  linkedStudentId String?
+  linkedParentId String?
+  date       DateTime
+  createdAt  DateTime    @default(now())
 }

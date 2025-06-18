@@ -1,140 +1,221 @@
-import Pagination from "@/components/Pagination";
-import TableSearch from "@/components/TableSearch";
-import Image from "next/image";
-import Table from "@/components/Table";
-import React, { PureComponent } from 'react';
-import Link from "next/link";
-import { parentsData, role } from "@/lib/data";
-import FormModal from "@/components/FormModal";
+'use client';
 
-type Parent = {
-    id:number;
-    parentId:string;
-    name:string;
-    email:string;
-    phone:string;
-    children:string[];
-    classes:string[];
-    address:string;
-  
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import DataTable from '@/components/DataTable';
+import { ColumnDef } from '@tanstack/react-table';
+import { Phone, Mail, Users, MapPin, Calendar } from 'lucide-react';
+
+interface Parent {
+  id: string;
+  username: string;
+  name: string;
+  surname: string;
+  email: string;
+  phone?: string;
+  address: string;
+  img?: string;
+  occupation?: string;
+  relationship?: string;
+  students: Array<{
+    id: string;
+    name: string;
+    surname: string;
+    class: {
+      name: string;
+    };
+  }>;
+  _count?: {
+    students: number;
+  };
 }
 
+const ParentsPage = () => {
+  const [parents, setParents] = useState<Parent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-const columns=[
-    {
-          header:"Info", accessor: "info"
-    },
-
-    {
-        header:"ParentID", accessor: "parentID", className:"hidden md:table-cell"
-    },
-
-  
-
-    {
-        header:"Children", accessor: "children", className:"hidden md:table-cell"
-    },
-
-    {
-        header:"Phone", accessor: "phone", className:"hidden lg:table-cell"
-    },
-
-    {
-        header:"Address", accessor: "address", className:"hidden lg:table-cell"
-    },
-    {
-        header:"Actions", accessor: "actions", className:"table-cell"
-    }
-
-]
-
-
-
-const ParentsList =() => {
-
-    const renderRow= (item:Parent) => (
-        <tr key={item.id} className=" border-b-gray-200 p-2 hover:bg-LYNXLavendar even:bg-slate-50 odd:bg-white  ">
-            <td className="flex items-center gap-4 p-3">
-                <div className="flex rounded-2xl p-1 pr-4">
-                   
-                <div className="flex flex-col">
-                    <div className="font-semibold">{item.name}</div>
-                    <p className="text-xs text-gray-500">{item?.email}</p>
-                </div>
-                </div>
-            </td>
-            <td className="hidden md:table-cell">{item.parentId}</td>
-            <td className="hidden md:table-cell">{item.children.join(",")}</td>
-            <td className="hidden md:table-cell">{item.phone}</td>
-            <td className="hidden md:table-cell">{item.address}</td>
-            <td className="table-cell">
-            <div className="flex items-center gap-2">
-
-                    <Link href={`/list/parents/${item.id}`}>
-                        <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LYNXLight" >
-                            <Image src="/view.png" alt="" width={16} height={16} />
-                        </button>
-                    </Link>
-
-            { role === "admin"  && (
-                <>
-                    <FormModal table ="parents" type="update" data={item} /> 
-                    <FormModal table ="parents" type="delete" id={item.id} /> 
-                </>
-            )}
-                    
-               
-            </div>
-            </td>
-        </tr>
-      
- );
-
-
-    return(
-        
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
-    {/* Top */}
-    <div className="flex items-center justify-between">
-         <h1 className="hidden md:block text-lg font-semibold">All Parents</h1>
-        <div className="flex flex-col justify-center md:flex-row items-center gap-4 w-full md:w-auto">
-         <TableSearch/>
-            <div className="flex items-center gap-4 self-end">
-        
-             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-                   <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-                  <Image src="/sort.png" alt="" width={14} height={14}/>
-            </button>
-            
-            { role === "admin" &&  (
-            // button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-            //      <Image src="/plus.png" alt="" width={14} height={14}></Image>
-            // </button>
-           
-            <FormModal table ="parents" type="create" /> 
-
-            ) }
-    
-    
-    </div>
-    </div>
-    </div>
-   
-
-  
-    <Table columns={columns} renderRow={renderRow} data={parentsData} />
-    <Pagination />
-
-
-    </div>
-    );
-
+  useEffect(() => {
+    const fetchParents = async () => {
+      try {
+        const response = await fetch('/api/parents');
+        if (!response.ok) {
+          throw new Error('Failed to fetch parents');
+        }
+        const data = await response.json();
+        setParents(data.data || data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
     };
-    
-    
 
+    fetchParents();
+  }, []);
 
-export default ParentsList
+  const columns: ColumnDef<Parent>[] = [
+    {
+      accessorKey: "name",
+      header: "Parent",
+      enableSorting: true,
+      cell: ({ row }) => {
+        const parent = row.original;
+        return (
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              {parent.img ? (
+                <Image
+                  src={parent.img}
+                  alt={`${parent.name} ${parent.surname}`}
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                  <span className="text-purple-600 font-medium text-sm">
+                    {parent.name[0]}{parent.surname[0]}
+                  </span>
+                </div>
+              )}
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">
+                {parent.name} {parent.surname}
+              </p>
+              <p className="text-sm text-gray-500">@{parent.username}</p>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "email",
+      header: "Contact",
+      cell: ({ row }) => {
+        const parent = row.original;
+        return (
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Mail className="w-4 h-4" />
+              <span className="truncate max-w-32">{parent.email}</span>
+            </div>
+            {parent.phone && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Phone className="w-4 h-4" />
+                <span>{parent.phone}</span>
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "occupation",
+      header: "Occupation",
+      enableSorting: true,
+      cell: ({ row }) => {
+        const occupation = row.original.occupation;
+        return (
+          <div>
+            <p className="font-medium text-gray-900">{occupation || 'Not specified'}</p>
+            <p className="text-sm text-gray-500">{row.original.relationship || 'Parent'}</p>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "address",
+      header: "Address",
+      cell: ({ row }) => {
+        const address = row.original.address;
+        return (
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-gray-400" />
+            <span className="text-sm text-gray-600 truncate max-w-32">{address}</span>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "students",
+      header: "Children",
+      cell: ({ row }) => {
+        const students = row.original.students || [];
+        const count = row.original._count?.students || students.length;
+        return (
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-blue-500" />
+              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                {count} {count === 1 ? 'child' : 'children'}
+              </span>
+            </div>
+            {students.length > 0 && (
+              <div className="text-xs text-gray-500">
+                {students.slice(0, 2).map((student, index) => (
+                  <div key={student.id}>
+                    {student.name} {student.surname} ({student.class.name})
+                  </div>
+                ))}
+                {students.length > 2 && (
+                  <div>+{students.length - 2} more</div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading parents...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="p-6">
+        <DataTable 
+          columns={columns} 
+          data={parents}
+          title="Parent Directory"
+          description="Manage parent information and communication"
+          searchPlaceholder="Search parents..."
+          onView={(parent) => console.log('View parent:', parent)}
+          onEdit={(parent) => console.log('Edit parent:', parent)}
+          onDelete={(parent) => console.log('Delete parent:', parent)}
+          onAdd={() => console.log('Add new parent')}
+          onExport={() => console.log('Export parents')}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ParentsPage;

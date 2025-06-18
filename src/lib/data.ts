@@ -1,260 +1,240 @@
+import type { Teacher, Student, Parent, Class } from '@/types/models';
 
 // TEMPORARY DATA
 
 export let role = "admin";
 
-export const teachersData = [
-  {
-    id: 1,
-    teacherId: "9101234567",
-    name: "Thabo Mokoena",
-    email: "thabo.mokoena@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/14950779/pexels-photo-14950779.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0821234567",
-    subjects: ["Mathematics", "Geometry"],
-    classes: ["Gr 8B", "Gr 9A", "Gr 10C"],
-    address: "45 Masakhane St, Soweto, Johannesburg, RSA",
-  },
-  {
-    id: 2,
-    teacherId: "8909876543",
-    name: "Lindiwe Dlamini",
-    email: "lindiwe.dlamini@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/871495/pexels-photo-871495.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0739876543",
-    subjects: ["Physics", "Chemistry"],
-    classes: ["Gr 11A", "Gr 12B"],
-    address: "12 Vilakazi St, Orlando West, Soweto, RSA",
-  },
-  {
-    id: 3,
-    teacherId: "8905671234",
-    name: "Nakedi Leboa",
-    email: "nakedi.leboa@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0745671234",
-    subjects: ["Biology", "Life Sciences"],
-    classes: ["Gr 10A", "Gr 11B"],
-    address: "36 Mandela St, Ivory Park, Johannesburg, RSA",
-  },
-  {
-    id: 4,
-    teacherId: "8908765432",
-    name: "Ayanda Mthembu",
-    email: "ayanda.mthembu@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/20605578/pexels-photo-20605578/free-photo-of-portrait-of-a-man-wearing-a-navy-blue-suit.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0618765432",
-    subjects: ["History", "Social Sciences"],
-    classes: ["Gr 8A", "Gr 9C"],
-    address: "78 Freedom St, Tembisa, Gauteng, RSA",
-  },
-  {
-    id: 5,
-    teacherId: "8906543210",
-    name: "Nomvula Khumalo",
-    email: "nomvula.khumalo@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/11701104/pexels-photo-11701104.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0836543210",
-    subjects: ["Music", "History"],
-    classes: ["Gr 10A", "Gr 9B"],
-    address: "89 Ubuntu St, Mamelodi, Pretoria, RSA",
-  },
-  {
-    id: 6,
-    teacherId: "8904321765",
-    name: "Kabelo Sekhukhune",
-    email: "kabelo.sekhukhune@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/18891841/pexels-photo-18891841/free-photo-of-portrait-of-elegant-man-in-round-glasses.jpeg?&fit=crop&h=500&w=500",
-    phone: "0834321765",
-    subjects: ["Accounting", "Economics"],
-    classes: ["Gr 10C", "Gr 12A"],
-    address: "25 Nelson Mandela St, Pretoria, RSA",
-  },
-  {
-    id: 7,
-    teacherId: "8509875678",
-    name: "Zodwa Sibeko",
-    email: "zodwa.sibeko@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/13430268/pexels-photo-13430268.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0719875678",
-    subjects: ["English", "Literature"],
-    classes: ["Gr 8A", "Gr 9C"],
-    address: "99 Vilakazi St, Soweto, Johannesburg, RSA",
-  },
-  {
-    id: 8,
-    teacherId: "8907654321",
-    name: "Lungile Ndlovu",
-    email: "lungile.ndlovu@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/6497112/pexels-photo-6497112.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0727654321",
-    subjects: ["Mathematics", "Physical Science"],
-    classes: ["Gr 10B", "Gr 11A"],
-    address: "27 Freedom St, Maboneng, Johannesburg, RSA",
-  },
-  {
-    id: 9,
-    teacherId: "9202348765",
-    name: "Lufuno Mulaudzi",
-    email: "buhle.mlangeni@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/14538746/pexels-photo-14538746.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0742348765",
-    subjects: ["Geography", "Life Sciences"],
-    classes: ["Gr 9A", "Gr 12B"],
-    address: "56 Sontonga St, Johannesburg, RSA",
-  },
-  {
-    id: 10,
-    teacherId: "8908762345",
-    name: "Phindile Maseko",
-    email: "phindile.maseko@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/7562139/pexels-photo-7562139.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0738762345",
-    subjects: ["Technology", "Engineering Graphics"],
-    classes: ["Gr 11B", "Gr 12C"],
-    address: "123 Luthuli St, Pretoria, RSA",
-  },
- /*  {
-    id: 11,
-    teacherId: "820204556798",
-    name: "Moloko Maseko",
-    email: "phindile.maseko@lynxacademy.org",
-    photo: "https://images.pexels.com/photos/10807449/pexels-photo-10807449.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0768832234",
-    subjects: ["English", "Life Orientation"],
-    classes: ["Gr 11B", "Gr 12C"],
-    address: "123 Luthuli St, Pretoria, RSA",
-  } */
-];
+// export const teachersData: Teacher[] = [
+//   {
+//     id: "9101234567",
+//     name: "Thabo Mokoena",
+//     email: "thabo.mokoena@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/14950779/pexels-photo-14950779.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0821234567",
+//     subjects: ["Mathematics", "Geometry"],
+//     classes: ["Gr 8B", "Gr 9A", "Gr 10C"],
+//     address: "45 Masakhane St, Soweto, Johannesburg, RSA",
+//   },
+//   {
+//     id: "8909876543",
+//     name: "Lindiwe Dlamini",
+//     email: "lindiwe.dlamini@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/871495/pexels-photo-871495.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0739876543",
+//     subjects: ["Physics", "Chemistry"],
+//     classes: ["Gr 11A", "Gr 12B"],
+//     address: "12 Vilakazi St, Orlando West, Soweto, RSA",
+//   },
+//   {
+//     id: "8905671234",
+//     name: "Nakedi Leboa",
+//     email: "nakedi.leboa@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0745671234",
+//     subjects: ["Biology", "Life Sciences"],
+//     classes: ["Gr 10A", "Gr 11B"],
+//     address: "36 Mandela St, Ivory Park, Johannesburg, RSA",
+//   },
+//   {
+//     id: "8908765432",
+//     name: "Ayanda Mthembu",
+//     email: "ayanda.mthembu@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/20605578/pexels-photo-20605578/free-photo-of-portrait-of-a-man-wearing-a-navy-blue-suit.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0618765432",
+//     subjects: ["History", "Social Sciences"],
+//     classes: ["Gr 8A", "Gr 9C"],
+//     address: "78 Freedom St, Tembisa, Gauteng, RSA",
+//   },
+//   {
+//     id: "8906543210",
+//     name: "Nomvula Khumalo",
+//     email: "nomvula.khumalo@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/11701104/pexels-photo-11701104.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0836543210",
+//     subjects: ["Music", "History"],
+//     classes: ["Gr 10A", "Gr 9B"],
+//     address: "89 Ubuntu St, Mamelodi, Pretoria, RSA",
+//   },
+//   {
+//     id: "8904321765",
+//     name: "Kabelo Sekhukhune",
+//     email: "kabelo.sekhukhune@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/18891841/pexels-photo-18891841/free-photo-of-portrait-of-elegant-man-in-round-glasses.jpeg?&fit=crop&h=500&w=500",
+//     phone: "0834321765",
+//     subjects: ["Accounting", "Economics"],
+//     classes: ["Gr 10C", "Gr 12A"],
+//     address: "25 Nelson Mandela St, Pretoria, RSA",
+//   },
+//   {
+//     id: "8509875678",
+//     name: "Zodwa Sibeko",
+//     email: "zodwa.sibeko@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/13430268/pexels-photo-13430268.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0719875678",
+//     subjects: ["English", "Literature"],
+//     classes: ["Gr 8A", "Gr 9C"],
+//     address: "99 Vilakazi St, Soweto, Johannesburg, RSA",
+//   },
+//   {
+//     id: "8907654321",
+//     name: "Lungile Ndlovu",
+//     email: "lungile.ndlovu@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/6497112/pexels-photo-6497112.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0727654321",
+//     subjects: ["Mathematics", "Physical Science"],
+//     classes: ["Gr 10B", "Gr 11A"],
+//     address: "27 Freedom St, Maboneng, Johannesburg, RSA",
+//   },
+//   {
+//     id: "9202348765",
+//     name: "Lufuno Mulaudzi",
+//     email: "buhle.mlangeni@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/14538746/pexels-photo-14538746.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0742348765",
+//     subjects: ["Geography", "Life Sciences"],
+//     classes: ["Gr 9A", "Gr 12B"],
+//     address: "56 Sontonga St, Johannesburg, RSA",
+//   },
+//   {
+//     id: "8908762345",
+//     name: "Phindile Maseko",
+//     email: "phindile.maseko@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/7562139/pexels-photo-7562139.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0738762345",
+//     subjects: ["Technology", "Engineering Graphics"],
+//     classes: ["Gr 11B", "Gr 12C"],
+//     address: "123 Luthuli St, Pretoria, RSA",
+//   },
+//  /*  {
+//     id: 11,
+//     teacherId: "820204556798",
+//     name: "Moloko Maseko",
+//     email: "phindile.maseko@lynxacademy.org",
+//     photo: "https://images.pexels.com/photos/10807449/pexels-photo-10807449.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0768832234",
+//     subjects: ["English", "Life Orientation"],
+//     classes: ["Gr 11B", "Gr 12C"],
+//     address: "123 Luthuli St, Pretoria, RSA",
+//   } */
+// };
 
 
-export const studentsData = [
-  {
-    id: 1,
-    studentId: "823645",
-    name: "John Mthembu",
-    email: "john.mthembu@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/2888150/pexels-photo-2888150.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0821234567",
-    grade: 11,
-    class: "11A",
-    address: "123 Main St, Soweto, RSA",
-  },
-  {
-    id: 2,
-    studentId: "374829",
-    name: "Jane Dlamini",
-    email: "jane.dlamini@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/936126/pexels-photo-936126.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0739876543",
-    grade: 11,
-    class: "11A",
-    address: "456 Vilakazi St, Orlando West, RSA",
-  },
-  {
-    id: 3,
-    studentId: "914563",
-    name: "Sebastian Sekhoela",
-    email: "sebastian.sekhoela@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/428328/pexels-photo-428328.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0745671234",
-    grade: 11,
-    class: "11A",
-    address: "789 Mandela St, Alexandra, RSA",
-  },
-  {
-    id: 4,
-    studentId: "237845",
-    name: "Jay Khumalo",
-    email: "jay.khumalo@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/1187765/pexels-photo-1187765.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0618765432",
-    grade: 11,
-    class: "11A",
-    address: "321 Freedom St, Tembisa, RSA",
-  },
-  {
-    id: 5,
-    studentId: "649582",
-    name: "Zandi Ngema",
-    email: "zandi.ngema@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/1102341/pexels-photo-1102341.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0836543210",
-    grade: 11,
-    class: "11A",
-    address: "654 Ubuntu St, Mamelodi, RSA",
-  },
-  {
-    id: 6,
-    studentId: "182374",
-    name: "Thandiwe Moeketsi",
-    email: "thandiwe.moeketsi@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0712345678",
-    grade: 11,
-    class: "11A",
-    address: "987 Nelson Mandela Ave, Midrand, RSA",
-  },
-  {
-    id: 7,
-    studentId: "493825",
-    name: "Sipho Khanyile",
-    email: "sipho.khanyile@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0798765432",
-    grade: 11,
-    class: "11A",
-    address: "234 Helen Joseph St, Randburg, RSA",
-  },
-  {
-    id: 8,
-    studentId: "726548",
-    name: "Nandi Shabalala",
-    email: "nandi.shabalala@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0823456789",
-    grade: 11,
-    class: "11A",
-    address: "456 Jabu Ndlovu St, Durban, RSA",
-  },
-  {
-    id: 9,
-    studentId: "542839",
-    name: "Dineo Mokoena",
-    email: "dineo.mokoena@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/842980/pexels-photo-842980.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0743210987",
-    grade: 11,
-    class: "11A",
-    address: "987 Luthuli St, Pretoria, RSA",
-  },
-  {
-    id: 10,
-    studentId: "364821",
-    name: "Lwazi Ndlovu",
-    email: "lwazi.ndlovu@lynxacademy.co.za",
-    photo:
-      "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
-    phone: "0812345678",
-    grade: 11,
-    class: "11A",
-    address: "321 Anton Lembede St, Bloemfontein, RSA",
-  },
-];
+// export const studentsData: Student[] = [
+//   {
+//     id: "823645",
+//     name: "John Mthembu",
+//     email: "john.mthembu@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/2888150/pexels-photo-2888150.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0821234567",
+//     grade: 11,
+//     class: "11A",
+//     address: "123 Main St, Soweto, RSA",
+//   },
+//   {
+//     id: "374829",
+//     name: "Jane Dlamini",
+//     email: "jane.dlamini@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/936126/pexels-photo-936126.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0739876543",
+//     grade: 11,
+//     class: "11A",
+//     address: "456 Vilakazi St, Orlando West, RSA",
+//   },
+//   {
+//     id: "914563",
+//     name: "Sebastian Sekhoela",
+//     email: "sebastian.sekhoela@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/428328/pexels-photo-428328.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0745671234",
+//     grade: 11,
+//     class: "11A",
+//     address: "789 Mandela St, Alexandra, RSA",
+//   },
+//   {
+//     id: "237845",
+//     name: "Jay Khumalo",
+//     email: "jay.khumalo@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/1187765/pexels-photo-1187765.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0618765432",
+//     grade: 11,
+//     class: "11A",
+//     address: "321 Freedom St, Tembisa, RSA",
+//   },
+//   {
+//     id: "649582",
+//     name: "Zandi Ngema",
+//     email: "zandi.ngema@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/1102341/pexels-photo-1102341.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0836543210",
+//     grade: 11,
+//     class: "11A",
+//     address: "654 Ubuntu St, Mamelodi, RSA",
+//   },
+//   {
+//     id: "182374",
+//     name: "Thandiwe Moeketsi",
+//     email: "thandiwe.moeketsi@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0712345678",
+//     grade: 11,
+//     class: "11A",
+//     address: "987 Nelson Mandela Ave, Midrand, RSA",
+//   },
+//   {
+//     id: "493825",
+//     name: "Sipho Khanyile",
+//     email: "sipho.khanyile@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0798765432",
+//     grade: 11,
+//     class: "11A",
+//     address: "234 Helen Joseph St, Randburg, RSA",
+//   },
+//   {
+//     id: "726548",
+//     name: "Nandi Shabalala",
+//     email: "nandi.shabalala@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0823456789",
+//     grade: 11,
+//     class: "11A",
+//     address: "456 Jabu Ndlovu St, Durban, RSA",
+//   },
+//   {
+//     id: "542839",
+//     name: "Dineo Mokoena",
+//     email: "dineo.mokoena@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/842980/pexels-photo-842980.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0743210987",
+//     grade: 11,
+//     class: "11A",
+//     address: "987 Luthuli St, Pretoria, RSA",
+//   },
+//   {
+//     id: "364821",
+//     name: "Lwazi Ndlovu",
+//     email: "lwazi.ndlovu@lynxacademy.co.za",
+//     photo:
+//       "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=500",
+//     phone: "0812345678",
+//     grade: 11,
+//     class: "11A",
+//     address: "321 Anton Lembede St, Bloemfontein, RSA",
+//   },
+// ];
 
-export const parentsData = [
+export const parentsData: Parent[] = [
   {
-    id: 1,
-    parentId: "P823645",
+    id: "1",
     name: "David Mthembu",
     email: "david.mthembu@lynxacademy.co.za",
     phone: "0829876543",
@@ -262,8 +242,7 @@ export const parentsData = [
     children: ["John Mthembu"]
   },
   {
-    id: 2,
-    parentId: "P374829",
+    id: "2",
     name: "Nomsa Dlamini",
     email: "nomsa.dlamini@lynxacademy.co.za",
     phone: "0736549872",
@@ -271,8 +250,7 @@ export const parentsData = [
     children: ["Jane Dlamini"]
   },
   {
-    id: 3,
-    parentId: "P914563",
+    id: "3",
     name: "Kenny Sekhoela",
     email: "kenny.sekhoela@lynxacademy.co.za",
     phone: "0745643210",
@@ -280,8 +258,7 @@ export const parentsData = [
     children: ["Sebastian Sekhoela"]
   },
   {
-    id: 4,
-    parentId: "P237845",
+    id: "4",
     name: "Thandi Khumalo",
     email: "thandi.khumalo@lynxacademy.co.za",
     phone: "0612345678",
@@ -289,8 +266,7 @@ export const parentsData = [
     children: ["Jay Khumalo", "Sam Khumalo"]
   },
   {
-    id: 5,
-    parentId: "P649582",
+    id: "5",
     name: "Zanele Ngema",
     email: "zanele.ngema@lynxacademy.co.za",
     phone: "0834567890",
@@ -298,8 +274,7 @@ export const parentsData = [
     children: ["Zandi Ngema"]
   },
   {
-    id: 6,
-    parentId: "P182374",
+    id: "6",
     name: "Lerato Moeketsi",
     email: "lerato.moeketsi@lynxacademy.co.za",
     phone: "0719876543",
@@ -307,8 +282,7 @@ export const parentsData = [
     children: ["Thandiwe Moeketsi"]
   },
   {
-    id: 7,
-    parentId: "P493825",
+    id: "7",
     name: "Mandla Khanyile",
     email: "mandla.khanyile@lynxacademy.co.za",
     phone: "0796543210",
@@ -316,8 +290,7 @@ export const parentsData = [
     children: ["Sipho Khanyile", "Lerato Khanyile"]
   },
   {
-    id: 8,
-    parentId: "P726548",
+    id: "8",
     name: "Nolwazi Shabalala",
     email: "nolwazi.shabalala@lynxacademy.co.za",
     phone: "0825671234",
@@ -325,8 +298,7 @@ export const parentsData = [
     children: ["Nandi Shabalala"]
   },
   {
-    id: 9,
-    parentId: "P542839",
+    id: "9",
     name: "Tshepo Mokoena",
     email: "tshepo.mokoena@lynxacademy.co.za",
     phone: "0747891234",
@@ -334,8 +306,7 @@ export const parentsData = [
     children: ["Dineo Mokoena"]
   },
   {
-    id: 10,
-    parentId: "P364821",
+    id: "10",
     name: "Lungile Ndlovu",
     email: "lungile.ndlovu@lynxacademy.co.za",
     phone: "0815672345",
@@ -343,7 +314,6 @@ export const parentsData = [
     children: ["Lwazi Ndlovu", "Nandi Shabalala"]
   }
 ];
-
 
 export const subjectsData = [
   {
@@ -400,78 +370,98 @@ export const subjectsData = [
 
 
 
-export const classesData = [
-  {
-    id: 1,
-    name: "1A",
-    capacity: 20,
-    grade: 1,
-    supervisor: "Joseph Padilla",
-  },
-  {
-    id: 2,
-    name: "2B",
-    capacity: 22,
-    grade: 2,
-    supervisor: "Blake Joseph",
-  },
-  {
-    id: 3,
-    name: "3C",
-    capacity: 20,
-    grade: 3,
-    supervisor: "Tom Bennett",
-  },
-  {
-    id: 4,
-    name: "4B",
-    capacity: 18,
-    grade: 4,
-    supervisor: "Aaron Collins",
-  },
-  {
-    id: 5,
-    name: "5A",
-    capacity: 16,
-    grade: 5,
-    supervisor: "Iva Frank",
-  },
-  {
-    id: 5,
-    name: "5B",
-    capacity: 20,
-    grade: 5,
-    supervisor: "Leila Santos",
-  },
-  {
-    id: 7,
-    name: "7A",
-    capacity: 18,
-    grade: 7,
-    supervisor: "Carrie Walton",
-  },
-  {
-    id: 8,
-    name: "6B",
-    capacity: 22,
-    grade: 6,
-    supervisor: "Christopher Butler",
-  },
-  {
-    id: 9,
-    name: "6C",
-    capacity: 18,
-    grade: 6,
-    supervisor: "Marc Miller",
-  },
-  {
-    id: 10,
-    name: "6D",
-    capacity: 20,
-    grade: 6,
-    supervisor: "Ophelia Marsh",
-  },
-];
+// export const classesData: Class[] = [
+//   {
+//     id: 1,
+//     name: "1A",
+//     capacity: 20,
+//     gradeId: 1,
+//     supervisorId: "9101234567",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 2,
+//     name: "2B",
+//     capacity: 22,
+//     gradeId: 2,
+//     supervisorId: "8909876543",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 3,
+//     name: "3C",
+//     capacity: 20,
+//     gradeId: 3,
+//     supervisorId: "8905671234",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 4,
+//     name: "4B",
+//     capacity: 18,
+//     gradeId: 4,
+//     supervisorId: "8908765432",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 5,
+//     name: "5A",
+//     capacity: 16,
+//     gradeId: 5,
+//     supervisorId: "8906543210",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 6,
+//     name: "5B",
+//     capacity: 20,
+//     gradeId: 5,
+//     supervisorId: "8904321765",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 7,
+//     name: "7A",
+//     capacity: 18,
+//     gradeId: 7,
+//     supervisorId: "8509875678",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 8,
+//     name: "6B",
+//     capacity: 22,
+//     gradeId: 6,
+//     supervisorId: "8907654321",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 9,
+//     name: "6C",
+//     capacity: 18,
+//     gradeId: 6,
+//     supervisorId: "9202348765",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+//   {
+//     id: 10,
+//     name: "6D",
+//     capacity: 20,
+//     gradeId: 6,
+//     supervisorId: "8908762345",
+//     createdAt: "2025-01-01T08:00:00.000Z",
+//     updatedAt: "2025-01-01T08:00:00.000Z",
+//   },
+// ];
 
 export const lessonsData = [
   {
