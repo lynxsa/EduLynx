@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import EduLynxLogo from "../../components/EduLynxLogo";
 
 export default function CustomLoginPage() {
   const [email, setEmail] = useState("");
@@ -177,20 +177,11 @@ export default function CustomLoginPage() {
           <div className="mb-6 text-center">
             <div className="mb-3 flex justify-center">
               <div className="relative w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center shadow-lg">
-                <Image 
-                  src="/logo.png" 
-                  alt="EduLynx Logo" 
+                <EduLynxLogo 
                   width={64} 
                   height={64} 
                   className="object-contain"
                   priority
-                  onLoad={() => console.log('Logo loaded successfully')}
-                  onError={(e) => {
-                    console.error('Logo failed to load from /logo.png');
-                    // Keep the purple background, no fallback text
-                    const target = e.currentTarget;
-                    target.style.display = 'none';
-                  }}
                 />
               </div>
             </div>
