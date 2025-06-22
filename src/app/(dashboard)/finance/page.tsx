@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 import FinanceEntryForm from '@/components/forms/FinanceEntryForm';
@@ -29,13 +29,26 @@ const FinancePage = () => {
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Finance Entries</h1>
-        <button className="btn btn-primary" onClick={() => { setShowForm(!showForm); setEditEntry(null); }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            setShowForm(!showForm);
+            setEditEntry(null);
+          }}
+        >
           {showForm ? 'Close' : 'Add Entry'}
         </button>
       </div>
       {(showForm || editEntry) && (
         <div className="mb-6">
-          <FinanceEntryForm initialData={editEntry || {}} onSuccess={() => { setShowForm(false); setEditEntry(null); setRefresh(r => r + 1); }} />
+          <FinanceEntryForm
+            initialData={editEntry || {}}
+            onSuccess={() => {
+              setShowForm(false);
+              setEditEntry(null);
+              setRefresh(r => r + 1);
+            }}
+          />
         </div>
       )}
       <div className="overflow-x-auto">
@@ -61,8 +74,18 @@ const FinancePage = () => {
                 <td className="p-2">{entry.reference || '--'}</td>
                 <td className="p-2">{new Date(entry.date).toLocaleDateString()}</td>
                 <td className="p-2 flex gap-2">
-                  <button className="btn btn-xs btn-secondary" onClick={() => { setEditEntry(entry); setShowForm(true); }}>Edit</button>
-                  <button className="btn btn-xs btn-danger" onClick={() => handleDelete(entry.id)}>Delete</button>
+                  <button
+                    className="btn btn-xs btn-secondary"
+                    onClick={() => {
+                      setEditEntry(entry);
+                      setShowForm(true);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button className="btn btn-xs btn-danger" onClick={() => handleDelete(entry.id)}>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

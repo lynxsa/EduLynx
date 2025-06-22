@@ -15,7 +15,8 @@ const ProfLynxPage = () => {
         <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Prof Lynx AI Assistant</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Your intelligent educational companion for analytics, insights, and data-driven decisions
+            Your intelligent educational companion for analytics, insights, and data-driven
+            decisions
           </p>
         </div>
       </div>
@@ -120,7 +121,9 @@ const ProfLynxPage = () => {
       {/* Sample Questions */}
       {/* eslint-disable react/no-unescaped-entities */}
       <div className="bg-gray-50 p-8 rounded-xl max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sample Questions to Ask</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          Sample Questions to Ask
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded-lg border border-gray-200">
             <p className="text-gray-700 italic">What are the current attendance trends?</p>

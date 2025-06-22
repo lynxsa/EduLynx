@@ -1,8 +1,26 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals"],
   "rules": {
     "react/no-unescaped-entities": "off",
     "@next/next/no-img-element": "off",
-    "react-hooks/exhaustive-deps": "warn"
-  }
+    "react-hooks/exhaustive-deps": "error",
+    "react/display-name": "off",
+    "prefer-const": "error",
+    "no-var": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["src/components/**/*.tsx", "src/app/**/*.tsx"],
+      "rules": {
+        "@next/next/no-css-tags": "off",
+        "react/forbid-dom-props": "off",
+        "react/no-unknown-property": "off"
+      }
+    }
+  ]
 }

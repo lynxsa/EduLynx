@@ -1,113 +1,188 @@
 'use client';
 
-import Pagination from "@/components/Pagination";
-import TableSearch from "@/components/TableSearch";
-import Image from "next/image";
-import Table from "@/components/Table";
-import React, { useEffect, useState } from 'react';
-import Link from "next/link";
-import FormModal from "@/components/FormModal";
+import { useEffect, useState } from 'react';
+import { ModernTable } from '@/components/ui/ModernTable';
+import { Calendar, Clock, GraduationCap, MapPin } from 'lucide-react';
 
 type EventRow = {
   id: number;
   title: string;
   startTime: string;
   endTime: string;
+  description?: string;
+  location?: string;
   class?: { name: string } | null;
 };
 
-const columns = [
-  { header: "Event Title", accessor: "title", sortable: true },
-  { header: "Class", accessor: "class", className: "table-cell", sortable: true },
-  { header: "Start Time", accessor: "startTime", className: "hidden md:table-cell", sortable: true },
-  { header: "End Time", accessor: "endTime", className: "hidden md:table-cell", sortable: true },
-  { header: "Actions", accessor: "actions", className: "table-cell" },
-];
-
-const EventList = () => {
+const EventsPage = () => {
   const [events, setEvents] = useState<EventRow[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const ITEMS_PER_PAGE = 15;
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch(`/api/events?page=${page}&limit=${ITEMS_PER_PAGE}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch events');
-        return res.json();
-      })
-      .then(data => {
-        setEvents(data.data);
-        setTotal(data.total);
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/events');
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        const data = await response.json();
+        setEvents(data.data || data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message || 'Unknown error');
-        setLoading(false);
-      });
-  }, [page]);
+      }
+    };
 
-  const filteredEvents = events.filter(e =>
-    e.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    e.class?.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    fetchEvents();
+  }, []);
 
-  const renderRow = (item: EventRow) => (
-    <tr key={item.id} role="row">
-      <td className="flex items-center gap-4 p-3" role="cell">
-        <div className="flex items-center gap-2">
-          <Image src="/calendar.png" alt="Event" width={24} height={24} />
-          <span className="font-semibold">{item.title}</span>
-        </div>
-      </td>
-      <td className="md:table-cell" role="cell">{item.class?.name || '-'}</td>
-      <td className="hidden md:table-cell" role="cell">{new Date(item.startTime).toLocaleString()}</td>
-      <td className="hidden md:table-cell" role="cell">{new Date(item.endTime).toLocaleString()}</td>
-      <td className="table-cell" role="cell">
-        <div className="flex items-center gap-2">
-          <Link href={`/list/events/${item.id}`} aria-label={`View details for event ${item.title}`} tabIndex={0}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LYNXLight" aria-label="View event details">
-              <Image src="/view.png" alt="View" width={16} height={16} />
-            </button>
-          </Link>
-          <FormModal table="events" type="update" data={item} aria-label={`Edit event ${item.title}`} />
-          <FormModal table="events" type="delete" id={item.id} aria-label={`Delete event ${item.title}`} />
-        </div>
-      </td>
-    </tr>
-  );
-
-  return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
-      <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Events</h1>
-        <div className="flex flex-col justify-center md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch value={searchTerm} onChange={setSearchTerm} placeholder="Search events..." />
-          <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-              <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-              <Image src="/sort.png" alt="" width={14} height={14} />
-            </button>
+  const columns = [
+    {
+      key: 'title',
+      label: 'Event',
+      sortable: true,
+      render: (event: EventRow) => (
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-indigo-600" />
+            </div>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900">{event.title}</div>
+            {event.description && (
+              <div className="text-sm text-gray-500 truncate max-w-xs">{event.description}</div>
+            )}
           </div>
         </div>
+      ),
+    },
+    {
+      key: 'class',
+      label: 'Class',
+      sortable: true,
+      render: (event: EventRow) => (
+        <div className="flex items-center gap-2">
+          <GraduationCap className="w-4 h-4 text-gray-400" />
+          <span className="text-sm text-gray-900">{event.class?.name || 'All Classes'}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'startTime',
+      label: 'Start Time',
+      sortable: true,
+      render: (event: EventRow) => {
+        const date = new Date(event.startTime);
+        return (
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-900">
+                {date.toLocaleDateString('en-ZA')}
+              </p>
+              <p className="text-xs text-gray-500">
+                {date.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
+              </p>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: 'endTime',
+      label: 'End Time',
+      sortable: true,
+      render: (event: EventRow) => {
+        const date = new Date(event.endTime);
+        return (
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-900">
+                {date.toLocaleDateString('en-ZA')}
+              </p>
+              <p className="text-xs text-gray-500">
+                {date.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
+              </p>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: 'location',
+      label: 'Location',
+      sortable: true,
+      render: (event: EventRow) => {
+        if (!event.location) {
+          return <span className="text-gray-500 text-sm">No location</span>;
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-gray-400" />
+            <span className="text-sm text-gray-900">{event.location}</span>
+          </div>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading events...</p>
+        </div>
       </div>
-      {loading ? (
-        <div className="p-4 text-center">Loading events...</div>
-      ) : error ? (
-        <div className="p-4 text-center text-red-500">{error}</div>
-      ) : (
-        <Table columns={columns} renderRow={renderRow} data={filteredEvents} emptyMessage="No events found." />
-      )}
-      <Pagination page={page} count={total} />
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      <ModernTable
+        data={events}
+        columns={columns}
+        title="Events"
+        description="Manage school events and activities"
+        searchableFields={['title', 'description', 'location', 'class.name']}
+        onView={(event: EventRow) => {
+          console.log('View event:', event);
+          // Navigate to view page
+        }}
+        onEdit={(event: EventRow) => {
+          console.log('Edit event:', event);
+          // Navigate to edit page
+        }}
+        onDelete={(event: EventRow) => {
+          if (window.confirm('Are you sure you want to delete this event?')) {
+            console.log('Delete event:', event);
+            // Handle delete
+          }
+        }}
+      />
     </div>
   );
 };
 
-export default EventList;
+export default EventsPage;

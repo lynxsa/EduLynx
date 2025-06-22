@@ -15,7 +15,18 @@ interface DashboardCardProps {
   description?: string;
 }
 
-const DashboardCard = ({ title, value, icon, trend, colorClass = 'bg-white', className = '', href, ariaLabel, children, description }: DashboardCardProps) => {
+const DashboardCard = ({
+  title,
+  value,
+  icon,
+  trend,
+  colorClass = 'bg-white',
+  className = '',
+  href,
+  ariaLabel,
+  children,
+  description,
+}: DashboardCardProps) => {
   const cardContent = (
     <div
       className={`rounded-2xl shadow-md p-5 flex flex-col gap-2 min-w-[150px] min-h-[110px] ${colorClass} ${className} transition-all duration-200 hover:scale-[1.03] hover:shadow-2xl focus-within:ring-2 focus-within:ring-LYNXPurple/70 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 outline-none focus:outline-LYNXPurple/80 animate-fade-in`}
@@ -26,7 +37,9 @@ const DashboardCard = ({ title, value, icon, trend, colorClass = 'bg-white', cla
       data-tooltip-content={description}
     >
       <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-semibold text-gray-600 dark:text-gray-200 uppercase">{title}</span>
+        <span className="text-xs font-semibold text-gray-600 dark:text-gray-200 uppercase">
+          {title}
+        </span>
         {icon && <span className="ml-2 text-xl flex items-center">{icon}</span>}
       </div>
       <div className="flex items-center gap-2">
@@ -38,8 +51,12 @@ const DashboardCard = ({ title, value, icon, trend, colorClass = 'bg-white', cla
     </div>
   );
   return href ? (
-    <Link href={href} tabIndex={0} aria-label={title} className="focus:outline-none">{cardContent}</Link>
-  ) : cardContent;
+    <Link href={href} tabIndex={0} aria-label={title} className="focus:outline-none">
+      {cardContent}
+    </Link>
+  ) : (
+    cardContent
+  );
 };
 
 export default DashboardCard;

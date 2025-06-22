@@ -15,7 +15,11 @@ const TopClassesBarChart: React.FC<TopClassesBarChartProps> = ({ data }) => {
     <div className="w-full bg-white rounded-2xl shadow-md p-4 animate-fade-in hover:shadow-xl transition-shadow duration-200">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-md font-semibold text-LYNXPurple">Top Performing Classes</h3>
-        <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full cursor-pointer" data-tooltip-id="topclasses-tooltip" data-tooltip-content="Classes ranked by average student scores">
+        <div
+          className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full cursor-pointer"
+          data-tooltip-id="topclasses-tooltip"
+          data-tooltip-content="Classes ranked by average student scores"
+        >
           🏆
         </div>
       </div>
@@ -25,7 +29,7 @@ const TopClassesBarChart: React.FC<TopClassesBarChartProps> = ({ data }) => {
         <div style={{ height: 260 }}>
           <ResponsiveBar
             data={data}
-            keys={["avgScore"]}
+            keys={['avgScore']}
             indexBy="className"
             margin={{ top: 20, right: 30, bottom: 40, left: 50 }}
             padding={0.3}

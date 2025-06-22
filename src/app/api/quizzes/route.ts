@@ -28,7 +28,10 @@ export async function POST(req: NextRequest) {
     const quiz = await prisma.quiz.create({ data });
     return NextResponse.json(quiz, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create quiz', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create quiz', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -44,7 +47,10 @@ export async function PUT(req: NextRequest) {
     const quiz = await prisma.quiz.update({ where: { id: data.id }, data });
     return NextResponse.json(quiz);
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to update quiz', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to update quiz', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -60,6 +66,9 @@ export async function DELETE(req: NextRequest) {
     await prisma.quiz.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to delete quiz', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to delete quiz', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }

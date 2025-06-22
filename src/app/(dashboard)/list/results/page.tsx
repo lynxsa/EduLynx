@@ -1,129 +1,260 @@
 'use client';
 
-import Pagination from "@/components/Pagination";
-import TableSearch from "@/components/TableSearch";
-import Image from "next/image";
-import Table from "@/components/Table";
-import React, { useEffect, useState } from 'react';
-import Link from "next/link";
-import FormModal from "@/components/FormModal";
+import { useEffect, useState } from 'react';
+import { ModernTable } from '@/components/ui/ModernTable';
+import { Trophy, User, GraduationCap, BookOpen, TrendingUp, FileText } from 'lucide-react';
 
 type ResultRow = {
   id: number;
   score: number;
-  exam?: { lesson?: { subject?: { name: string }, class?: { name: string } } } | null;
-  assignment?: { lesson?: { subject?: { name: string }, class?: { name: string } } } | null;
+  exam?: {
+    title?: string;
+    lesson?: {
+      subject?: { name: string };
+      class?: { name: string };
+    };
+  } | null;
+  assignment?: {
+    title?: string;
+    lesson?: {
+      subject?: { name: string };
+      class?: { name: string };
+    };
+  } | null;
   student?: { name: string } | null;
 };
 
-const columns = [
-  { header: "Subject Name", accessor: "subject", sortable: true },
-  { header: "Student", accessor: "student", className: "table-cell", sortable: true },
-  { header: "Class", accessor: "class", className: "hidden md:table-cell", sortable: true },
-  { header: "Score", accessor: "score", className: "table-cell", sortable: true },
-  { header: "Type", accessor: "type", className: "table-cell", sortable: true },
-  { header: "Actions", accessor: "actions", className: "table-cell" },
-];
-
-const ResultList = () => {
+const ResultsPage = () => {
   const [results, setResults] = useState<ResultRow[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const ITEMS_PER_PAGE = 15;
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch(`/api/results?page=${page}&limit=${ITEMS_PER_PAGE}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch results');
-        return res.json();
-      })
-      .then(data => {
-        setResults(data.data);
-        setTotal(data.total);
+    const fetchResults = async () => {
+      try {
+        const response = await fetch('/api/results');
+        if (!response.ok) {
+          throw new Error('Failed to fetch results');
+        }
+        const data = await response.json();
+        setResults(data.data || data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message || 'Unknown error');
-        setLoading(false);
-      });
-  }, [page]);
+      }
+    };
 
-  const filteredResults = results.filter(r => {
-    let subject = r.exam?.lesson?.subject?.name || r.assignment?.lesson?.subject?.name || "";
-    let student = r.student?.name || "";
-    return (
-      subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+    fetchResults();
+  }, []);
 
-  const renderRow = (item: ResultRow) => {
-    let type = '-';
-    let subject = '-';
-    let className = '-';
-    if (item.exam) {
-      type = 'Exam';
-      subject = item.exam.lesson?.subject?.name || '-';
-      className = item.exam.lesson?.class?.name || '-';
-    } else if (item.assignment) {
-      type = 'Assignment';
-      subject = item.assignment.lesson?.subject?.name || '-';
-      className = item.assignment.lesson?.class?.name || '-';
-    }
-    return (
-      <tr key={item.id} className="border-b-gray-200 p-2 hover:bg-LYNXLavendar even:bg-slate-50 odd:bg-white">
-        <td className="flex items-center gap-4 p-3">
-          <Image src="/result.png" alt="Result" width={24} height={24} className="inline-block" />
-          <span>{subject}</span>
-        </td>
-        <td className="table-cell">{item.student?.name || '-'}</td>
-        <td className="hidden md:table-cell">{className}</td>
-        <td className="table-cell">{item.score}</td>
-        <td className="table-cell">{type}</td>
-        <td className="table-cell">
-          <div className="flex items-center gap-2">
-            <Link href={`/list/results/${item.id}`}>
-              <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LYNXLight">
-                <Image src="/view.png" alt="View" width={16} height={16} />
-              </button>
-            </Link>
-          </div>
-        </td>
-      </tr>
-    );
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return 'text-green-600 bg-green-100';
+    if (score >= 70) return 'text-blue-600 bg-blue-100';
+    if (score >= 60) return 'text-yellow-600 bg-yellow-100';
+    return 'text-red-600 bg-red-100';
   };
 
-  return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
-      <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Results</h1>
-        <div className="flex flex-col justify-center md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch value={searchTerm} onChange={setSearchTerm} placeholder="Search results..." />
-          <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-              <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-              <Image src="/sort.png" alt="" width={14} height={14} />
-            </button>
+  const getGradeFromScore = (score: number) => {
+    if (score >= 90) return 'A+';
+    if (score >= 80) return 'A';
+    if (score >= 70) return 'B';
+    if (score >= 60) return 'C';
+    if (score >= 50) return 'D';
+    return 'F';
+  };
+
+  const columns = [
+    {
+      key: 'assessment',
+      label: 'Assessment',
+      sortable: true,
+      render: (result: ResultRow) => {
+        const isExam = !!result.exam;
+        const title = result.exam?.title || result.assignment?.title || 'N/A';
+        const subject =
+          result.exam?.lesson?.subject?.name || result.assignment?.lesson?.subject?.name || 'N/A';
+
+        return (
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0">
+              <div
+                className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                  isExam ? 'bg-red-100' : 'bg-purple-100'
+                }`}
+              >
+                {isExam ? (
+                  <FileText className="w-5 h-5 text-red-600" />
+                ) : (
+                  <BookOpen className="w-5 h-5 text-purple-600" />
+                )}
+              </div>
+            </div>
+            <div>
+              <div className="font-medium text-gray-900">{title}</div>
+              <div className="text-sm text-gray-500">
+                <span
+                  className={`inline-block px-2 py-1 rounded-full text-xs mr-2 ${
+                    isExam ? 'bg-red-100 text-red-800' : 'bg-purple-100 text-purple-800'
+                  }`}
+                >
+                  {isExam ? 'Exam' : 'Assignment'}
+                </span>
+                {subject}
+              </div>
+            </div>
           </div>
+        );
+      },
+    },
+    {
+      key: 'student',
+      label: 'Student',
+      sortable: true,
+      render: (result: ResultRow) => (
+        <div className="flex items-center gap-2">
+          <User className="w-4 h-4 text-gray-400" />
+          <span className="text-sm text-gray-900">{result.student?.name || 'N/A'}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'class',
+      label: 'Class',
+      sortable: true,
+      render: (result: ResultRow) => {
+        const className =
+          result.exam?.lesson?.class?.name || result.assignment?.lesson?.class?.name || 'N/A';
+        return (
+          <div className="flex items-center gap-2">
+            <GraduationCap className="w-4 h-4 text-gray-400" />
+            <span className="text-sm text-gray-900">{className}</span>
+          </div>
+        );
+      },
+    },
+    {
+      key: 'score',
+      label: 'Score & Grade',
+      sortable: true,
+      render: (result: ResultRow) => {
+        const scoreColor = getScoreColor(result.score);
+        const grade = getGradeFromScore(result.score);
+
+        return (
+          <div className="flex items-center gap-3">
+            <TrendingUp className="w-4 h-4 text-gray-400" />
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-gray-900">{result.score}%</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${scoreColor}`}>
+                  {grade}
+                </span>
+              </div>
+              <div className="text-xs text-gray-500">
+                {result.score >= 70 ? 'Pass' : 'Needs Improvement'}
+              </div>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: 'performance',
+      label: 'Performance',
+      sortable: true,
+      render: (result: ResultRow) => {
+        const score = result.score;
+        let performance = 'Poor';
+        let performanceColor = 'text-red-600 bg-red-100';
+
+        if (score >= 90) {
+          performance = 'Excellent';
+          performanceColor = 'text-green-600 bg-green-100';
+        } else if (score >= 80) {
+          performance = 'Very Good';
+          performanceColor = 'text-green-600 bg-green-100';
+        } else if (score >= 70) {
+          performance = 'Good';
+          performanceColor = 'text-blue-600 bg-blue-100';
+        } else if (score >= 60) {
+          performance = 'Satisfactory';
+          performanceColor = 'text-yellow-600 bg-yellow-100';
+        } else if (score >= 50) {
+          performance = 'Needs Improvement';
+          performanceColor = 'text-orange-600 bg-orange-100';
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-gray-400" />
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${performanceColor}`}>
+              {performance}
+            </span>
+          </div>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading results...</p>
         </div>
       </div>
-      {loading ? (
-        <div className="p-4 text-center">Loading results...</div>
-      ) : error ? (
-        <div className="p-4 text-center text-red-500">{error}</div>
-      ) : (
-        <Table columns={columns} renderRow={renderRow} data={filteredResults} emptyMessage="No results found." />
-      )}
-      <Pagination page={page} count={total} />
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      <ModernTable
+        data={results}
+        columns={columns}
+        title="Results"
+        description="Manage student assessment results and grades"
+        searchableFields={[
+          'student.name',
+          'exam.title',
+          'assignment.title',
+          'exam.lesson.subject.name',
+          'assignment.lesson.subject.name',
+        ]}
+        onView={(result: ResultRow) => {
+          console.log('View result:', result);
+          // Navigate to view page
+        }}
+        onEdit={(result: ResultRow) => {
+          console.log('Edit result:', result);
+          // Navigate to edit page
+        }}
+        onDelete={(result: ResultRow) => {
+          if (window.confirm('Are you sure you want to delete this result?')) {
+            console.log('Delete result:', result);
+            // Handle delete
+          }
+        }}
+      />
     </div>
   );
 };
 
-export default ResultList;
+export default ResultsPage;

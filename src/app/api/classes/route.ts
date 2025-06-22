@@ -48,7 +48,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const newClass = await prisma.class.create({ data });
     return NextResponse.json(newClass, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create class', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create class', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -63,7 +66,10 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     const updatedClass = await prisma.class.update({ where: { id: data.id }, data });
     return NextResponse.json(updatedClass);
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to update class', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to update class', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -78,6 +84,9 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     await prisma.class.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to delete class', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to delete class', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }

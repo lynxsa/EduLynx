@@ -10,14 +10,7 @@ export default function PassRateCard({ passRate }: PassRateCardProps) {
       <h3 className="text-md font-semibold text-LYNXPurple mb-2">Pass Rate</h3>
       <div className="relative flex items-center justify-center h-32 w-32">
         <svg className="absolute top-0 left-0" width="128" height="128">
-          <circle
-            cx="64"
-            cy="64"
-            r="56"
-            fill="none"
-            stroke="#e5e7eb"
-            strokeWidth="12"
-          />
+          <circle cx="64" cy="64" r="56" fill="none" stroke="#e5e7eb" strokeWidth="12" />
           <circle
             cx="64"
             cy="64"

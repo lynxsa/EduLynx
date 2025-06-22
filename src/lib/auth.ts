@@ -1,10 +1,12 @@
 import { NextRequest } from 'next/server';
 import * as jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { UserRole } from '@prisma/client';
 
 export interface TokenPayload {
   userId: string;
   email: string;
-  role: string;  
+  role: string;
   firstName: string;
   lastName: string;
   schoolId?: number;
@@ -14,6 +16,28 @@ export interface TokenPayload {
   aud?: string;
 }
 
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
+
+// Password utilities
+export async function hashPassword(password: string): Promise<string> {
+  const saltRounds = 12;
+  return await bcrypt.hash(password, saltRounds);
+}
+
+export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+  return await bcrypt.compare(password, hashedPassword);
+}
+
+// Token generation
+export function generateToken(payload: Omit<TokenPayload, 'iat' | 'exp'>): string {
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: '7d',
+    issuer: 'edulynx',
+    audience: 'edulynx-users',
+    algorithm: 'HS256',
+  });
+}
+
 export function verifyToken(token: string): TokenPayload | null {
   try {
     const jwtSecret = process.env.JWT_SECRET;
@@ -21,19 +45,19 @@ export function verifyToken(token: string): TokenPayload | null {
       console.error('JWT_SECRET not configured');
       return null;
     }
-    
+
     const decoded = jwt.verify(token, jwtSecret, {
       algorithms: ['HS256'],
       issuer: 'edulynx',
-      audience: 'edulynx-users'
+      audience: 'edulynx-users',
     }) as TokenPayload;
-    
+
     // Additional validation
     if (!decoded.userId || !decoded.email || !decoded.role) {
       console.error('Invalid token payload structure');
       return null;
     }
-    
+
     return decoded;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -60,7 +84,7 @@ export function getTokenFromRequest(request: Request): string | null {
         }
       }
     }
-    
+
     // Fallback to Authorization header
     const authHeader = request.headers.get('authorization');
     if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -69,7 +93,7 @@ export function getTokenFromRequest(request: Request): string | null {
         return token;
       }
     }
-    
+
     return null;
   } catch (error) {
     console.error('Error extracting token from request:', error);
@@ -101,4 +125,69 @@ export function getRoleFromRequest(req: NextRequest): string | undefined {
   if (!sessionToken) return undefined;
   const payload = parseJwt(sessionToken);
   return payload?.role || payload?.publicMetadata?.role;
+}
+
+// Permission utilities
+export function hasPermission(userRole: string, requiredRoles: string[]): boolean {
+  return requiredRoles.includes(userRole);
+}
+
+export function isAdmin(userRole: string): boolean {
+  return userRole === 'ADMIN';
+}
+
+export function isTeacher(userRole: string): boolean {
+  return userRole === 'TEACHER';
+}
+
+export function isStudent(userRole: string): boolean {
+  return userRole === 'STUDENT';
+}
+
+export function isParent(userRole: string): boolean {
+  return userRole === 'PARENT';
+}
+
+export function canAccessResource(userRole: string, resourceType: string, action: string): boolean {
+  // Admin can access everything
+  if (isAdmin(userRole)) return true;
+
+  // Define role-based permissions
+  const permissions = {
+    TEACHER: {
+      students: ['read', 'update'],
+      classes: ['read', 'update'],
+      lessons: ['read', 'create', 'update'],
+      assignments: ['read', 'create', 'update'],
+      grades: ['read', 'create', 'update'],
+      attendance: ['read', 'create', 'update'],
+    },
+    STUDENT: {
+      profile: ['read', 'update'],
+      assignments: ['read'],
+      grades: ['read'],
+      attendance: ['read'],
+    },
+    PARENT: {
+      children: ['read'],
+      grades: ['read'],
+      attendance: ['read'],
+      payments: ['read', 'create'],
+    },
+  };
+
+  const rolePermissions = permissions[userRole as keyof typeof permissions];
+  if (!rolePermissions) return false;
+
+  const resourcePermissions = rolePermissions[resourceType as keyof typeof rolePermissions];
+  if (!resourcePermissions) return false;
+
+  return resourcePermissions.includes(action);
+}
+
+export async function getCurrentUser(request: NextRequest): Promise<TokenPayload | null> {
+  const token = getTokenFromRequest(request);
+  if (!token) return null;
+
+  return verifyToken(token);
 }

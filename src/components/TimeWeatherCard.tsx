@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from 'react';
 import { Clock, MapPin, Sun, Cloud, CloudRain, CloudSnow, Zap } from 'lucide-react';
 
@@ -19,7 +19,7 @@ const TimeWeatherCard = () => {
     location: 'Johannesburg',
     icon: 'cloud',
     humidity: 65,
-    windSpeed: 12
+    windSpeed: 12,
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,7 +48,7 @@ const TimeWeatherCard = () => {
             condition: data.condition || 'Partly Cloudy',
             humidity: data.humidity || 65,
             windSpeed: data.windSpeed || 12,
-            icon: data.icon || 'cloud'
+            icon: data.icon || 'cloud',
           }));
         }
       } catch (error) {
@@ -59,7 +59,7 @@ const TimeWeatherCard = () => {
           ...prev,
           temperature: temp,
           condition: currentHour < 12 ? 'Morning Clear' : 'Afternoon Sun',
-          icon: currentHour < 18 ? 'sun' : 'cloud'
+          icon: currentHour < 18 ? 'sun' : 'cloud',
         }));
       } finally {
         setIsLoading(false);
@@ -69,12 +69,12 @@ const TimeWeatherCard = () => {
     fetchWeather();
     // Refresh weather every 30 minutes
     const weatherInterval = setInterval(fetchWeather, 30 * 60 * 1000);
-    
+
     return () => clearInterval(weatherInterval);
   }, [currentHour]); // Now using extracted currentHour variable
 
   const getWeatherIcon = (icon: string) => {
-    const iconClass = "w-4 h-4";
+    const iconClass = 'w-4 h-4';
     switch (icon) {
       case 'sun':
         return <Sun className={`${iconClass} text-yellow-500`} />;
@@ -105,15 +105,13 @@ const TimeWeatherCard = () => {
           <Clock className="w-4 h-4 text-purple-600" />
           <div>
             <div className="text-sm font-semibold text-gray-900">
-              {currentTime.toLocaleTimeString('en-ZA', { 
-                hour: '2-digit', 
+              {currentTime.toLocaleTimeString('en-ZA', {
+                hour: '2-digit',
                 minute: '2-digit',
-                hour12: false
+                hour12: false,
               })}
             </div>
-            <div className="text-xs text-gray-600">
-              {getGreeting()}
-            </div>
+            <div className="text-xs text-gray-600">{getGreeting()}</div>
           </div>
         </div>
 
@@ -125,9 +123,7 @@ const TimeWeatherCard = () => {
             getWeatherIcon(weather.icon)
           )}
           <div>
-            <div className="text-sm font-medium text-gray-900">
-              {weather.temperature}°C
-            </div>
+            <div className="text-sm font-medium text-gray-900">{weather.temperature}°C</div>
             <div className="flex items-center space-x-1">
               <MapPin className="w-3 h-3 text-gray-400" />
               <span className="text-xs text-gray-600">{weather.location}</span>

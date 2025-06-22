@@ -1,66 +1,117 @@
-import React from 'react';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  BarChart3, 
-  Users, 
-  Award, 
-  Target,
-  BookOpen,
-  Clock
-} from 'lucide-react';
+'use client';
 
-// Mock performance data
-const performanceData = {
-  overallGPA: 3.45,
-  passRate: 87.5,
-  attendanceRate: 91.2,
-  subjectPerformance: [
-    { subject: 'Mathematics', average: 78.5, trend: 'up', students: 245 },
-    { subject: 'English', average: 82.3, trend: 'up', students: 250 },
-    { subject: 'Science', average: 75.8, trend: 'down', students: 238 },
-    { subject: 'History', average: 79.2, trend: 'up', students: 220 },
-    { subject: 'Geography', average: 73.4, trend: 'down', students: 205 },
-    { subject: 'Life Skills', average: 85.6, trend: 'up', students: 255 }
-  ],
-  gradeDistribution: [
-    { grade: 'A (80-100%)', count: 125, percentage: 15.6 },
-    { grade: 'B (70-79%)', count: 298, percentage: 37.3 },
-    { grade: 'C (60-69%)', count: 245, percentage: 30.6 },
-    { grade: 'D (50-59%)', count: 89, percentage: 11.1 },
-    { grade: 'F (0-49%)', count: 43, percentage: 5.4 }
-  ],
-  topPerformers: [
-    { name: 'Sarah Johnson', grade: '12A', gpa: 4.0, subjects: 6 },
-    { name: 'Michael Chen', grade: '11B', gpa: 3.95, subjects: 6 },
-    { name: 'Emily Davis', grade: '12C', gpa: 3.89, subjects: 6 },
-    { name: 'David Wilson', grade: '10A', gpa: 3.87, subjects: 5 },
-    { name: 'Lisa Anderson', grade: '11A', gpa: 3.85, subjects: 6 }
-  ],
-  classPerformance: [
-    { class: '12A', students: 35, average: 82.4, attendance: 94.2 },
-    { class: '12B', students: 33, average: 78.9, attendance: 91.5 },
-    { class: '11A', students: 38, average: 80.1, attendance: 92.8 },
-    { class: '11B', students: 36, average: 77.3, attendance: 89.7 },
-    { class: '10A', students: 40, average: 75.6, attendance: 93.1 },
-    { class: '10B', students: 38, average: 73.2, attendance: 88.9 }
-  ]
-};
+import { Award, BookOpen, Clock, Target, TrendingDown, TrendingUp, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+interface PerformanceData {
+  overallGPA: number;
+  passRate: number;
+  attendanceRate: number;
+  subjectPerformance: Array<{
+    subject: string;
+    average: number;
+    trend: string;
+    students: number;
+  }>;
+  gradeDistribution: Array<{
+    grade: string;
+    count: number;
+    percentage: number;
+  }>;
+  topPerformers: Array<{
+    name: string;
+    grade: string;
+    gpa: number;
+    subjects: number;
+  }>;
+  classPerformance: Array<{
+    class: string;
+    students: number;
+    average: number;
+    attendance: number;
+  }>;
+  totalStudents: number;
+  lastUpdated: string;
+}
 
 const PerformanceInsightsPage = () => {
+  const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPerformanceData = async () => {
+      try {
+        const response = await fetch('/api/dashboard/performance');
+        if (!response.ok) {
+          throw new Error('Failed to fetch performance data');
+        }
+        const result = await response.json();
+        setPerformanceData(result.data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPerformanceData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading performance data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!performanceData) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-600 dark:text-gray-400">No performance data available</p>
+      </div>
+    );
+  }
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Performance Insights</h1>
-          <p className="text-gray-600 mt-1">Analyze student academic performance and trends</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Performance Analytics
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Live academic performance insights and trends
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+            Last updated: {new Date(performanceData.lastUpdated).toLocaleString()}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
             Generate Report
           </button>
-          <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             Export Data
           </button>
         </div>
@@ -140,7 +191,10 @@ const PerformanceInsightsPage = () => {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Subject Performance</h3>
           <div className="space-y-4">
             {performanceData.subjectPerformance.map((subject, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              >
                 <div className="flex items-center gap-3">
                   <div className="bg-blue-100 p-2 rounded-full">
                     <BookOpen className="w-4 h-4 text-blue-600" />
@@ -159,9 +213,11 @@ const PerformanceInsightsPage = () => {
                       ) : (
                         <TrendingDown className="w-4 h-4 text-red-600" />
                       )}
-                      <span className={`text-xs ml-1 ${
-                        subject.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                      }`}>
+                      <span
+                        className={`text-xs ml-1 ${
+                          subject.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                        }`}
+                      >
                         {subject.trend === 'up' ? '+' : '-'}2.5%
                       </span>
                     </div>
@@ -183,17 +239,20 @@ const PerformanceInsightsPage = () => {
                     <span className="text-sm font-medium text-gray-900">{grade.grade}</span>
                     <span className="text-sm text-gray-600">{grade.count} students</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full ${
-                        index === 0 ? 'bg-green-500' :
-                        index === 1 ? 'bg-blue-500' :
-                        index === 2 ? 'bg-yellow-500' :
-                        index === 3 ? 'bg-orange-500' : 'bg-red-500'
-                      }`}
-                      style={{ width: `${grade.percentage}%` }}
-                    ></div>
-                  </div>
+                  <div
+                    className={`h-2 rounded-full ${
+                      index === 0
+                        ? 'bg-green-500'
+                        : index === 1
+                          ? 'bg-blue-500'
+                          : index === 2
+                            ? 'bg-yellow-500'
+                            : index === 3
+                              ? 'bg-orange-500'
+                              : 'bg-red-500'
+                    }`}
+                    style={{ width: `${grade.percentage}%` }}
+                  ></div>
                   <div className="text-xs text-gray-500 mt-1">{grade.percentage}%</div>
                 </div>
               </div>
@@ -209,18 +268,29 @@ const PerformanceInsightsPage = () => {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Performers</h3>
           <div className="space-y-3">
             {performanceData.topPerformers.map((student, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
-                    index === 0 ? 'bg-yellow-500' :
-                    index === 1 ? 'bg-gray-400' :
-                    index === 2 ? 'bg-orange-600' : 'bg-blue-500'
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
+                      index === 0
+                        ? 'bg-yellow-500'
+                        : index === 1
+                          ? 'bg-gray-400'
+                          : index === 2
+                            ? 'bg-orange-600'
+                            : 'bg-blue-500'
+                    }`}
+                  >
                     {index + 1}
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{student.name}</p>
-                    <p className="text-sm text-gray-500">{student.grade} • {student.subjects} subjects</p>
+                    <p className="text-sm text-gray-500">
+                      {student.grade} • {student.subjects} subjects
+                    </p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -250,20 +320,30 @@ const PerformanceInsightsPage = () => {
                     <td className="py-3 font-medium text-gray-900">{classData.class}</td>
                     <td className="py-3 text-gray-600">{classData.students}</td>
                     <td className="py-3">
-                      <span className={`font-bold ${
-                        classData.average >= 80 ? 'text-green-600' :
-                        classData.average >= 70 ? 'text-blue-600' :
-                        classData.average >= 60 ? 'text-yellow-600' : 'text-red-600'
-                      }`}>
+                      <span
+                        className={`font-bold ${
+                          classData.average >= 80
+                            ? 'text-green-600'
+                            : classData.average >= 70
+                              ? 'text-blue-600'
+                              : classData.average >= 60
+                                ? 'text-yellow-600'
+                                : 'text-red-600'
+                        }`}
+                      >
                         {classData.average}%
                       </span>
                     </td>
                     <td className="py-3">
-                      <span className={`text-sm px-2 py-1 rounded-full ${
-                        classData.attendance >= 90 ? 'bg-green-100 text-green-800' :
-                        classData.attendance >= 85 ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`text-sm px-2 py-1 rounded-full ${
+                          classData.attendance >= 90
+                            ? 'bg-green-100 text-green-800'
+                            : classData.attendance >= 85
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                        }`}
+                      >
                         {classData.attendance}%
                       </span>
                     </td>

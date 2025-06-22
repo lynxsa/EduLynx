@@ -13,12 +13,17 @@ export class AppError extends Error {
   public readonly isOperational: boolean;
   public readonly details?: any;
 
-  constructor(message: string, status: number = 500, code: string = 'INTERNAL_ERROR', isOperational: boolean = true) {
+  constructor(
+    message: string,
+    status: number = 500,
+    code: string = 'INTERNAL_ERROR',
+    isOperational: boolean = true
+  ) {
     super(message);
     this.status = status;
     this.code = code;
     this.isOperational = isOperational;
-    
+
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, AppError);
@@ -28,7 +33,7 @@ export class AppError extends Error {
 
 export class ValidationError extends AppError {
   public details?: any;
-  
+
   constructor(message: string, details?: any) {
     super(message, 400, 'VALIDATION_ERROR');
     this.details = details;
@@ -76,7 +81,7 @@ export function handleApiError(error: any): ApiError {
     const apiError: ApiError = {
       message: 'Network connection failed. Please check your internet connection.',
       status: 0,
-      code: 'NETWORK_ERROR'
+      code: 'NETWORK_ERROR',
     };
     toast.error(apiError.message);
     return apiError;
@@ -88,9 +93,9 @@ export function handleApiError(error: any): ApiError {
       message: error.message,
       status: error.status,
       code: error.code,
-      details: error.details
+      details: error.details,
     };
-    
+
     if (error.status === 401) {
       toast.error('Please log in to continue');
       // Redirect to login if needed
@@ -106,7 +111,7 @@ export function handleApiError(error: any): ApiError {
     } else {
       toast.error(error.message);
     }
-    
+
     return apiError;
   }
 
@@ -114,12 +119,12 @@ export function handleApiError(error: any): ApiError {
   if (error.response) {
     const status = error.response.status;
     const data = error.response.data;
-    
+
     const apiError: ApiError = {
       message: data?.message || data?.error || getDefaultErrorMessage(status),
       status,
       code: data?.code || `HTTP_${status}`,
-      details: data?.details
+      details: data?.details,
     };
 
     if (status === 401) {
@@ -147,7 +152,7 @@ export function handleApiError(error: any): ApiError {
     message: error.message || 'An unexpected error occurred',
     status: 500,
     code: 'UNKNOWN_ERROR',
-    details: error
+    details: error,
   };
 
   toast.error(apiError.message);
@@ -165,11 +170,11 @@ export async function apiCall<T>(
     return await apiFunction();
   } catch (error) {
     const apiError = handleApiError(error);
-    
+
     if (customErrorHandler) {
       customErrorHandler(apiError);
     }
-    
+
     return null;
   }
 }
@@ -177,15 +182,18 @@ export async function apiCall<T>(
 /**
  * Validates required fields in a form
  */
-export function validateRequiredFields(data: Record<string, any>, requiredFields: string[]): string[] {
+export function validateRequiredFields(
+  data: Record<string, any>,
+  requiredFields: string[]
+): string[] {
   const errors: string[] = [];
-  
+
   requiredFields.forEach(field => {
     if (!data[field] || (typeof data[field] === 'string' && !data[field].trim())) {
       errors.push(`${field} is required`);
     }
   });
-  
+
   return errors;
 }
 

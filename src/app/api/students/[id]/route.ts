@@ -25,7 +25,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
           address: true,
           occupation: true,
           relationshipToStudent: true,
-        }
+        },
       },
       class: {
         include: {
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
               name: true,
               surname: true,
               email: true,
-            }
+            },
           },
           lessons: {
             include: {
@@ -46,11 +46,11 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
                   id: true,
                   name: true,
                   surname: true,
-                }
-              }
-            }
-          }
-        }
+                },
+              },
+            },
+          },
+        },
       },
       grade: true,
       results: {
@@ -59,43 +59,43 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             include: {
               lesson: {
                 include: {
-                  subject: true
-                }
-              }
-            }
+                  subject: true,
+                },
+              },
+            },
           },
           assignment: {
             include: {
               lesson: {
                 include: {
-                  subject: true
-                }
-              }
-            }
-          }
+                  subject: true,
+                },
+              },
+            },
+          },
         },
         orderBy: {
-          id: 'desc'
+          id: 'desc',
         },
-        take: 10 // Latest 10 results
+        take: 10, // Latest 10 results
       },
       attendances: {
         include: {
           lesson: {
             include: {
-              subject: true
-            }
-          }
+              subject: true,
+            },
+          },
         },
         orderBy: {
-          date: 'desc'
+          date: 'desc',
         },
-        take: 20 // Latest 20 attendance records
+        take: 20, // Latest 20 attendance records
       },
       medicalRecord: true,
     },
   });
-  
+
   if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
   // Calculate attendance percentage
@@ -105,7 +105,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
   // Calculate average score
   const scores = student.results?.map((r: any) => r.score) || [];
-  const averageScore = scores.length > 0 ? scores.reduce((a: number, b: number) => a + b, 0) / scores.length : 0;
+  const averageScore =
+    scores.length > 0 ? scores.reduce((a: number, b: number) => a + b, 0) / scores.length : 0;
 
   // Enhanced student data
   const enhancedStudent = {
@@ -116,17 +117,19 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     totalAttendances: totalAttendances,
     presentCount,
     absentCount: totalAttendances - presentCount,
-    results: student.results?.map((r: any) => ({
-      ...r,
-      createdAt: r.createdAt.toISOString(),
-      updatedAt: r.updatedAt.toISOString(),
-    })) || [],
-    attendances: student.attendances?.map((a: any) => ({
-      ...a,
-      date: a.date.toISOString(),
-      createdAt: a.createdAt.toISOString(),
-      updatedAt: a.updatedAt.toISOString(),
-    })) || [],
+    results:
+      student.results?.map((r: any) => ({
+        ...r,
+        createdAt: r.createdAt.toISOString(),
+        updatedAt: r.updatedAt.toISOString(),
+      })) || [],
+    attendances:
+      student.attendances?.map((a: any) => ({
+        ...a,
+        date: a.date.toISOString(),
+        createdAt: a.createdAt.toISOString(),
+        updatedAt: a.updatedAt.toISOString(),
+      })) || [],
   };
 
   return NextResponse.json(enhancedStudent);

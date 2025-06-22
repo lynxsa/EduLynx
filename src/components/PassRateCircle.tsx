@@ -10,7 +10,10 @@ interface PassRateCircleProps {
 const PassRateCircle = ({ value, label = 'Pass Rate', color = '#6366f1' }: PassRateCircleProps) => {
   return (
     <div className="flex flex-col items-center justify-center h-32 w-32 animate-fade-in">
-      <div data-tooltip-id="passrate-circle-tooltip" data-tooltip-content={`Current pass rate: ${value}%. Target: 85%+`}>
+      <div
+        data-tooltip-id="passrate-circle-tooltip"
+        data-tooltip-content={`Current pass rate: ${value}%. Target: 85%+`}
+      >
         <CircularProgressbar
           value={value}
           text={`${value}%`}

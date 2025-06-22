@@ -1,18 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
 import Image from 'next/image';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
-  Shield,
-  Camera,
-  Edit3,
-  Save,
-  Settings
-} from 'lucide-react';
+import { Mail, Phone, MapPin, Calendar, Shield, Camera, Edit3, Settings } from 'lucide-react';
 
 // Mock user profile data
 const profileData = {
@@ -33,14 +21,14 @@ const profileData = {
     'Financial Reports',
     'Academic Records',
     'System Settings',
-    'Analytics Dashboard'
+    'Analytics Dashboard',
   ],
   recentActivity: [
     { action: 'Updated student records', timestamp: '2024-01-15 14:30' },
     { action: 'Generated financial report', timestamp: '2024-01-15 11:15' },
     { action: 'Approved teacher leave request', timestamp: '2024-01-14 16:45' },
-    { action: 'Sent parent notification', timestamp: '2024-01-14 09:20' }
-  ]
+    { action: 'Sent parent notification', timestamp: '2024-01-14 09:20' },
+  ],
 };
 
 const ProfilePage = () => {
@@ -87,13 +75,13 @@ const ProfilePage = () => {
               </h2>
               <p className="text-gray-600">{profileData.role}</p>
               <p className="text-sm text-gray-500">{profileData.department}</p>
-              
+
               <div className="flex items-center justify-center gap-2 mt-2">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 <span className="text-sm text-gray-500">Online</span>
               </div>
             </div>
-            
+
             <div className="mt-6 pt-6 border-t border-gray-200">
               <p className="text-sm text-gray-600 text-center">{profileData.bio}</p>
             </div>
@@ -148,20 +136,17 @@ const ProfilePage = () => {
             <h3 className="text-lg font-semibold text-gray-900 mb-6">Account Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                 <input
                   type="text"
                   value={profileData.firstName}
+                  placeholder="First Name"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   readOnly
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                 <input
                   type="text"
                   value={profileData.lastName}
@@ -181,9 +166,7 @@ const ProfilePage = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                 <input
                   type="tel"
                   value={profileData.phone}
@@ -192,9 +175,7 @@ const ProfilePage = () => {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Role
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                 <input
                   type="text"
                   value={`${profileData.role} - ${profileData.department}`}
@@ -203,9 +184,7 @@ const ProfilePage = () => {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bio
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
                 <textarea
                   value={profileData.bio}
                   rows={3}
@@ -245,7 +224,7 @@ const ProfilePage = () => {
                   Change
                 </button>
               </div>
-              
+
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div>
                   <h4 className="font-medium text-gray-900">Two-Factor Authentication</h4>
@@ -255,7 +234,7 @@ const ProfilePage = () => {
                   Enable
                 </button>
               </div>
-              
+
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div>
                   <h4 className="font-medium text-gray-900">Login Sessions</h4>

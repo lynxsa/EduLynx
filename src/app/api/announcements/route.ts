@@ -38,7 +38,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const announcement = await prisma.announcement.create({ data });
     return NextResponse.json(announcement, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create announcement', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create announcement', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -53,6 +56,9 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     await prisma.announcement.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to delete announcement', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to delete announcement', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }

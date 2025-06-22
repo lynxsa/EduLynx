@@ -1,7 +1,18 @@
-"use client"
+'use client';
 import Image from 'next/image';
 import React from 'react';
-import { RadialBarChart, RadialBar, Legend, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import {
+  RadialBarChart,
+  RadialBar,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from 'recharts';
 
 interface CountChartProps {
   data?: Array<{ month: string; students: number }>;
@@ -41,7 +52,11 @@ const CountChart: React.FC<CountChartProps> = ({ data = [] }) => {
   };
 
   return (
-    <div className="w-full h-full bg-white rounded-xl p-4 flex flex-col gap-4 animate-fade-in shadow-md hover:shadow-xl transition-shadow duration-200" aria-label="Student Growth Chart" role="region">
+    <div
+      className="w-full h-full bg-white rounded-xl p-4 flex flex-col gap-4 animate-fade-in shadow-md hover:shadow-xl transition-shadow duration-200"
+      aria-label="Student Growth Chart"
+      role="region"
+    >
       {/* Title */}
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold text-LYNXPurple">Students</h1>
@@ -54,13 +69,26 @@ const CountChart: React.FC<CountChartProps> = ({ data = [] }) => {
           <div className="animate-pulse h-full w-full bg-gray-100 rounded-xl" />
         ) : (
           <ResponsiveContainer>
-            <RadialBarChart cx="50%" cy="50%" innerRadius="40%" outerRadius="100%" barSize={32} data={chartData}>
+            <RadialBarChart
+              cx="50%"
+              cy="50%"
+              innerRadius="40%"
+              outerRadius="100%"
+              barSize={32}
+              data={chartData}
+            >
               <RadialBar dataKey="count" cornerRadius={10} fill="#3726a6" />
               <Legend iconSize={18} layout="vertical" verticalAlign="middle" wrapperStyle={style} />
             </RadialBarChart>
           </ResponsiveContainer>
         )}
-        <Image src="/malefemale.png" alt="students" width={40} height={40} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <Image
+          src="/malefemale.png"
+          alt="students"
+          width={40}
+          height={40}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        />
       </div>
       {/* Monthly Growth Line Chart */}
       <div className="w-full h-32">
@@ -73,7 +101,13 @@ const CountChart: React.FC<CountChartProps> = ({ data = [] }) => {
               <XAxis dataKey="month" tick={{ fill: '#3726a6' }} />
               <YAxis tick={{ fill: '#a096e7' }} />
               <Tooltip />
-              <Line type="monotone" dataKey="students" stroke="#3726a6" strokeWidth={3} dot={{ r: 5, fill: '#a096e7' }} />
+              <Line
+                type="monotone"
+                dataKey="students"
+                stroke="#3726a6"
+                strokeWidth={3}
+                dot={{ r: 5, fill: '#a096e7' }}
+              />
             </LineChart>
           </ResponsiveContainer>
         )}

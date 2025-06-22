@@ -1,25 +1,25 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import { useRouter } from 'next/navigation'
-import CustomLoginPage from '../app/sign-in/page'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { useRouter } from 'next/navigation';
+import CustomLoginPage from '../app/sign-in/page';
 
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
-}))
+}));
 
 // Mock fetch
-global.fetch = jest.fn()
+global.fetch = jest.fn();
 
 describe('Login Integration Test', () => {
-  const mockPush = jest.fn()
-  
+  const mockPush = jest.fn();
+
   beforeEach(() => {
-    ;(useRouter as jest.Mock).mockReturnValue({
+    (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
-    })
-    jest.clearAllMocks()
-  })
+    });
+    jest.clearAllMocks();
+  });
 
   it('should handle successful login flow', async () => {
     const mockLoginResponse = {
@@ -31,25 +31,25 @@ describe('Login Integration Test', () => {
           email: 'admin@example.com',
           role: 'ADMIN',
           firstName: 'Admin',
-          lastName: 'User'
+          lastName: 'User',
         },
-        redirectTo: '/admin'
-      })
-    }
+        redirectTo: '/admin',
+      }),
+    };
 
-    ;(fetch as jest.Mock).mockResolvedValueOnce(mockLoginResponse)
+    (fetch as jest.Mock).mockResolvedValueOnce(mockLoginResponse);
 
-    render(<CustomLoginPage />)
+    render(<CustomLoginPage />);
 
     // Fill in login form
-    const emailInput = screen.getByPlaceholderText(/email/i)
-    const passwordInput = screen.getByPlaceholderText(/password/i)
-    const loginButton = screen.getByText(/sign in/i)
+    const emailInput = screen.getByPlaceholderText(/email/i);
+    const passwordInput = screen.getByPlaceholderText(/password/i);
+    const loginButton = screen.getByText(/sign in/i);
 
-    fireEvent.change(emailInput, { target: { value: 'admin@example.com' } })
-    fireEvent.change(passwordInput, { target: { value: 'password123' } })
-    
-    fireEvent.click(loginButton)
+    fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+
+    fireEvent.click(loginButton);
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/auth/login', {
@@ -59,77 +59,77 @@ describe('Login Integration Test', () => {
         },
         body: JSON.stringify({
           email: 'admin@example.com',
-          password: 'password123'
+          password: 'password123',
         }),
-      })
-      
-      expect(mockPush).toHaveBeenCalledWith('/admin')
-    })
-  })
+      });
+
+      expect(mockPush).toHaveBeenCalledWith('/admin');
+    });
+  });
 
   it('should handle login failure', async () => {
     const mockLoginResponse = {
       ok: false,
       json: async () => ({
         success: false,
-        error: 'Invalid credentials'
-      })
-    }
+        error: 'Invalid credentials',
+      }),
+    };
 
-    ;(fetch as jest.Mock).mockResolvedValueOnce(mockLoginResponse)
+    (fetch as jest.Mock).mockResolvedValueOnce(mockLoginResponse);
 
-    render(<CustomLoginPage />)
+    render(<CustomLoginPage />);
 
-    const emailInput = screen.getByPlaceholderText(/email/i)
-    const passwordInput = screen.getByPlaceholderText(/password/i)
-    const loginButton = screen.getByText(/sign in/i)
+    const emailInput = screen.getByPlaceholderText(/email/i);
+    const passwordInput = screen.getByPlaceholderText(/password/i);
+    const loginButton = screen.getByText(/sign in/i);
 
-    fireEvent.change(emailInput, { target: { value: 'wrong@example.com' } })
-    fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } })
-    
-    fireEvent.click(loginButton)
+    fireEvent.change(emailInput, { target: { value: 'wrong@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
+
+    fireEvent.click(loginButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument()
-    })
+      expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
+    });
 
     // Should not redirect on failed login
-    expect(mockPush).not.toHaveBeenCalled()
-  })
+    expect(mockPush).not.toHaveBeenCalled();
+  });
 
   it('should validate required fields', async () => {
-    render(<CustomLoginPage />)
+    render(<CustomLoginPage />);
 
-    const loginButton = screen.getByText(/sign in/i)
-    fireEvent.click(loginButton)
+    const loginButton = screen.getByText(/sign in/i);
+    fireEvent.click(loginButton);
 
     // Should not make API call with empty fields
-    expect(fetch).not.toHaveBeenCalled()
-  })
+    expect(fetch).not.toHaveBeenCalled();
+  });
 
   it('should show loading state during login', async () => {
-    let resolveLogin: (value: any) => void
+    let resolveLogin: (value: any) => void;
     const loginPromise = new Promise(resolve => {
-      resolveLogin = resolve
-    })
+      resolveLogin = resolve;
+    });
 
-    ;(fetch as jest.Mock).mockReturnValueOnce(loginPromise)
+    (fetch as jest.Mock).mockReturnValueOnce(loginPromise);
 
-    render(<CustomLoginPage />)
+    render(<CustomLoginPage />);
 
-    const emailInput = screen.getByPlaceholderText(/email/i)
-    const passwordInput = screen.getByPlaceholderText(/password/i)
-    const loginButton = screen.getByText(/sign in/i)
+    const emailInput = screen.getByPlaceholderText(/email/i);
+    const passwordInput = screen.getByPlaceholderText(/password/i);
+    const loginButton = screen.getByText(/sign in/i);
 
-    fireEvent.change(emailInput, { target: { value: 'admin@example.com' } })
-    fireEvent.change(passwordInput, { target: { value: 'password123' } })
-    
-    fireEvent.click(loginButton)
+    fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+
+    fireEvent.click(loginButton);
 
     // Check if loading state is shown
     await waitFor(() => {
-      expect(loginButton).toBeDisabled()
-    })
+      expect(loginButton).toBeDisabled();
+    });
 
     // Resolve the promise
     resolveLogin!({
@@ -137,12 +137,12 @@ describe('Login Integration Test', () => {
       json: async () => ({
         success: true,
         user: { id: '1', email: 'admin@example.com', role: 'ADMIN' },
-        redirectTo: '/admin'
-      })
-    })
+        redirectTo: '/admin',
+      }),
+    });
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/admin')
-    })
-  })
-})
+      expect(mockPush).toHaveBeenCalledWith('/admin');
+    });
+  });
+});

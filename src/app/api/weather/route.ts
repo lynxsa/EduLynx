@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
       temp: data.main?.temp,
       city: data.name,
       country: data.sys?.country,
-      raw: data
+      raw: data,
     });
   } catch (e) {
     return NextResponse.json({ error: 'Weather unavailable' }, { status: 500 });

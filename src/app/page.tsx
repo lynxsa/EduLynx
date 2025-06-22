@@ -1,41 +1,41 @@
-"use client";
+'use client';
+
+import StandardLoadingScreen from '@/components/StandardLoadingScreen';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import Image from 'next/image';
 
-const Homepage = () => {
+export default function HomePage() {
+  const { user, isLoading } = useAuth();
   const router = useRouter();
-  
+
   useEffect(() => {
-    // Redirect to sign-in after splash
-    const timer = setTimeout(() => {
-      router.push('/sign-in');
-    }, 1200); // 1.2s splash
-    return () => clearTimeout(timer);
-  }, [router]);
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-LYNXPurple to-LYNXLight">
-      <Image src="/logo.png" alt="EduLynx Logo" width={80} height={80} className="mb-6 animate-bounce" priority />
-      <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">Welcome to EduLynx</h1>
-      <p className="text-lg text-white/80 mb-4">South Africa’s Premier School Management Platform</p>
-      <span className="loader"></span>
-      <style jsx>{`
-        .loader {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #3726a6;
-          border-radius: 50%;
-          width: 32px;
-          height: 32px;
-          animation: spin 1s linear infinite;
+    if (!isLoading) {
+      if (user) {
+        // Redirect authenticated users to their respective dashboards
+        switch (user.role) {
+          case 'ADMIN':
+            router.replace('/admin');
+            break;
+          case 'TEACHER':
+            router.replace('/teacher');
+            break;
+          case 'PARENT':
+            router.replace('/parent');
+            break;
+          case 'STUDENT':
+            router.replace('/student');
+            break;
+          default:
+            router.replace('/sign-in');
         }
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
-  );
-};
+      } else {
+        // Redirect unauthenticated users to sign-in
+        router.replace('/sign-in');
+      }
+    }
+  }, [user, isLoading, router]);
 
-export default Homepage;
+  // Show loading while determining redirect
+  return <StandardLoadingScreen message="Redirecting..." />;
+}

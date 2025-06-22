@@ -18,7 +18,20 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   const [parents, total] = await Promise.all([
     prisma.parent.findMany({
-      select: { id: true, username: true, name: true, surname: true, email: true, phone: true, address: true, img: true, sex: true, createdAt: true, schoolId: true, userId: true },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        surname: true,
+        email: true,
+        phone: true,
+        address: true,
+        img: true,
+        sex: true,
+        createdAt: true,
+        schoolId: true,
+        userId: true,
+      },
       orderBy: { name: 'asc' },
       skip,
       take: limit,

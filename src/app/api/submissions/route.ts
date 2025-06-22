@@ -25,6 +25,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const submission = await prisma.submission.create({ data });
     return NextResponse.json(submission, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create submission', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create submission', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }

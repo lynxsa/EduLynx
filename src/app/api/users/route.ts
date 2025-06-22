@@ -34,7 +34,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const user = await prisma.user.create({ data });
     return NextResponse.json(toUserInterface(user), { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create user', details: e instanceof Error ? e.message : 'Unknown error' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create user', details: e instanceof Error ? e.message : 'Unknown error' },
+      { status: 400 }
+    );
   }
 }
 
@@ -49,7 +52,10 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     const user = await prisma.user.update({ where: { id: data.id }, data });
     return NextResponse.json(toUserInterface(user));
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to update user', details: e instanceof Error ? e.message : 'Unknown error' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to update user', details: e instanceof Error ? e.message : 'Unknown error' },
+      { status: 400 }
+    );
   }
 }
 
@@ -64,6 +70,9 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     await prisma.user.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to delete user', details: e instanceof Error ? e.message : 'Unknown error' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to delete user', details: e instanceof Error ? e.message : 'Unknown error' },
+      { status: 400 }
+    );
   }
 }

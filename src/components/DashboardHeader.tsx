@@ -1,21 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 // Helper to get greeting based on hour
 function getGreeting(date: Date) {
   const hour = date.getHours();
-  if (hour < 5) return "Good night";
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
+  if (hour < 5) return 'Good night';
+  if (hour < 12) return 'Good morning';
+  if (hour < 18) return 'Good afternoon';
+  return 'Good evening';
 }
 
 // Weather API (OpenWeatherMap)
 const WEATHER_API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
-const CITY = "Johannesburg";
-const COUNTRY = "ZA";
+const CITY = 'Johannesburg';
+const COUNTRY = 'ZA';
 
 interface DashboardHeaderProps {
   userName: string;
@@ -24,8 +24,8 @@ interface DashboardHeaderProps {
 export default function DashboardHeader({ userName }: DashboardHeaderProps) {
   const [now, setNow] = useState(new Date());
   const [weather, setWeather] = useState<any>(null);
-  const [dateString, setDateString] = useState<string>("");
-  const [timeString, setTimeString] = useState<string>("");
+  const [dateString, setDateString] = useState<string>('');
+  const [timeString, setTimeString] = useState<string>('');
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -36,7 +36,7 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
     async function fetchWeather() {
       try {
         const res = await fetch('/api/weather');
-        if (!res.ok) throw new Error("Weather fetch failed");
+        if (!res.ok) throw new Error('Weather fetch failed');
         setWeather(await res.json());
       } catch (e) {
         setWeather(null);
@@ -46,8 +46,10 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
   }, []);
 
   useEffect(() => {
-    setDateString(now.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }));
-    setTimeString(now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+    setDateString(
+      now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })
+    );
+    setTimeString(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
   }, [now]);
 
   return (
@@ -61,8 +63,12 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
           className="rounded-full shadow"
         />
         <div>
-          <h1 className="text-lg font-semibold text-gray-800">{getGreeting(now)}, {userName}!</h1>
-          <p className="text-sm text-gray-500">{dateString} | {timeString}</p>
+          <h1 className="text-lg font-semibold text-gray-800">
+            {getGreeting(now)}, {userName}!
+          </h1>
+          <p className="text-sm text-gray-500">
+            {dateString} | {timeString}
+          </p>
         </div>
       </div>
       {weather && (
@@ -73,7 +79,9 @@ export default function DashboardHeader({ userName }: DashboardHeaderProps) {
             width={40}
             height={40}
           />
-          <p className="text-sm text-gray-600">{weather.description}, {weather.temp}°C</p>
+          <p className="text-sm text-gray-600">
+            {weather.description}, {weather.temp}°C
+          </p>
         </div>
       )}
     </header>

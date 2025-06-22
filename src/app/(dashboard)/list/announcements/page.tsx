@@ -1,9 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import DataTable from '@/components/DataTable';
-import { ColumnDef } from '@tanstack/react-table';
-import { Megaphone, Calendar, User, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { ModernTable } from '@/components/ui/ModernTable';
+import {
+  Megaphone,
+  Calendar,
+  User,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Eye,
+  Edit,
+  Trash2,
+} from 'lucide-react';
 
 interface Announcement {
   id: number;
@@ -43,85 +52,61 @@ const AnnouncementsPage = () => {
     fetchAnnouncements();
   }, []);
 
-  const columns: ColumnDef<Announcement>[] = [
+  const columns = [
     {
-      accessorKey: "title",
-      header: "Announcement",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const announcement = row.original;
-        const priorityColors = {
-          'High': 'bg-red-100 text-red-800',
-          'Medium': 'bg-yellow-100 text-yellow-800',
-          'Low': 'bg-green-100 text-green-800',
-        };
-        
-        return (
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
+      key: 'title',
+      label: 'Announcement',
+      sortable: true,
+      render: (announcement: Announcement) => (
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <Megaphone className="w-5 h-5 text-blue-600" />
             </div>
-            <div>
-              <p className="font-medium text-gray-900">{announcement.title}</p>
-              <div className="flex items-center gap-2 mt-1">
-                {announcement.priority && (
-                  <span className={`px-2 py-1 text-xs rounded ${
-                    priorityColors[announcement.priority as keyof typeof priorityColors] || 'bg-gray-100 text-gray-600'
-                  }`}>
-                    {announcement.priority} Priority
-                  </span>
-                )}
-                {announcement.targetAudience && (
-                  <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">
-                    {announcement.targetAudience}
-                  </span>
-                )}
-              </div>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900">{announcement.title}</div>
+            <div className="text-sm text-gray-500 truncate max-w-xs">
+              {announcement.description}
             </div>
+            {announcement.priority && (
+              <span
+                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-1 ${
+                  announcement.priority === 'High'
+                    ? 'bg-red-100 text-red-800'
+                    : announcement.priority === 'Medium'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-green-100 text-green-800'
+                }`}
+              >
+                {announcement.priority} Priority
+              </span>
+            )}
           </div>
-        );
-      },
+        </div>
+      ),
     },
     {
-      accessorKey: "description",
-      header: "Content",
-      cell: ({ row }) => {
-        const description = row.original.description;
-        return (
-          <div className="max-w-64">
-            <p className="text-sm text-gray-600 line-clamp-3" title={description}>
-              {description}
-            </p>
-          </div>
-        );
-      },
+      key: 'author',
+      label: 'Author',
+      sortable: true,
+      render: (announcement: Announcement) => (
+        <div className="flex items-center gap-2">
+          <User className="w-4 h-4 text-gray-400" />
+          <span className="text-sm text-gray-900">{announcement.author || 'System'}</span>
+        </div>
+      ),
     },
     {
-      accessorKey: "author",
-      header: "Author",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const author = row.original.author;
-        return (
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-gray-400" />
-            <span className="text-sm text-gray-900">
-              {author || 'System'}
-            </span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "date",
-      header: "Published",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const date = new Date(row.original.date);
+      key: 'date',
+      label: 'Published',
+      sortable: true,
+      render: (announcement: Announcement) => {
+        const date = new Date(announcement.date);
         const now = new Date();
         const diffTime = Math.abs(now.getTime() - date.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         return (
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-gray-400" />
@@ -138,30 +123,31 @@ const AnnouncementsPage = () => {
       },
     },
     {
-      accessorKey: "status",
-      header: "Status",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const announcement = row.original;
+      key: 'status',
+      label: 'Status',
+      sortable: true,
+      render: (announcement: Announcement) => {
         const isExpired = announcement.expiryDate && new Date(announcement.expiryDate) < new Date();
-        const status = isExpired ? 'Expired' : (announcement.status || 'Active');
-        
+        const status = isExpired ? 'Expired' : announcement.status || 'Active';
+
         const statusColors = {
-          'Active': 'bg-green-100 text-green-800',
-          'Draft': 'bg-gray-100 text-gray-800',
-          'Expired': 'bg-red-100 text-red-800',
-          'Scheduled': 'bg-blue-100 text-blue-800',
+          Active: 'bg-green-100 text-green-800',
+          Draft: 'bg-gray-100 text-gray-800',
+          Expired: 'bg-red-100 text-red-800',
+          Scheduled: 'bg-blue-100 text-blue-800',
         };
-        
-        const StatusIcon = status === 'Active' ? CheckCircle : 
-                          status === 'Expired' ? AlertCircle : Clock;
-        
+
+        const StatusIcon =
+          status === 'Active' ? CheckCircle : status === 'Expired' ? AlertCircle : Clock;
+
         return (
           <div className="flex items-center gap-2">
             <StatusIcon className="w-4 h-4" />
-            <span className={`px-2 py-1 text-xs rounded-full ${
-              statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-600'
-            }`}>
+            <span
+              className={`px-2 py-1 text-xs rounded-full ${
+                statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-600'
+              }`}
+            >
               {status}
             </span>
           </div>
@@ -169,43 +155,41 @@ const AnnouncementsPage = () => {
       },
     },
     {
-      accessorKey: "views",
-      header: "Engagement",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const views = row.original.views || 0;
-        const announcement = row.original;
+      key: 'views',
+      label: 'Engagement',
+      sortable: true,
+      render: (announcement: Announcement) => {
+        const views = announcement.views || 0;
         const daysSincePublished = Math.ceil(
-          Math.abs(new Date().getTime() - new Date(announcement.date).getTime()) / (1000 * 60 * 60 * 24)
+          Math.abs(new Date().getTime() - new Date(announcement.date).getTime()) /
+            (1000 * 60 * 60 * 24)
         );
-        const avgViewsPerDay = daysSincePublished > 0 ? Math.round(views / daysSincePublished) : views;
-        
+        const avgViewsPerDay =
+          daysSincePublished > 0 ? Math.round(views / daysSincePublished) : views;
+
         return (
           <div>
             <p className="font-medium text-gray-900">{views} views</p>
-            <p className="text-xs text-gray-500">
-              {avgViewsPerDay}/day avg
-            </p>
+            <p className="text-xs text-gray-500">{avgViewsPerDay}/day avg</p>
           </div>
         );
       },
     },
     {
-      accessorKey: "expiryDate",
-      header: "Expires",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const expiryDate = row.original.expiryDate;
-        if (!expiryDate) {
+      key: 'expiryDate',
+      label: 'Expires',
+      sortable: true,
+      render: (announcement: Announcement) => {
+        if (!announcement.expiryDate) {
           return <span className="text-gray-500 text-sm">No expiry</span>;
         }
-        
-        const expiry = new Date(expiryDate);
+
+        const expiry = new Date(announcement.expiryDate);
         const now = new Date();
         const isExpired = expiry < now;
         const diffTime = Math.abs(expiry.getTime() - now.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         return (
           <div>
             <p className={`font-medium ${isExpired ? 'text-red-600' : 'text-gray-900'}`}>
@@ -236,8 +220,8 @@ const AnnouncementsPage = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 text-lg">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
             Try Again
@@ -248,21 +232,28 @@ const AnnouncementsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="p-6">
-        <DataTable 
-          columns={columns} 
-          data={announcements}
-          title="Announcements"
-          description="Manage school announcements and communications"
-          searchPlaceholder="Search announcements..."
-          onView={(announcement) => console.log('View announcement:', announcement)}
-          onEdit={(announcement) => console.log('Edit announcement:', announcement)}
-          onDelete={(announcement) => console.log('Delete announcement:', announcement)}
-          onAdd={() => console.log('Create new announcement')}
-          onExport={() => console.log('Export announcements')}
-        />
-      </div>
+    <div className="p-6">
+      <ModernTable
+        data={announcements}
+        columns={columns}
+        title="Announcements"
+        description="Manage school announcements and communications"
+        searchableFields={['title', 'description', 'author']}
+        onView={(announcement: Announcement) => {
+          console.log('View announcement:', announcement);
+          // Navigate to view page
+        }}
+        onEdit={(announcement: Announcement) => {
+          console.log('Edit announcement:', announcement);
+          // Navigate to edit page
+        }}
+        onDelete={(announcement: Announcement) => {
+          if (window.confirm('Are you sure you want to delete this announcement?')) {
+            console.log('Delete announcement:', announcement);
+            // Handle delete
+          }
+        }}
+      />
     </div>
   );
 };

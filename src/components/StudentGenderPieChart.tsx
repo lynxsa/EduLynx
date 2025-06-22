@@ -12,7 +12,11 @@ const GenderLineCircle: React.FC<GenderLineCircleProps> = ({ male, female, small
   const malePercent = total ? Math.round((male / total) * 100) : 0;
   const femalePercent = 100 - malePercent;
   return (
-    <div className={`flex flex-col items-center justify-center ${small ? 'h-24 w-24' : 'h-32 w-32'}`} aria-label="Student Gender Distribution" role="region">
+    <div
+      className={`flex flex-col items-center justify-center ${small ? 'h-24 w-24' : 'h-32 w-32'}`}
+      aria-label="Student Gender Distribution"
+      role="region"
+    >
       <CircularProgressbarWithChildren
         value={malePercent}
         strokeWidth={8}

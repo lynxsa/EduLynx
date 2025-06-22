@@ -19,11 +19,13 @@ const ProfLynx: React.FC<ProfLynxProps> = ({ userRole, userName }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
-  const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([
+  const [chatMessages, setChatMessages] = useState<
+    Array<{ role: 'user' | 'assistant'; content: string }>
+  >([
     {
       role: 'assistant',
-      content: `Hello ${userName}! I'm Prof Lynx, your AI assistant. I can help you with analytics, insights, and answer questions about your educational data. How can I assist you today?`
-    }
+      content: `Hello ${userName}! I'm Prof Lynx, your AI assistant. I can help you with analytics, insights, and answer questions about your educational data. How can I assist you today?`,
+    },
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -62,7 +64,7 @@ const ProfLynx: React.FC<ProfLynxProps> = ({ userRole, userName }) => {
         body: JSON.stringify({
           message: userMessage,
           userRole,
-          analyticsData
+          analyticsData,
         }),
       });
 
@@ -70,16 +72,23 @@ const ProfLynx: React.FC<ProfLynxProps> = ({ userRole, userName }) => {
         const data = await response.json();
         setChatMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
       } else {
-        setChatMessages(prev => [...prev, { 
-          role: 'assistant', 
-          content: 'I apologize, but I encountered an issue processing your request. Please try again.' 
-        }]);
+        setChatMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content:
+              'I apologize, but I encountered an issue processing your request. Please try again.',
+          },
+        ]);
       }
     } catch (error) {
-      setChatMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'I apologize, but I encountered a connection issue. Please try again.' 
-      }]);
+      setChatMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: 'I apologize, but I encountered a connection issue. Please try again.',
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -182,9 +191,7 @@ const ProfLynx: React.FC<ProfLynxProps> = ({ userRole, userName }) => {
           >
             <div
               className={`max-w-[80%] p-3 rounded-lg text-sm ${
-                message.role === 'user'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-800'
+                message.role === 'user' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-800'
               }`}
             >
               {message.content}
@@ -198,8 +205,14 @@ const ProfLynx: React.FC<ProfLynxProps> = ({ userRole, userName }) => {
                 <div className="animate-pulse">Thinking...</div>
                 <div className="flex space-x-1">
                   <div className="w-1 h-1 bg-gray-500 rounded-full animate-bounce"></div>
-                  <div className="w-1 h-1 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-1 h-1 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div
+                    className="w-1 h-1 bg-gray-500 rounded-full animate-bounce"
+                    style={{ animationDelay: '0.1s' }}
+                  ></div>
+                  <div
+                    className="w-1 h-1 bg-gray-500 rounded-full animate-bounce"
+                    style={{ animationDelay: '0.2s' }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -214,7 +227,7 @@ const ProfLynx: React.FC<ProfLynxProps> = ({ userRole, userName }) => {
           <input
             type="text"
             value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
+            onChange={e => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask Prof Lynx anything..."
             className="flex-1 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"

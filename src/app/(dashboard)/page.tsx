@@ -1,31 +1,39 @@
-"use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardRedirectPage() {
   const router = useRouter();
+  const { user, isAuthenticated, isLoading } = useAuth();
+
   useEffect(() => {
-    // Get role from sessionStorage (demo only)
-    const role = typeof window !== "undefined" ? sessionStorage.getItem("role") : null;
-    let dashboardPath = "/dashboard";
-    switch (role) {
-      case "ADMIN":
-        dashboardPath = "/admin";
+    if (isLoading) return; // Wait for auth to initialize
+
+    if (!isAuthenticated) {
+      router.replace('/sign-in');
+      return;
+    }
+
+    let dashboardPath = '/dashboard';
+    switch (user?.role) {
+      case 'ADMIN':
+        dashboardPath = '/admin';
         break;
-      case "TEACHER":
-        dashboardPath = "/teacher";
+      case 'TEACHER':
+        dashboardPath = '/teacher';
         break;
-      case "PARENT":
-        dashboardPath = "/parent";
+      case 'PARENT':
+        dashboardPath = '/parent';
         break;
-      case "STUDENT":
-        dashboardPath = "/student";
+      case 'STUDENT':
+        dashboardPath = '/student';
         break;
       default:
-        dashboardPath = "/sign-in";
+        dashboardPath = '/dashboard';
     }
     router.replace(dashboardPath);
-  }, [router]);
+  }, [user, isAuthenticated, isLoading, router]);
   return (
     <div className="flex items-center justify-center min-h-screen">
       <span className="text-lg text-gray-600">Redirecting to your dashboard...</span>

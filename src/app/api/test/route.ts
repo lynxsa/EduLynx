@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'API is working',
       timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV 
+      environment: process.env.NODE_ENV,
     });
   } catch (error) {
     console.error('Test API Error:', error);

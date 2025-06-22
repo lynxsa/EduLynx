@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import { Trophy, Medal, Award } from 'lucide-react';
 
@@ -19,7 +19,14 @@ const TopAchieversCard = ({ achievers = [] }: TopAchieversCardProps) => {
   // Mock data if no achievers provided
   const mockAchievers: TopAchiever[] = [
     { id: '1', name: 'Thabo', surname: 'Mthembu', grade: 'Grade 12', averageScore: 94.5, rank: 1 },
-    { id: '2', name: 'Nomsa', surname: 'Van Der Merwe', grade: 'Grade 11', averageScore: 92.8, rank: 2 },
+    {
+      id: '2',
+      name: 'Nomsa',
+      surname: 'Van Der Merwe',
+      grade: 'Grade 11',
+      averageScore: 92.8,
+      rank: 2,
+    },
     { id: '3', name: 'Sipho', surname: 'Nkomo', grade: 'Grade 10', averageScore: 91.2, rank: 3 },
     { id: '4', name: 'Lerato', surname: 'Botha', grade: 'Grade 9', averageScore: 89.6, rank: 4 },
     { id: '5', name: 'Mandla', surname: 'Dlamini', grade: 'Grade 8', averageScore: 88.1, rank: 5 },
@@ -36,7 +43,11 @@ const TopAchieversCard = ({ achievers = [] }: TopAchieversCardProps) => {
       case 3:
         return <Award className="w-4 h-4 text-amber-600" />;
       default:
-        return <div className="w-4 h-4 flex items-center justify-center text-xs font-bold text-gray-500">{rank}</div>;
+        return (
+          <div className="w-4 h-4 flex items-center justify-center text-xs font-bold text-gray-500">
+            {rank}
+          </div>
+        );
     }
   };
 
@@ -64,7 +75,10 @@ const TopAchieversCard = ({ achievers = [] }: TopAchieversCardProps) => {
       {/* Achievers List */}
       <div className="space-y-3">
         {displayAchievers.slice(0, 5).map((achiever, index) => (
-          <div key={achiever.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+          <div
+            key={achiever.id}
+            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+          >
             <div className="flex items-center space-x-3">
               {getRankIcon(achiever.rank)}
               <div>
@@ -78,7 +92,9 @@ const TopAchieversCard = ({ achievers = [] }: TopAchieversCardProps) => {
               <span className="text-sm font-semibold text-gray-700">
                 {achiever.averageScore.toFixed(1)}%
               </span>
-              <div className={`w-2 h-2 rounded-full ${getIndicatorColor(achiever.averageScore)}`}></div>
+              <div
+                className={`w-2 h-2 rounded-full ${getIndicatorColor(achiever.averageScore)}`}
+              ></div>
             </div>
           </div>
         ))}
@@ -87,7 +103,11 @@ const TopAchieversCard = ({ achievers = [] }: TopAchieversCardProps) => {
       {/* Footer Stats */}
       <div className="mt-4 pt-4 border-t border-gray-200">
         <div className="text-xs text-gray-500 text-center">
-          Average: {(displayAchievers.reduce((sum, a) => sum + a.averageScore, 0) / displayAchievers.length).toFixed(1)}%
+          Average:{' '}
+          {(
+            displayAchievers.reduce((sum, a) => sum + a.averageScore, 0) / displayAchievers.length
+          ).toFixed(1)}
+          %
         </div>
       </div>
     </div>

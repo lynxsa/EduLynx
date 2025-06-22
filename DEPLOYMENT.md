@@ -3,6 +3,7 @@
 ## 🚀 Deployment Options
 
 ### 1. Vercel (Recommended)
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -18,6 +19,7 @@ vercel --prod
 ```
 
 ### 2. Docker Deployment
+
 ```dockerfile
 # Dockerfile
 FROM node:18-alpine
@@ -42,6 +44,7 @@ docker run -p 3000:3000 edulynx-dashboard
 ```
 
 ### 3. Traditional Server Deployment
+
 ```bash
 # Build the application
 npm run build
@@ -57,6 +60,7 @@ pm2 start npm --name "edulynx" -- start
 ## 🔧 Environment Setup
 
 ### Required Environment Variables
+
 ```bash
 # Authentication
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-min-32-chars
@@ -78,6 +82,7 @@ NODE_ENV=production
 ```
 
 ### Database Setup
+
 ```bash
 # Initialize Prisma
 npx prisma generate
@@ -90,6 +95,7 @@ npx prisma db seed
 ## 📊 Production Checklist
 
 ### Security
+
 - [ ] Change JWT_SECRET to a strong, unique value
 - [ ] Set up HTTPS with SSL certificates
 - [ ] Configure CORS properly
@@ -97,6 +103,7 @@ npx prisma db seed
 - [ ] Set up proper backup strategies
 
 ### Performance
+
 - [ ] Enable gzip compression
 - [ ] Configure CDN for static assets
 - [ ] Set up database connection pooling
@@ -104,6 +111,7 @@ npx prisma db seed
 - [ ] Monitor application performance
 
 ### Monitoring
+
 - [ ] Set up error tracking (Sentry, Bugsnag)
 - [ ] Configure application monitoring
 - [ ] Set up uptime monitoring
@@ -111,6 +119,7 @@ npx prisma db seed
 - [ ] Set up alerting for critical issues
 
 ### Backup & Recovery
+
 - [ ] Database backup automation
 - [ ] File storage backup
 - [ ] Disaster recovery plan
@@ -119,6 +128,7 @@ npx prisma db seed
 ## 🔍 Health Checks
 
 ### Application Health
+
 ```bash
 # Check application status
 curl https://your-domain.com/api/health
@@ -128,6 +138,7 @@ curl https://your-domain.com/api/health/db
 ```
 
 ### Performance Monitoring
+
 ```bash
 # Check bundle size
 npm run build
@@ -140,12 +151,15 @@ npm run test:performance
 ## 🚨 Troubleshooting
 
 ### Common Issues
+
 1. **Database Connection Failed**
+
    - Check DATABASE_URL format
    - Verify database server is running
    - Check firewall settings
 
 2. **JWT Authentication Issues**
+
    - Verify JWT_SECRET is set correctly
    - Check token expiry settings
    - Validate cookie settings
@@ -156,6 +170,7 @@ npm run test:performance
    - Validate API endpoints
 
 ### Debugging
+
 ```bash
 # Enable debug logging
 DEBUG=* npm start
@@ -170,12 +185,14 @@ npm run monitor
 ## 📈 Scaling Considerations
 
 ### Horizontal Scaling
+
 - Use load balancers
 - Implement session storage (Redis)
 - Configure database replication
 - Use container orchestration (Kubernetes)
 
 ### Vertical Scaling
+
 - Optimize database queries
 - Implement caching layers
 - Use CDN for static content
@@ -184,6 +201,7 @@ npm run monitor
 ## 🔒 Security Hardening
 
 ### Additional Security Measures
+
 ```bash
 # Install security headers
 npm install helmet
@@ -196,6 +214,7 @@ npm install csurf
 ```
 
 ### Security Headers
+
 ```javascript
 // next.config.mjs
 const nextConfig = {
@@ -226,6 +245,7 @@ const nextConfig = {
 ## 📱 Mobile Optimization
 
 ### PWA Configuration
+
 ```javascript
 // next.config.mjs
 const withPWA = require('next-pwa')({
@@ -239,6 +259,7 @@ module.exports = withPWA({
 ```
 
 ### Mobile Performance
+
 - Optimize images for mobile
 - Implement lazy loading
 - Use responsive design
@@ -247,6 +268,7 @@ module.exports = withPWA({
 ## 🎯 Go-Live Checklist
 
 ### Pre-Deployment
+
 - [ ] All tests passing
 - [ ] Security audit completed
 - [ ] Performance testing done
@@ -254,6 +276,7 @@ module.exports = withPWA({
 - [ ] Monitoring set up
 
 ### Deployment Day
+
 - [ ] Deploy to production
 - [ ] Verify all features work
 - [ ] Check performance metrics
@@ -261,6 +284,7 @@ module.exports = withPWA({
 - [ ] Validate user flows
 
 ### Post-Deployment
+
 - [ ] Monitor application for 24 hours
 - [ ] Check all integrations
 - [ ] Verify data accuracy
@@ -270,12 +294,14 @@ module.exports = withPWA({
 ## 📞 Support & Maintenance
 
 ### Regular Maintenance
+
 - Weekly security updates
 - Monthly performance reviews
 - Quarterly feature updates
 - Annual security audits
 
 ### Support Channels
+
 - Technical documentation
 - Issue tracking system
 - User support portal
@@ -283,8 +309,10 @@ module.exports = withPWA({
 
 ---
 
-## 🎉 Congratulations!
+## 🎉 Congratulations
 
-Your EduLynx Dashboard is now ready for production deployment. Follow this guide to ensure a smooth launch and optimal performance.
+Your EduLynx Dashboard is now ready for production deployment. Follow this guide
+to ensure a smooth launch and optimal performance.
 
-For additional support or questions, refer to the main README.md file or contact the development team.
+For additional support or questions, refer to the main README.md file or contact
+the development team.

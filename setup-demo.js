@@ -58,7 +58,7 @@ exec('node create-users.js', (error, stdout, stderr) => {
   }
   console.log(stdout);
   if (stderr) console.error(stderr);
-  
+
   // Clean up
   fs.unlinkSync('./create-users.js');
   console.log('Demo users setup complete!');

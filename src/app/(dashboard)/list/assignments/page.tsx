@@ -1,14 +1,8 @@
 'use client';
 
-import Pagination from "@/components/Pagination";
-import TableSearch from "@/components/TableSearch";
-import Image from "next/image";
-import Table from "@/components/Table";
-import React, { Suspense, useEffect, useState } from "react";
-import Link from "next/link";
-import { role } from "@/lib/data";
-import FormModal from "@/components/FormModal";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { ModernTable } from '@/components/ui/ModernTable';
+import { BookOpen, Calendar, Clock, User, GraduationCap } from 'lucide-react';
 
 // Assignment type based on Prisma model
 interface Assignment {
@@ -19,124 +13,193 @@ interface Assignment {
   lesson: {
     id: number;
     name: string;
+    subject?: { name: string };
+    class?: { name: string };
+    teacher?: { name: string };
   };
 }
 
-const columns = [
-  { header: "Title", accessor: "title", sortable: true },
-  { header: "Lesson", accessor: "lesson", className: "hidden md:table-cell", sortable: true },
-  { header: "Start Date", accessor: "startDate", className: "hidden md:table-cell", sortable: true },
-  { header: "Due Date", accessor: "dueDate", className: "hidden md:table-cell", sortable: true },
-  { header: "Actions", accessor: "actions", className: "table-cell" },
-];
-
-function AssignmentsPageImpl() {
+const AssignmentsPage = () => {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const ITEMS_PER_PAGE = 15;
-
-  const fetchAssignments = () => {
-    setLoading(true);
-    setError(null);
-    fetch(`/api/assignments?page=${page}&limit=${ITEMS_PER_PAGE}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch assignments");
-        return res.json();
-      })
-      .then((data) => {
-        setAssignments(data.data);
-        setTotal(data.total);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message || "Unknown error");
-        setLoading(false);
-      });
-  };
 
   useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const response = await fetch('/api/assignments');
+        if (!response.ok) {
+          throw new Error('Failed to fetch assignments');
+        }
+        const data = await response.json();
+        setAssignments(data.data || data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAssignments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
-  const handleRefresh = () => {
-    fetchAssignments();
-  };
-
-  const filteredAssignments = assignments.filter(a =>
-    a.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    a.lesson?.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const renderRow = (item: Assignment) => (
-    <tr key={item.id} role="row">
-      <td className="flex items-center gap-4 p-3" role="cell">
-        <div className="flex items-center gap-2">
-          <Image src="/assignment.png" alt="Assignment" width={20} height={20} />
-          <span className="font-semibold">{item.title}</span>
-        </div>
-      </td>
-      <td className="hidden md:table-cell" role="cell">{item.lesson?.name || '-'}</td>
-      <td className="hidden md:table-cell" role="cell">{item.startDate ? new Date(item.startDate).toLocaleDateString() : '-'}</td>
-      <td className="hidden md:table-cell" role="cell">{item.dueDate ? new Date(item.dueDate).toLocaleDateString() : '-'}</td>
-      <td className="table-cell" role="cell">
-        <div className="flex items-center gap-2">
-          <Link href={`/list/assignments/${item.id}`} aria-label={`View details for assignment ${item.title}`} tabIndex={0}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LYNXLight" aria-label="View assignment details">
-              <Image src="/view.png" alt="View" width={16} height={16} />
-            </button>
-          </Link>
-          {role === "admin" && (
-            <>
-              <FormModal table="assignments" type="update" data={item} onSuccess={fetchAssignments} aria-label={`Edit assignment ${item.title}`} />
-              <FormModal table="assignments" type="delete" id={item.id} onSuccess={fetchAssignments} aria-label={`Delete assignment ${item.title}`} />
-            </>
-          )}
-        </div>
-      </td>
-    </tr>
-  );
-
-  return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0" role="region" aria-labelledby="assignments-heading">
-      {/* Top */}
-      <div className="flex items-center justify-between">
-        <h1 id="assignments-heading" className="hidden md:block text-lg font-semibold">All Assignments</h1>
-        <div className="flex flex-col justify-center md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch value={searchTerm} onChange={setSearchTerm} placeholder="Search assignments..." />
-          <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar" aria-label="Filter assignments">
-              <Image src="/filter.png" alt="Filter" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar" aria-label="Sort assignments">
-              <Image src="/sort.png" alt="Sort" width={14} height={14} />
-            </button>
-            {role === "admin" && <FormModal table="assignments" type="create" onSuccess={fetchAssignments} />}
+  const columns = [
+    {
+      key: 'title',
+      label: 'Assignment',
+      sortable: true,
+      render: (assignment: Assignment) => (
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            </div>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900 dark:text-white">{assignment.title}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">{assignment.lesson.name}</div>
           </div>
         </div>
+      ),
+    },
+    {
+      key: 'lesson',
+      label: 'Subject & Class',
+      sortable: true,
+      render: (assignment: Assignment) => (
+        <div>
+          <div className="flex items-center gap-2">
+            <GraduationCap className="w-4 h-4 text-gray-400" />
+            <span className="font-medium text-gray-900 dark:text-white">
+              {assignment.lesson.subject?.name || 'N/A'}
+            </span>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Class: {assignment.lesson.class?.name || 'N/A'}
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'teacher',
+      label: 'Teacher',
+      sortable: true,
+      render: (assignment: Assignment) => (
+        <div className="flex items-center gap-2">
+          <User className="w-4 h-4 text-gray-400" />
+          <span className="text-sm text-gray-900 dark:text-white">
+            {assignment.lesson.teacher?.name || 'N/A'}
+          </span>
+        </div>
+      ),
+    },
+    {
+      key: 'startDate',
+      label: 'Start Date',
+      sortable: true,
+      render: (assignment: Assignment) => {
+        const date = new Date(assignment.startDate);
+        return (
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                {date.toLocaleDateString('en-ZA')}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {date.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
+              </p>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: 'dueDate',
+      label: 'Due Date',
+      sortable: true,
+      render: (assignment: Assignment) => {
+        const date = new Date(assignment.dueDate);
+        const now = new Date();
+        const isOverdue = date < now;
+        const diffTime = Math.abs(date.getTime() - now.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        return (
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-gray-400" />
+            <div>
+              <p
+                className={`text-sm font-medium ${isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-white'}`}
+              >
+                {date.toLocaleDateString('en-ZA')}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {isOverdue
+                  ? `Overdue by ${diffDays} days`
+                  : diffDays === 0
+                    ? 'Due today'
+                    : `${diffDays} days left`}
+              </p>
+            </div>
+          </div>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading assignments...</p>
+        </div>
       </div>
-      {loading ? (
-        <Table columns={columns} renderRow={renderRow} data={[]} loading={true} />
-      ) : error ? (
-        <Table columns={columns} renderRow={renderRow} data={[]} error={error} />
-      ) : (
-        <Table columns={columns} renderRow={renderRow} data={filteredAssignments} emptyMessage="No assignments found." />
-      )}
-      <Pagination page={page} count={total} />
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <ModernTable
+        data={assignments}
+        columns={columns}
+        title="Assignments"
+        description="Manage assignment tasks and deadlines"
+        searchableFields={['title', 'lesson.name', 'lesson.subject.name', 'lesson.teacher.name']}
+        onView={(assignment: Assignment) => {
+          console.log('View assignment:', assignment);
+          // Navigate to view page
+        }}
+        onEdit={(assignment: Assignment) => {
+          console.log('Edit assignment:', assignment);
+          // Navigate to edit page
+        }}
+        onDelete={(assignment: Assignment) => {
+          if (window.confirm('Are you sure you want to delete this assignment?')) {
+            console.log('Delete assignment:', assignment);
+            // Handle delete
+          }
+        }}
+      />
     </div>
   );
-}
+};
 
-export default function AssignmentsPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <AssignmentsPageImpl />
-    </Suspense>
-  );
-}
+export default AssignmentsPage;

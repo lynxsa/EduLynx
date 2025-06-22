@@ -1,33 +1,53 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { AuthProvider } from "@/contexts/AuthContext";
-import "./globals.css";
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { GlobalErrorHandler } from '@/components/GlobalErrorHandler';
+import { AuthProvider } from '@/contexts/AuthContext';
+import '@/styles/enhanced-cards.css';
+import { ThemeProvider } from '@/styles/theme';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "EduLynx - School Management System",
-  description: "Modern school management platform by LYNX Consulting South Africa (Pty) Ltd",
+  title: 'EduLynx - School Management System',
+  description: 'Modern school management platform by LYNX Consulting South Africa (Pty) Ltd',
+  keywords:
+    'school management, education, South Africa, student portal, teacher dashboard, parent portal',
   openGraph: {
-    title: "EduLynx - School Management System",
-    description: "Modern school management platform for South African educational institutions",
-    type: "website",
-    locale: "en_ZA",
-    siteName: "EduLynx",
+    title: 'EduLynx - School Management System',
+    description: 'Modern school management platform for South African educational institutions',
+    type: 'website',
+    locale: 'en_ZA',
+    siteName: 'EduLynx',
+    images: [
+      {
+        url: '/edulynx-logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'EduLynx Logo',
+      },
+    ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "EduLynx - School Management System",
-    description: "Modern school management platform for South African educational institutions",
+    card: 'summary_large_image',
+    title: 'EduLynx - School Management System',
+    description: 'Modern school management platform for South African educational institutions',
   },
   icons: {
     icon: [
-      { url: "/favicon.png", sizes: "any" },
-      { url: "/icon.png", sizes: "32x32", type: "image/png" },
-      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" }
+      { url: '/favicon.png', sizes: 'any' },
+      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
-    apple: "/apple-icon.png",
-    shortcut: "/favicon.png",
+    apple: '/apple-icon.png',
+    shortcut: '/favicon.png',
+  },
+  manifest: '/manifest.json',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
   },
 };
 
@@ -37,15 +57,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="ltr">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#3726a6" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const theme = localStorage.getItem('theme') || 'system';
+                const resolved = theme === 'system' 
+                  ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+                  : theme;
+                document.documentElement.classList.add(resolved);
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body className={inter.className} aria-label="EduLynx App Root">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <ErrorBoundary level="critical">
+          <GlobalErrorHandler>
+            <ThemeProvider>
+              <AuthProvider>
+                <ErrorBoundary level="page">{children}</ErrorBoundary>
+              </AuthProvider>
+            </ThemeProvider>
+          </GlobalErrorHandler>
+        </ErrorBoundary>
       </body>
     </html>
   );

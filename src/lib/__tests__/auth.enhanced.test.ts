@@ -8,14 +8,15 @@ import * as jwt from 'jsonwebtoken';
 jest.mock('jsonwebtoken');
 
 describe('Auth Utilities', () => {
-  const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJmaXJzdE5hbWUiOiJKb2huIiwibGFzdE5hbWUiOiJEb2UifQ.signature';
-  
+  const mockToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJmaXJzdE5hbWUiOiJKb2huIiwibGFzdE5hbWUiOiJEb2UifQ.signature';
+
   const mockPayload = {
     userId: '123',
     email: 'test@test.com',
     role: 'admin',
     firstName: 'John',
-    lastName: 'Doe'
+    lastName: 'Doe',
   };
 
   beforeEach(() => {
@@ -57,10 +58,10 @@ describe('Auth Utilities', () => {
     it('extracts token from cookie', () => {
       const mockRequest = {
         headers: {
-          get: jest.fn((name: string) => 
+          get: jest.fn((name: string) =>
             name === 'cookie' ? 'auth-token=test-token; other=value' : null
-          )
-        }
+          ),
+        },
       } as any;
 
       const result = getTokenFromRequest(mockRequest);
@@ -71,10 +72,8 @@ describe('Auth Utilities', () => {
     it('extracts token from Authorization header', () => {
       const mockRequest = {
         headers: {
-          get: jest.fn((name: string) => 
-            name === 'authorization' ? 'Bearer test-token' : null
-          )
-        }
+          get: jest.fn((name: string) => (name === 'authorization' ? 'Bearer test-token' : null)),
+        },
       } as any;
 
       const result = getTokenFromRequest(mockRequest);
@@ -85,8 +84,8 @@ describe('Auth Utilities', () => {
     it('returns null when no token found', () => {
       const mockRequest = {
         headers: {
-          get: jest.fn(() => null)
-        }
+          get: jest.fn(() => null),
+        },
       } as any;
 
       const result = getTokenFromRequest(mockRequest);
@@ -101,8 +100,8 @@ describe('Auth Utilities', () => {
             if (name === 'cookie') return 'auth-token=cookie-token';
             if (name === 'authorization') return 'Bearer header-token';
             return null;
-          })
-        }
+          }),
+        },
       } as any;
 
       const result = getTokenFromRequest(mockRequest);

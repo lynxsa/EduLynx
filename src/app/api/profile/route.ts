@@ -22,38 +22,38 @@ export async function GET(request: NextRequest) {
 
     // Get user profile based on role
     let userProfile;
-    
+
     switch (payload.role.toLowerCase()) {
       case 'admin':
         userProfile = await prisma.admin.findUnique({
-          where: { id: payload.userId }
+          where: { id: payload.userId },
         });
         break;
-        
+
       case 'teacher':
         userProfile = await prisma.teacher.findUnique({
           where: { id: payload.userId },
           include: {
             subjects: true,
             lessons: true,
-            class: true
-          }
+            class: true,
+          },
         });
         break;
-        
+
       case 'student':
         userProfile = await prisma.student.findUnique({
           where: { id: payload.userId },
           include: {
             class: {
               include: {
-                grade: true
-              }
+                grade: true,
+              },
             },
             parent: true,
             attendances: {
               take: 10,
-              orderBy: { date: 'desc' }
+              orderBy: { date: 'desc' },
             },
             results: {
               take: 5,
@@ -63,26 +63,26 @@ export async function GET(request: NextRequest) {
                   include: {
                     lesson: {
                       include: {
-                        subject: true
-                      }
-                    }
-                  }
+                        subject: true,
+                      },
+                    },
+                  },
                 },
                 assignment: {
                   include: {
                     lesson: {
                       include: {
-                        subject: true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+                        subject: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         });
         break;
-        
+
       case 'parent':
         userProfile = await prisma.parent.findUnique({
           where: { id: payload.userId },
@@ -91,23 +91,23 @@ export async function GET(request: NextRequest) {
               include: {
                 class: {
                   include: {
-                    grade: true
-                  }
+                    grade: true,
+                  },
                 },
                 attendances: {
                   take: 10,
-                  orderBy: { date: 'desc' }
+                  orderBy: { date: 'desc' },
                 },
                 results: {
                   take: 5,
-                  orderBy: { id: 'desc' }
-                }
-              }
-            }
-          }
+                  orderBy: { id: 'desc' },
+                },
+              },
+            },
+          },
         });
         break;
-        
+
       default:
         return NextResponse.json({ error: 'Invalid user role' }, { status: 400 });
     }
@@ -120,21 +120,18 @@ export async function GET(request: NextRequest) {
     const profileWithExtras = {
       ...userProfile,
       role: payload.role,
-      fullName: `${(userProfile as any).name || (userProfile as any).firstName || ''} ${(userProfile as any).surname || (userProfile as any).lastName || ''}`.trim(),
+      fullName:
+        `${(userProfile as any).name || (userProfile as any).firstName || ''} ${(userProfile as any).surname || (userProfile as any).lastName || ''}`.trim(),
       lastLogin: new Date().toISOString(), // This would come from a session tracking system
     };
 
     return NextResponse.json({
       success: true,
-      profile: profileWithExtras
+      profile: profileWithExtras,
     });
-
   } catch (error) {
     console.error('Profile API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch profile data' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch profile data' }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

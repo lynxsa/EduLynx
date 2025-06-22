@@ -37,7 +37,10 @@ export async function POST(req: NextRequest) {
     const assignment = await prisma.assignment.create({ data });
     return NextResponse.json(assignment, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create assignment', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create assignment', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -52,7 +55,10 @@ export async function PUT(req: NextRequest) {
     const assignment = await prisma.assignment.update({ where: { id: data.id }, data });
     return NextResponse.json(assignment);
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to update assignment', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to update assignment', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -67,6 +73,9 @@ export async function DELETE(req: NextRequest) {
     await prisma.assignment.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to delete assignment', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to delete assignment', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }

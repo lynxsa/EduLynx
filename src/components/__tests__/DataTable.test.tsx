@@ -1,12 +1,12 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import DataTable from '../DataTable'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import DataTable from '../DataTable';
 
 // Mock data for testing
 const mockData = [
   { id: 1, name: 'John Doe', email: 'john@example.com', role: 'student' },
   { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'teacher' },
-]
+];
 
 const mockColumns = [
   {
@@ -15,25 +15,25 @@ const mockColumns = [
     accessorKey: 'name',
   },
   {
-    id: 'email', 
+    id: 'email',
     header: 'Email',
     accessorKey: 'email',
   },
   {
     id: 'role',
-    header: 'Role', 
+    header: 'Role',
     accessorKey: 'role',
   },
-]
+];
 
 describe('DataTable Component', () => {
-  const mockOnEdit = jest.fn()
-  const mockOnDelete = jest.fn()
-  const mockOnView = jest.fn()
+  const mockOnEdit = jest.fn();
+  const mockOnDelete = jest.fn();
+  const mockOnView = jest.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   it('renders table with data', () => {
     render(
@@ -44,11 +44,11 @@ describe('DataTable Component', () => {
         onDelete={mockOnDelete}
         onView={mockOnView}
       />
-    )
+    );
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument()
-    expect(screen.getByText('jane@example.com')).toBeInTheDocument()
-  })
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('jane@example.com')).toBeInTheDocument();
+  });
 
   it('handles search functionality', async () => {
     render(
@@ -60,16 +60,16 @@ describe('DataTable Component', () => {
         onView={mockOnView}
         searchPlaceholder="Search users..."
       />
-    )
+    );
 
-    const searchInput = screen.getByPlaceholderText('Search users...')
-    fireEvent.change(searchInput, { target: { value: 'John' } })
+    const searchInput = screen.getByPlaceholderText('Search users...');
+    fireEvent.change(searchInput, { target: { value: 'John' } });
 
     await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument()
-      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+    });
+  });
 
   it('calls action handlers when buttons are clicked', async () => {
     render(
@@ -80,14 +80,14 @@ describe('DataTable Component', () => {
         onDelete={mockOnDelete}
         onView={mockOnView}
       />
-    )
+    );
 
     // Find and click the first edit button
-    const editButtons = screen.getAllByText('Edit')
-    fireEvent.click(editButtons[0])
+    const editButtons = screen.getAllByText('Edit');
+    fireEvent.click(editButtons[0]);
 
-    expect(mockOnEdit).toHaveBeenCalledWith(mockData[0])
-  })
+    expect(mockOnEdit).toHaveBeenCalledWith(mockData[0]);
+  });
 
   it('handles sorting', () => {
     render(
@@ -98,15 +98,15 @@ describe('DataTable Component', () => {
         onDelete={mockOnDelete}
         onView={mockOnView}
       />
-    )
+    );
 
-    const nameHeader = screen.getByText('Name')
-    fireEvent.click(nameHeader)
+    const nameHeader = screen.getByText('Name');
+    fireEvent.click(nameHeader);
 
     // The table should still render both items (sorted)
-    expect(screen.getByText('John Doe')).toBeInTheDocument()
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument()
-  })
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+  });
 
   it('handles empty data gracefully', () => {
     render(
@@ -117,8 +117,8 @@ describe('DataTable Component', () => {
         onDelete={mockOnDelete}
         onView={mockOnView}
       />
-    )
+    );
 
-    expect(screen.getByText('No data available')).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText('No data available')).toBeInTheDocument();
+  });
+});

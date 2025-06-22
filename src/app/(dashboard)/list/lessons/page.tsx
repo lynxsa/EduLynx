@@ -1,15 +1,12 @@
 'use client';
 
-import Pagination from "@/components/Pagination";
-import TableSearch from "@/components/TableSearch";
-import Image from "next/image";
-import Table from "@/components/Table";
-import React, { useEffect, useState } from 'react';
-import Link from "next/link";
-import FormModal from "@/components/FormModal";
+import { useEffect, useState } from 'react';
+import { ModernTable } from '@/components/ui/ModernTable';
+import { BookOpen, Clock, GraduationCap, User, Calendar } from 'lucide-react';
 
 type LessonRow = {
   id: number;
+  name: string;
   subject: { name: string };
   class: { name: string };
   teacher: { name: string };
@@ -18,103 +15,159 @@ type LessonRow = {
   endTime: string;
 };
 
-const columns = [
-  { header: "Subject Name", accessor: "subject", sortable: true },
-  { header: "Class", accessor: "class", className: "hidden md:table-cell", sortable: true },
-  { header: "Teacher", accessor: "teacher", className: "hidden md:table-cell", sortable: true },
-  { header: "Day", accessor: "day", className: "hidden md:table-cell", sortable: true },
-  { header: "Start Time", accessor: "startTime", className: "hidden md:table-cell", sortable: true },
-  { header: "End Time", accessor: "endTime", className: "hidden md:table-cell", sortable: true },
-  { header: "Actions", accessor: "actions", className: "table-cell" },
-];
-
-const LessonList = () => {
+const LessonsPage = () => {
   const [lessons, setLessons] = useState<LessonRow[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const ITEMS_PER_PAGE = 15;
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch(`/api/lessons?page=${page}&limit=${ITEMS_PER_PAGE}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch lessons');
-        return res.json();
-      })
-      .then(data => {
-        setLessons(data.data);
-        setTotal(data.total);
+    const fetchLessons = async () => {
+      try {
+        const response = await fetch('/api/lessons');
+        if (!response.ok) {
+          throw new Error('Failed to fetch lessons');
+        }
+        const data = await response.json();
+        setLessons(data.data || data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message || 'Unknown error');
-        setLoading(false);
-      });
-  }, [page]);
+      }
+    };
 
-  const filteredLessons = lessons.filter(l =>
-    l.subject?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    l.class?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    l.teacher?.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    fetchLessons();
+  }, []);
 
-  const renderRow = (item: LessonRow) => (
-    <tr key={item.id} role="row">
-      <td className="flex items-center gap-4 p-3" role="cell">
-        <div className="flex items-center gap-2">
-          <Image src="/lesson.png" alt="Lesson" width={20} height={20} />
-          <span className="font-semibold">{item.subject?.name || '-'}</span>
-        </div>
-      </td>
-      <td className="hidden md:table-cell" role="cell">{item.class?.name || '-'}</td>
-      <td className="hidden md:table-cell" role="cell">{item.teacher?.name || '-'}</td>
-      <td className="hidden md:table-cell" role="cell">{item.day}</td>
-      <td className="hidden md:table-cell" role="cell">{item.startTime}</td>
-      <td className="hidden md:table-cell" role="cell">{item.endTime}</td>
-      <td className="table-cell" role="cell">
-        <div className="flex items-center gap-2">
-          <Link href={`/list/lessons/${item.id}`} aria-label={`View details for lesson ${item.subject?.name}`} tabIndex={0}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-LYNXLight" aria-label="View lesson details">
-              <Image src="/view.png" alt="View" width={16} height={16} />
-            </button>
-          </Link>
-          <FormModal table="lessons" type="update" data={item} aria-label={`Edit lesson ${item.subject?.name}`} />
-          <FormModal table="lessons" type="delete" id={item.id} aria-label={`Delete lesson ${item.subject?.name}`} />
-        </div>
-      </td>
-    </tr>
-  );
-
-  return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
-      <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Lessons</h1>
-        <div className="flex flex-col justify-center md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch value={searchTerm} onChange={setSearchTerm} placeholder="Search lessons..." />
-          <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-              <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-LYNXLavendar">
-              <Image src="/sort.png" alt="" width={14} height={14} />
-            </button>
+  const columns = [
+    {
+      key: 'subject',
+      label: 'Subject',
+      sortable: true,
+      render: (lesson: LessonRow) => (
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-blue-600" />
+            </div>
+          </div>
+          <div>
+            <div className="font-medium text-gray-900">{lesson.subject.name}</div>
+            {lesson.name && <div className="text-sm text-gray-500">{lesson.name}</div>}
           </div>
         </div>
+      ),
+    },
+    {
+      key: 'class',
+      label: 'Class',
+      sortable: true,
+      render: (lesson: LessonRow) => (
+        <div className="flex items-center gap-2">
+          <GraduationCap className="w-4 h-4 text-gray-400" />
+          <span className="text-sm text-gray-900">{lesson.class.name}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'teacher',
+      label: 'Teacher',
+      sortable: true,
+      render: (lesson: LessonRow) => (
+        <div className="flex items-center gap-2">
+          <User className="w-4 h-4 text-gray-400" />
+          <span className="text-sm text-gray-900">{lesson.teacher.name}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'day',
+      label: 'Day',
+      sortable: true,
+      render: (lesson: LessonRow) => (
+        <div className="flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-gray-400" />
+          <span className="text-sm font-medium text-gray-900">{lesson.day}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'time',
+      label: 'Time',
+      sortable: true,
+      render: (lesson: LessonRow) => {
+        const startTime = new Date(`1970-01-01T${lesson.startTime}`);
+        const endTime = new Date(`1970-01-01T${lesson.endTime}`);
+        const duration = Math.round((endTime.getTime() - startTime.getTime()) / (1000 * 60));
+
+        return (
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-900">
+                {startTime.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })} -{' '}
+                {endTime.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
+              </p>
+              <p className="text-xs text-gray-500">{duration} minutes</p>
+            </div>
+          </div>
+        );
+      },
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading lessons...</p>
+        </div>
       </div>
-      {loading ? (
-        <div className="p-4 text-center">Loading lessons...</div>
-      ) : error ? (
-        <div className="p-4 text-center text-red-500">{error}</div>
-      ) : (
-        <Table columns={columns} renderRow={renderRow} data={filteredLessons} emptyMessage="No lessons found." />
-      )}
-      <Pagination page={page} count={total} />
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      <ModernTable
+        data={lessons}
+        columns={columns}
+        title="Lessons"
+        description="Manage lesson schedules and timetables"
+        searchableFields={['subject.name', 'class.name', 'teacher.name', 'day']}
+        onView={(lesson: LessonRow) => {
+          console.log('View lesson:', lesson);
+          // Navigate to view page
+        }}
+        onEdit={(lesson: LessonRow) => {
+          console.log('Edit lesson:', lesson);
+          // Navigate to edit page
+        }}
+        onDelete={(lesson: LessonRow) => {
+          if (window.confirm('Are you sure you want to delete this lesson?')) {
+            console.log('Delete lesson:', lesson);
+            // Handle delete
+          }
+        }}
+      />
     </div>
   );
 };
 
-export default LessonList;
+export default LessonsPage;

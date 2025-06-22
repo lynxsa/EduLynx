@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: Request) {
   try {
@@ -10,14 +10,14 @@ export async function GET(request: Request) {
             name: true,
             surname: true,
             img: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
     return NextResponse.json(medicalRecords);
   } catch (error) {
-    console.error("[API_HEALTH_GET]", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error('[API_HEALTH_GET]', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
 
@@ -35,11 +35,11 @@ export async function POST(request: Request) {
       emergencyContactRelationship,
       doctorName,
       doctorPhone,
-      notes
+      notes,
     } = body;
 
     if (!studentId) {
-      return new NextResponse("Student ID is required", { status: 400 });
+      return new NextResponse('Student ID is required', { status: 400 });
     }
 
     const medicalRecord = await prisma.medicalRecord.create({
@@ -54,14 +54,13 @@ export async function POST(request: Request) {
         emergencyContactRelationship,
         doctorName,
         doctorPhone,
-        notes
-      }
+        notes,
+      },
     });
 
     return NextResponse.json(medicalRecord, { status: 201 });
-
   } catch (error) {
-    console.error("[API_HEALTH_POST]", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error('[API_HEALTH_POST]', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }

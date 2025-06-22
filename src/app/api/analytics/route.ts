@@ -21,22 +21,22 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch analytics data
-    const [studentsCount, teachersCount, classesCount, totalAttendance, presentAttendance] = await Promise.all([
-      prisma.student.count(),
-      prisma.teacher.count(),
-      prisma.class.count(),
-      prisma.attendance.count(),
-      prisma.attendance.count({
-        where: {
-          present: true
-        }
-      })
-    ]);
+    const [studentsCount, teachersCount, classesCount, totalAttendance, presentAttendance] =
+      await Promise.all([
+        prisma.student.count(),
+        prisma.teacher.count(),
+        prisma.class.count(),
+        prisma.attendance.count(),
+        prisma.attendance.count({
+          where: {
+            present: true,
+          },
+        }),
+      ]);
 
     // Calculate average attendance percentage
-    const averageAttendance = totalAttendance > 0 
-      ? Math.round((presentAttendance / totalAttendance) * 100)
-      : 0;
+    const averageAttendance =
+      totalAttendance > 0 ? Math.round((presentAttendance / totalAttendance) * 100) : 0;
 
     // Get recent activity (simplified)
     const recentActivity = [
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       '5 assignments submitted today',
       'Math class attendance: 95%',
       'New announcement posted',
-      'Parent meeting scheduled'
+      'Parent meeting scheduled',
     ];
 
     const analyticsData = {
@@ -53,17 +53,13 @@ export async function GET(request: NextRequest) {
       totalClasses: classesCount,
       averageAttendance,
       recentActivity,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
 
     return NextResponse.json(analyticsData);
-
   } catch (error) {
     console.error('Analytics API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch analytics data' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch analytics data' }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

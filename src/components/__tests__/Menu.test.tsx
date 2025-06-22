@@ -17,12 +17,14 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-const MockedAuthProvider = ({ children, role = 'ADMIN' }: { children: React.ReactNode; role?: string }) => {
-  return (
-    <AuthProvider>
-      {children}
-    </AuthProvider>
-  );
+const MockedAuthProvider = ({
+  children,
+  role = 'ADMIN',
+}: {
+  children: React.ReactNode;
+  role?: string;
+}) => {
+  return <AuthProvider>{children}</AuthProvider>;
 };
 
 describe('Menu Component', () => {
@@ -54,7 +56,7 @@ describe('Menu Component', () => {
 
   it('handles keyboard navigation', async () => {
     // const user = userEvent.setup();
-    
+
     render(
       <MockedAuthProvider>
         <Menu />
@@ -63,13 +65,13 @@ describe('Menu Component', () => {
 
     const firstMenuItem = screen.getByText('Dashboard');
     fireEvent.focus(firstMenuItem);
-    
+
     expect(firstMenuItem).toHaveFocus();
   });
 
   it('supports collapsible sections', async () => {
     // const user = userEvent.setup();
-    
+
     render(
       <MockedAuthProvider>
         <Menu />
@@ -79,7 +81,7 @@ describe('Menu Component', () => {
     // Find a collapsible section (PEOPLE section)
     const peopleSection = screen.getByText('PEOPLE');
     const toggleButton = peopleSection.closest('button');
-    
+
     if (toggleButton) {
       fireEvent.click(toggleButton);
       // Check if the section collapsed/expanded

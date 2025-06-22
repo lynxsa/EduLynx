@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import {
   ColumnDef,
   flexRender,
@@ -10,18 +10,18 @@ import {
   getFilteredRowModel,
   SortingState,
   ColumnFiltersState,
-} from "@tanstack/react-table";
-import { 
-  ChevronUp, 
-  ChevronDown, 
-  Search, 
-  Eye, 
-  Edit, 
+} from '@tanstack/react-table';
+import {
+  ChevronUp,
+  ChevronDown,
+  Search,
+  Eye,
+  Edit,
   Trash2,
   Plus,
   Download,
-  Filter
-} from "lucide-react";
+  Filter,
+} from 'lucide-react';
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -38,10 +38,10 @@ interface DataTableProps<TData> {
   customActions?: React.ReactNode;
 }
 
-const DataTable = <TData,>({ 
-  columns, 
-  data, 
-  searchPlaceholder = "Search...",
+const DataTable = <TData,>({
+  columns,
+  data,
+  searchPlaceholder = 'Search...',
   onAdd,
   onView,
   onEdit,
@@ -50,11 +50,11 @@ const DataTable = <TData,>({
   title,
   description,
   showActions = true,
-  customActions
+  customActions,
 }: DataTableProps<TData>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState('');
 
   // Add actions column if handlers are provided
   const enhancedColumns = useMemo(() => {
@@ -63,8 +63,8 @@ const DataTable = <TData,>({
     }
 
     const actionsColumn: ColumnDef<TData> = {
-      id: "actions",
-      header: "Actions",
+      id: 'actions',
+      header: 'Actions',
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           {onView && (
@@ -133,8 +133,8 @@ const DataTable = <TData,>({
           <div className="relative flex-1 max-w-md">
             <input
               placeholder={searchPlaceholder}
-              value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(String(event.target.value))}
+              value={globalFilter ?? ''}
+              onChange={event => setGlobalFilter(String(event.target.value))}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -179,37 +179,34 @@ const DataTable = <TData,>({
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="text-xs text-gray-600 uppercase bg-gray-50 border-b border-gray-200">
-                {table.getHeaderGroups().map((headerGroup) => (
+                {table.getHeaderGroups().map(headerGroup => (
                   <tr key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
+                    {headerGroup.headers.map(header => (
                       <th key={header.id} className="px-6 py-4 font-medium">
                         {header.isPlaceholder ? null : (
                           <div
                             className={`flex items-center gap-2 ${
                               header.column.getCanSort()
-                                ? "cursor-pointer select-none hover:text-gray-900"
-                                : ""
+                                ? 'cursor-pointer select-none hover:text-gray-900'
+                                : ''
                             }`}
                             onClick={header.column.getToggleSortingHandler()}
                           >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            {flexRender(header.column.columnDef.header, header.getContext())}
                             {header.column.getCanSort() && (
                               <div className="flex flex-col">
                                 <ChevronUp
                                   className={`w-3 h-3 ${
-                                    header.column.getIsSorted() === "asc"
-                                      ? "text-purple-600"
-                                      : "text-gray-400"
+                                    header.column.getIsSorted() === 'asc'
+                                      ? 'text-purple-600'
+                                      : 'text-gray-400'
                                   }`}
                                 />
                                 <ChevronDown
                                   className={`w-3 h-3 -mt-1 ${
-                                    header.column.getIsSorted() === "desc"
-                                      ? "text-purple-600"
-                                      : "text-gray-400"
+                                    header.column.getIsSorted() === 'desc'
+                                      ? 'text-purple-600'
+                                      : 'text-gray-400'
                                   }`}
                                 />
                               </div>
@@ -222,12 +219,12 @@ const DataTable = <TData,>({
                 ))}
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {table.getRowModel().rows.map((row) => (
+                {table.getRowModel().rows.map(row => (
                   <tr
                     key={row.id}
                     className="hover:bg-gray-50 transition-colors duration-200 ease-in-out"
                   >
-                    {row.getVisibleCells().map((cell) => (
+                    {row.getVisibleCells().map(cell => (
                       <td key={cell.id} className="px-6 py-4 text-gray-900">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
@@ -245,16 +242,12 @@ const DataTable = <TData,>({
         <div>
           Showing {table.getFilteredRowModel().rows.length} of {data.length} entries
           {globalFilter && (
-            <span className="ml-1">
-              (filtered from {data.length} total entries)
-            </span>
+            <span className="ml-1">(filtered from {data.length} total entries)</span>
           )}
         </div>
         <div className="flex items-center gap-2">
           {sorting.length > 0 && (
-            <span className="text-purple-600">
-              Sorted by {sorting.map(s => s.id).join(", ")}
-            </span>
+            <span className="text-purple-600">Sorted by {sorting.map(s => s.id).join(', ')}</span>
           )}
         </div>
       </div>

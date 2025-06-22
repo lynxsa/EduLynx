@@ -1,40 +1,72 @@
-import React from 'react';
-import { 
-  DollarSign, 
-  TrendingUp, 
-  TrendingDown, 
-  CreditCard, 
-  PiggyBank,
-  Receipt,
-  AlertCircle,
-  Calendar
-} from 'lucide-react';
+'use client';
 
-// Mock financial data
-const financialData = {
-  totalRevenue: 2450000,
-  monthlyRevenue: 204166,
-  pendingPayments: 125000,
-  expenses: 1800000,
-  netProfit: 650000,
-  recentTransactions: [
-    { id: 1, type: 'revenue', description: 'Tuition Payment - Grade 12', amount: 15000, date: '2024-01-15', status: 'completed' },
-    { id: 2, type: 'expense', description: 'Teacher Salaries', amount: -120000, date: '2024-01-14', status: 'completed' },
-    { id: 3, type: 'revenue', description: 'School Supplies Fee', amount: 8500, date: '2024-01-13', status: 'completed' },
-    { id: 4, type: 'expense', description: 'Utilities Bill', amount: -25000, date: '2024-01-12', status: 'completed' },
-    { id: 5, type: 'revenue', description: 'Extra Classes Fee', amount: 12000, date: '2024-01-11', status: 'pending' },
-  ],
-  monthlyBreakdown: [
-    { month: 'Jan', revenue: 220000, expenses: 180000 },
-    { month: 'Feb', revenue: 210000, expenses: 175000 },
-    { month: 'Mar', revenue: 235000, expenses: 190000 },
-    { month: 'Apr', revenue: 225000, expenses: 185000 },
-    { month: 'May', revenue: 240000, expenses: 195000 },
-    { month: 'Jun', revenue: 250000, expenses: 200000 },
-  ]
-};
+import {
+  AlertCircle,
+  CreditCard,
+  DollarSign,
+  PiggyBank,
+  TrendingDown,
+  TrendingUp,
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+interface FinancialData {
+  totalRevenue: number;
+  monthlyRevenue: number;
+  pendingPayments: number;
+  expenses: number;
+  monthlyExpenses: number;
+  netProfit: number;
+  monthlyNetProfit: number;
+  profitMargin: number;
+  recentTransactions: Array<{
+    id: number;
+    type: string;
+    description: string;
+    amount: number;
+    date: string;
+    status: string;
+  }>;
+  monthlyBreakdown: Array<{
+    month: string;
+    revenue: number;
+    expenses: number;
+  }>;
+  metrics: {
+    totalStudents: number;
+    averageFeePerStudent: number;
+    teacherCount: number;
+    averageTeacherSalary: number;
+    revenueGrowth: number;
+    expenseRatio: number;
+  };
+  lastUpdated: string;
+}
 
 const FinancePage = () => {
+  const [financialData, setFinancialData] = useState<FinancialData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFinancialData = async () => {
+      try {
+        const response = await fetch('/api/dashboard/finance');
+        if (!response.ok) {
+          throw new Error('Failed to fetch financial data');
+        }
+        const result = await response.json();
+        setFinancialData(result.data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFinancialData();
+  }, []);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
@@ -43,19 +75,59 @@ const FinancePage = () => {
     }).format(amount);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading financial data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!financialData) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-600 dark:text-gray-400">No financial data available</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Financial Dashboard</h1>
-          <p className="text-gray-600 mt-1">Monitor school finances and track revenue</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Financial Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Live financial performance and revenue tracking
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+            Last updated: {new Date(financialData.lastUpdated).toLocaleString()}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
             Generate Report
           </button>
-          <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             Export Data
           </button>
         </div>
@@ -67,7 +139,9 @@ const FinancePage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(financialData.totalRevenue)}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {formatCurrency(financialData.totalRevenue)}
+              </p>
               <p className="text-sm text-green-600 flex items-center mt-1">
                 <TrendingUp className="w-4 h-4 mr-1" />
                 +12.5% from last year
@@ -83,7 +157,9 @@ const FinancePage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(financialData.monthlyRevenue)}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {formatCurrency(financialData.monthlyRevenue)}
+              </p>
               <p className="text-sm text-green-600 flex items-center mt-1">
                 <TrendingUp className="w-4 h-4 mr-1" />
                 +5.3% from last month
@@ -99,7 +175,9 @@ const FinancePage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Pending Payments</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(financialData.pendingPayments)}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {formatCurrency(financialData.pendingPayments)}
+              </p>
               <p className="text-sm text-orange-600 flex items-center mt-1">
                 <AlertCircle className="w-4 h-4 mr-1" />
                 Requires attention
@@ -115,7 +193,9 @@ const FinancePage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Net Profit</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(financialData.netProfit)}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {formatCurrency(financialData.netProfit)}
+              </p>
               <p className="text-sm text-green-600 flex items-center mt-1">
                 <TrendingUp className="w-4 h-4 mr-1" />
                 +8.2% margin
@@ -146,16 +226,22 @@ const FinancePage = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Transactions</h3>
           <div className="space-y-4">
-            {financialData.recentTransactions.map((transaction) => (
-              <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            {financialData.recentTransactions.map(transaction => (
+              <div
+                key={transaction.id}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-full ${
-                    transaction.type === 'revenue' ? 'bg-green-100' : 'bg-red-100'
-                  }`}>
-                    {transaction.type === 'revenue' ? 
-                      <TrendingUp className="w-4 h-4 text-green-600" /> : 
+                  <div
+                    className={`p-2 rounded-full ${
+                      transaction.type === 'revenue' ? 'bg-green-100' : 'bg-red-100'
+                    }`}
+                  >
+                    {transaction.type === 'revenue' ? (
+                      <TrendingUp className="w-4 h-4 text-green-600" />
+                    ) : (
                       <TrendingDown className="w-4 h-4 text-red-600" />
-                    }
+                    )}
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{transaction.description}</p>
@@ -163,16 +249,20 @@ const FinancePage = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className={`font-bold ${
-                    transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
-                  }`}>
+                  <p
+                    className={`font-bold ${
+                      transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
                     {formatCurrency(transaction.amount)}
                   </p>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    transaction.status === 'completed' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-orange-100 text-orange-800'
-                  }`}>
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      transaction.status === 'completed'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-orange-100 text-orange-800'
+                    }`}
+                  >
                     {transaction.status}
                   </span>
                 </div>
@@ -207,13 +297,15 @@ const FinancePage = () => {
                     <td className="py-3 px-4 text-red-600">{formatCurrency(month.expenses)}</td>
                     <td className="py-3 px-4 font-bold">{formatCurrency(netProfit)}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        parseFloat(margin) > 15 
-                          ? 'bg-green-100 text-green-800' 
-                          : parseFloat(margin) > 10 
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${
+                          parseFloat(margin) > 15
+                            ? 'bg-green-100 text-green-800'
+                            : parseFloat(margin) > 10
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                        }`}
+                      >
                         {margin}%
                       </span>
                     </td>

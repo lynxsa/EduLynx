@@ -2,9 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import DataTable from '@/components/DataTable';
-import { ColumnDef } from '@tanstack/react-table';
-import { Phone, Mail, Users, MapPin, Calendar } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ModernTable } from '@/components/ui/ModernTable';
+import {
+  Phone,
+  Mail,
+  Users,
+  MapPin,
+  Calendar,
+  Briefcase,
+  Heart,
+  GraduationCap,
+  Activity,
+} from 'lucide-react';
 
 interface Parent {
   id: string;
@@ -34,6 +44,7 @@ const ParentsPage = () => {
   const [parents, setParents] = useState<Parent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchParents = async () => {
@@ -54,141 +65,135 @@ const ParentsPage = () => {
     fetchParents();
   }, []);
 
-  const columns: ColumnDef<Parent>[] = [
+  const columns = [
     {
-      accessorKey: "name",
-      header: "Parent",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const parent = row.original;
-        return (
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              {parent.img ? (
-                <Image
-                  src={parent.img}
-                  alt={`${parent.name} ${parent.surname}`}
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                  <span className="text-purple-600 font-medium text-sm">
-                    {parent.name[0]}{parent.surname[0]}
-                  </span>
-                </div>
-              )}
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
-            </div>
-            <div>
-              <p className="font-medium text-gray-900">
-                {parent.name} {parent.surname}
-              </p>
-              <p className="text-sm text-gray-500">@{parent.username}</p>
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "email",
-      header: "Contact",
-      cell: ({ row }) => {
-        const parent = row.original;
-        return (
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Mail className="w-4 h-4" />
-              <span className="truncate max-w-32">{parent.email}</span>
-            </div>
-            {parent.phone && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Phone className="w-4 h-4" />
-                <span>{parent.phone}</span>
+      key: 'name',
+      label: 'Parent',
+      sortable: true,
+      render: (parent: Parent) => (
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            {parent.img ? (
+              <Image
+                src={parent.img}
+                alt={`${parent.name} ${parent.surname}`}
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-400 font-medium text-sm">
+                  {parent.name[0]}
+                  {parent.surname[0]}
+                </span>
               </div>
             )}
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
           </div>
-        );
-      },
-    },
-    {
-      accessorKey: "occupation",
-      header: "Occupation",
-      enableSorting: true,
-      cell: ({ row }) => {
-        const occupation = row.original.occupation;
-        return (
           <div>
-            <p className="font-medium text-gray-900">{occupation || 'Not specified'}</p>
-            <p className="text-sm text-gray-500">{row.original.relationship || 'Parent'}</p>
+            <p className="font-medium text-gray-900 dark:text-white">
+              {parent.name} {parent.surname}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">@{parent.username}</p>
           </div>
-        );
-      },
+        </div>
+      ),
     },
     {
-      accessorKey: "address",
-      header: "Address",
-      cell: ({ row }) => {
-        const address = row.original.address;
-        return (
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gray-400" />
-            <span className="text-sm text-gray-600 truncate max-w-32">{address}</span>
+      key: 'email',
+      label: 'Contact',
+      render: (parent: Parent) => (
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+            <Mail className="w-4 h-4" />
+            <span className="truncate max-w-32">{parent.email}</span>
           </div>
-        );
-      },
-    },
-    {
-      accessorKey: "students",
-      header: "Children",
-      cell: ({ row }) => {
-        const students = row.original.students || [];
-        const count = row.original._count?.students || students.length;
-        return (
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-blue-500" />
-              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                {count} {count === 1 ? 'child' : 'children'}
-              </span>
+          {parent.phone && (
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <Phone className="w-4 h-4" />
+              <span>{parent.phone}</span>
             </div>
-            {students.length > 0 && (
-              <div className="text-xs text-gray-500">
-                {students.slice(0, 2).map((student, index) => (
-                  <div key={student.id}>
-                    {student.name} {student.surname} ({student.class.name})
-                  </div>
-                ))}
-                {students.length > 2 && (
-                  <div>+{students.length - 2} more</div>
-                )}
-              </div>
-            )}
+          )}
+        </div>
+      ),
+    },
+    {
+      key: 'students',
+      label: 'Children',
+      sortable: true,
+      render: (parent: Parent) => (
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-sm">
+            <Users className="w-4 h-4 text-blue-500" />
+            <span className="font-medium">{parent.students?.length || 0} children</span>
           </div>
-        );
-      },
+          {parent.students?.slice(0, 2).map(student => (
+            <div key={student.id} className="text-xs text-gray-600 dark:text-gray-300">
+              {student.name} {student.surname} ({student.class.name})
+            </div>
+          ))}
+          {parent.students?.length > 2 && (
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              +{parent.students.length - 2} more
+            </span>
+          )}
+        </div>
+      ),
+    },
+    {
+      key: 'occupation',
+      label: 'Details',
+      render: (parent: Parent) => (
+        <div className="space-y-1">
+          {parent.occupation && (
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <Briefcase className="w-4 h-4 text-green-500" />
+              <span className="truncate max-w-24">{parent.occupation}</span>
+            </div>
+          )}
+          {parent.relationship && (
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <Heart className="w-4 h-4 text-red-500" />
+              <span>{parent.relationship}</span>
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      key: 'address',
+      label: 'Address',
+      render: (parent: Parent) => (
+        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+          <MapPin className="w-4 h-4 text-purple-500" />
+          <span className="truncate max-w-32">{parent.address}</span>
+        </div>
+      ),
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading parents...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleView = (parent: Parent) => {
+    router.push(`/list/parents/${parent.id}`);
+  };
+
+  const handleEdit = (parent: Parent) => {
+    // TODO: Implement edit functionality
+    console.log('Edit parent:', parent);
+  };
+
+  const handleDelete = (parent: Parent) => {
+    // TODO: Implement delete functionality
+    console.log('Delete parent:', parent);
+  };
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 text-lg">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <p className="text-red-600 dark:text-red-400 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
             className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
             Try Again
@@ -199,19 +204,79 @@ const ParentsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="p-6">
-        <DataTable 
-          columns={columns} 
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <div className="space-y-6">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{parents.length}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Parents</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                <GraduationCap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {parents.reduce((acc, p) => acc + (p.students?.length || 0), 0)}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Children</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                <Activity className="w-5 h-5 text-green-600 dark:text-green-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {parents.filter(p => p.students && p.students.length > 0).length}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Active Parents</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                <Heart className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {parents.length > 0
+                    ? (
+                        parents.reduce((acc, p) => acc + (p.students?.length || 0), 0) /
+                        parents.length
+                      ).toFixed(1)
+                    : 0}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Avg Children per Parent</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Modern Table */}
+        <ModernTable
           data={parents}
+          columns={columns}
+          searchableFields={['name', 'surname', 'email', 'username', 'occupation', 'address']}
+          loading={loading}
           title="Parent Directory"
-          description="Manage parent information and communication"
-          searchPlaceholder="Search parents..."
-          onView={(parent) => console.log('View parent:', parent)}
-          onEdit={(parent) => console.log('Edit parent:', parent)}
-          onDelete={(parent) => console.log('Delete parent:', parent)}
-          onAdd={() => console.log('Add new parent')}
-          onExport={() => console.log('Export parents')}
+          description="Manage parent and guardian information"
+          onView={handleView}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          itemsPerPage={15}
         />
       </div>
     </div>

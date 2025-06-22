@@ -1,16 +1,16 @@
 import React from 'react';
-import { 
-  Settings, 
-  Bell, 
-  Shield, 
-  Palette, 
-  Globe, 
+import {
+  Settings,
+  Bell,
+  Shield,
+  Palette,
+  Globe,
   Database,
   Mail,
   Users,
   Lock,
   Eye,
-  Save
+  Save,
 } from 'lucide-react';
 
 const SettingsPage = () => {
@@ -74,7 +74,7 @@ const SettingsPage = () => {
               <Settings className="w-5 h-5" />
               General Settings
             </h3>
-            
+
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -108,9 +108,7 @@ const SettingsPage = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Time Zone
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Time Zone</label>
                   <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <option>South Africa Standard Time (SAST)</option>
                     <option>GMT</option>
@@ -118,7 +116,7 @@ const SettingsPage = () => {
                   </select>
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   School Address
@@ -138,7 +136,7 @@ const SettingsPage = () => {
               <Bell className="w-5 h-5" />
               Notification Preferences
             </h3>
-            
+
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -150,7 +148,7 @@ const SettingsPage = () => {
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="font-medium text-gray-900">Student Updates</h4>
@@ -161,18 +159,20 @@ const SettingsPage = () => {
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="font-medium text-gray-900">System Alerts</h4>
-                  <p className="text-sm text-gray-600">Important system maintenance notifications</p>
+                  <p className="text-sm text-gray-600">
+                    Important system maintenance notifications
+                  </p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" defaultChecked className="sr-only peer" />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="font-medium text-gray-900">Financial Updates</h4>
@@ -192,7 +192,7 @@ const SettingsPage = () => {
               <Shield className="w-5 h-5" />
               Security & Privacy
             </h3>
-            
+
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3">
@@ -209,7 +209,7 @@ const SettingsPage = () => {
                   <option>Never</option>
                 </select>
               </div>
-              
+
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <Users className="w-5 h-5 text-gray-600" />
@@ -222,7 +222,7 @@ const SettingsPage = () => {
                   Configure
                 </button>
               </div>
-              
+
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <Eye className="w-5 h-5 text-gray-600" />
@@ -245,15 +245,19 @@ const SettingsPage = () => {
               <Palette className="w-5 h-5" />
               Appearance
             </h3>
-            
+
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Theme
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Theme</label>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="relative">
-                    <input type="radio" name="theme" value="light" defaultChecked className="sr-only peer" />
+                    <input
+                      type="radio"
+                      name="theme"
+                      value="light"
+                      defaultChecked
+                      className="sr-only peer"
+                    />
                     <div className="w-full p-4 border-2 border-gray-300 rounded-lg cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50">
                       <div className="w-full h-12 bg-white border border-gray-200 rounded mb-2"></div>
                       <p className="text-sm font-medium text-center">Light</p>
@@ -275,7 +279,7 @@ const SettingsPage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Primary Color

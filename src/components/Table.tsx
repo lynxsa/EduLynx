@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 interface TableProps {
   columns?: { header: string; accessor: string; className?: string; sortable?: boolean }[];
@@ -15,7 +15,7 @@ const Table = ({
   data = [],
   loading = false,
   error = null,
-  emptyMessage = "No data found."
+  emptyMessage = 'No data found.',
 }: TableProps) => {
   const [sortCol, setSortCol] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
@@ -29,7 +29,7 @@ const Table = ({
     }
   };
 
-  let sortedData = [...data];
+  const sortedData = [...data];
   if (sortCol) {
     sortedData.sort((a, b) => {
       const aVal = a[sortCol];
@@ -63,7 +63,7 @@ const Table = ({
         <table className="w-full mt-4" role="table" aria-label="Data table">
           <thead>
             <tr>
-              {columns.map((col) => (
+              {columns.map(col => (
                 <th
                   key={col.accessor}
                   className={`table-header ${col.className || ''}`}

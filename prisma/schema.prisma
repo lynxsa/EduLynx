@@ -32,6 +32,32 @@ enum FinanceType {
   Expense
 }
 
+enum MessagePriority {
+  LOW
+  NORMAL
+  HIGH
+}
+
+enum MessageType {
+  INBOX
+  SENT
+  ARCHIVED
+}
+
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  COMPLETED
+  SUBMITTED
+  GRADED
+}
+
+enum ProjectType {
+  INDIVIDUAL
+  GROUP
+  CLASS
+}
+
 model Admin {
   id       String @id
   username String @unique
@@ -88,6 +114,7 @@ model Class {
   lessons       Lesson[]       @relation("ClassLessons")
   events        Event[]        @relation("ClassEvents")
   announcements Announcement[] @relation("ClassAnnouncements")
+  projects      Project[]
 }
 
 model Subject {
@@ -95,6 +122,7 @@ model Subject {
   name      String             @unique
   teachers  SubjectToTeacher[]
   lessons   Lesson[]
+  projects  Project[]
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt @default(now())
 }
@@ -122,6 +150,7 @@ model Teacher {
   birthday   DateTime
   subjects   SubjectToTeacher[]
   lessons    Lesson[]
+  projects   Project[]
   class      Class?             @relation("ClassTeachers", fields: [classId], references: [id], onDelete: SetNull)
   classId    Int?
   supervised Class[]            @relation("SupervisorClasses")
@@ -181,6 +210,7 @@ model Student {
   attendances  Attendance[]  @relation("StudentAttendances")
   submissions  Submission[]  @relation("StudentSubmissions")
   quizAttempts QuizAttempt[] @relation("StudentQuizAttempts")
+  projects     Project[]     @relation("ProjectStudents")
   medicalRecord MedicalRecord? 
 }
 
@@ -383,6 +413,10 @@ model User {
   student Student? @relation("StudentUser")
   teacher Teacher? @relation("TeacherUser")
   parent  Parent?  @relation("ParentUser")
+
+  // Messages
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
 }
 
 model School {
@@ -418,4 +452,61 @@ model FinanceEntry {
   linkedParentId String?
   date       DateTime
   createdAt  DateTime    @default(now())
+}
+
+model Message {
+  id        String          @id @default(uuid())
+  subject   String
+  content   String
+  preview   String
+  fromId    String
+  toId      String
+  priority  MessagePriority @default(NORMAL)
+  type      MessageType     @default(INBOX)
+  read      Boolean         @default(false)
+  starred   Boolean         @default(false)
+  archived  Boolean         @default(false)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  from User @relation("SentMessages", fields: [fromId], references: [id], onDelete: Cascade)
+  to   User @relation("ReceivedMessages", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@index([fromId])
+  @@index([toId])
+  @@index([createdAt])
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  title       String
+  description String?
+  type        ProjectType
+  status      ProjectStatus @default(PLANNING)
+  startDate   DateTime
+  dueDate     DateTime
+  grade       Int?          // Grade out of 100
+  feedback    String?
+  requirements String?      // JSON string of requirements
+  resources   String?       // JSON string of resources/links
+  
+  // Relations
+  subjectId   Int?
+  subject     Subject?      @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  classId     Int?
+  class       Class?        @relation(fields: [classId], references: [id], onDelete: SetNull)
+  teacherId   String?
+  teacher     Teacher?      @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+  
+  // Many-to-many relation with students for group projects
+  students    Student[]     @relation("ProjectStudents")
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([subjectId])
+  @@index([classId])
+  @@index([teacherId])
+  @@index([dueDate])
+  @@index([status])
 }

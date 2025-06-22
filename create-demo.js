@@ -74,7 +74,6 @@ async function createDemoUsersSimple() {
     // Verify users exist
     const count = await prisma.user.count();
     console.log(`🎯 Total users in database: ${count}`);
-
   } catch (error) {
     console.error('❌ Error creating demo users:', error);
   } finally {

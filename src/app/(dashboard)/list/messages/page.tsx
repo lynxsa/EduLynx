@@ -1,18 +1,9 @@
-// Force dynamic rendering to prevent static generation issues with functions in columns
-export const dynamic = 'force-dynamic';
+'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DataTable from '@/components/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import { 
-  MessageCircle, 
-  Send, 
-  Inbox, 
-  Archive, 
-  Star,
-  Clock,
-  User
-} from 'lucide-react';
+import { MessageCircle, Send, Inbox, Archive, Star, Clock, User } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -27,69 +18,12 @@ interface Message {
   type: 'inbox' | 'sent' | 'archived';
 }
 
-// Mock messages data
-const messagesData: Message[] = [
-  {
-    id: '1',
-    from: 'Dr. Sarah Johnson',
-    to: 'Admin',
-    subject: 'Grade 12 Final Exam Schedule',
-    preview: 'Please review the proposed exam schedule for Grade 12 students...',
-    timestamp: '2024-01-15 09:30',
-    read: false,
-    starred: true,
-    priority: 'high',
-    type: 'inbox'
-  },
-  {
-    id: '2',
-    from: 'Michael Chen',
-    to: 'Admin',
-    subject: 'Parent-Teacher Conference Request',
-    preview: 'I would like to schedule a meeting to discuss my child\'s progress...',
-    timestamp: '2024-01-14 14:15',
-    read: true,
-    starred: false,
-    priority: 'normal',
-    type: 'inbox'
-  },
-  {
-    id: '3',
-    from: 'Admin',
-    to: 'All Teachers',
-    subject: 'New Educational Policy Updates',
-    preview: 'Please find attached the latest policy updates from the education department...',
-    timestamp: '2024-01-14 11:00',
-    read: true,
-    starred: false,
-    priority: 'normal',
-    type: 'sent'
-  },
-  {
-    id: '4',
-    from: 'Lisa Anderson',
-    to: 'Admin',
-    subject: 'Student Absence Notification',
-    preview: 'My daughter Emily will be absent from school due to medical appointment...',
-    timestamp: '2024-01-13 16:45',
-    read: true,
-    starred: false,
-    priority: 'low',
-    type: 'inbox'
-  },
-  {
-    id: '5',
-    from: 'David Wilson',
-    to: 'Admin',
-    subject: 'Equipment Request for Science Lab',
-    preview: 'We need to order new laboratory equipment for the upcoming semester...',
-    timestamp: '2024-01-12 10:20',
-    read: false,
-    starred: true,
-    priority: 'high',
-    type: 'inbox'
-  }
-];
+interface MessageStats {
+  inbox: number;
+  unread: number;
+  starred: number;
+  archived: number;
+}
 
 // Define columns outside the component to avoid server/client issues
 const messageColumns: ColumnDef<Message>[] = [
@@ -98,17 +32,17 @@ const messageColumns: ColumnDef<Message>[] = [
     header: '',
     cell: ({ row }) => (
       <button className="p-1 hover:bg-gray-100 rounded">
-        <Star 
+        <Star
           className={`w-4 h-4 ${
-            row.original.starred 
-              ? 'text-yellow-500 fill-current' 
+            row.original.starred
+              ? 'text-yellow-500 fill-current'
               : 'text-gray-400 hover:text-yellow-500'
           }`}
         />
       </button>
     ),
     enableSorting: false,
-    size: 40
+    size: 40,
   },
   {
     accessorKey: 'from',
@@ -117,7 +51,10 @@ const messageColumns: ColumnDef<Message>[] = [
       <div className="flex items-center space-x-3">
         <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
           <span className="text-blue-600 font-medium text-sm">
-            {row.original.from.split(' ').map((n: string) => n[0]).join('')}
+            {row.original.from
+              .split(' ')
+              .map((n: string) => n[0])
+              .join('')}
           </span>
         </div>
         <span className="font-medium text-gray-900">{row.original.from}</span>
@@ -137,30 +74,106 @@ const messageColumns: ColumnDef<Message>[] = [
   {
     accessorKey: 'timestamp',
     header: 'Time',
-    cell: ({ row }) => (
-      <span className="text-sm text-gray-500">{row.original.timestamp}</span>
-    ),
+    cell: ({ row }) => <span className="text-sm text-gray-500">{row.original.timestamp}</span>,
   },
 ];
 
 const MessagesPage = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [stats, setStats] = useState<MessageStats>({
+    inbox: 0,
+    unread: 0,
+    starred: 0,
+    archived: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('all');
+
+  // For demo purposes, using a hardcoded user ID. In a real app, this would come from auth context
+  const userId = '1'; // This should be replaced with actual user ID from authentication
+
+  const fetchMessages = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/messages?userId=${userId}&type=${activeTab}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch messages');
+      }
+      const data = await response.json();
+      setMessages(data.data || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  }, [userId, activeTab]);
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch(`/api/messages/stats?userId=${userId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch message stats');
+      }
+      const data = await response.json();
+      setStats(data);
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+    fetchStats();
+  }, [fetchMessages]);
+
+  const handleMarkAsRead = async (messageId: string) => {
+    try {
+      await fetch('/api/messages', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messageId, read: true }),
+      });
+      fetchMessages();
+      fetchStats();
+    } catch (err) {
+      console.error('Error marking as read:', err);
+    }
+  };
+
+  const handleStarToggle = async (messageId: string, starred: boolean) => {
+    try {
+      await fetch('/api/messages', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messageId, starred: !starred }),
+      });
+      fetchMessages();
+      fetchStats();
+    } catch (err) {
+      console.error('Error toggling star:', err);
+    }
+  };
   const columns: ColumnDef<Message>[] = [
     {
       id: 'starred',
       header: '',
       cell: ({ row }) => (
-        <button className="p-1 hover:bg-gray-100 rounded">
-          <Star 
+        <button
+          className="p-1 hover:bg-gray-100 rounded"
+          onClick={() => handleStarToggle(row.original.id, row.original.starred)}
+        >
+          <Star
             className={`w-4 h-4 ${
-              row.original.starred 
-                ? 'text-yellow-500 fill-current' 
+              row.original.starred
+                ? 'text-yellow-500 fill-current'
                 : 'text-gray-400 hover:text-yellow-500'
             }`}
           />
         </button>
       ),
       enableSorting: false,
-      size: 40
+      size: 40,
     },
     {
       id: 'from',
@@ -171,42 +184,46 @@ const MessagesPage = () => {
           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
             <User className="w-4 h-4 text-blue-600" />
           </div>
-          <span className={`font-medium ${!row.original.read ? 'font-bold text-gray-900' : 'text-gray-700'}`}>
+          <span
+            className={`font-medium ${!row.original.read ? 'font-bold text-gray-900' : 'text-gray-700'}`}
+          >
             {row.original.from}
           </span>
         </div>
-      )
+      ),
     },
     {
       id: 'subject',
       header: 'Subject',
       accessorKey: 'subject',
       cell: ({ row }) => (
-        <div>
-          <div className={`${!row.original.read ? 'font-bold text-gray-900' : 'text-gray-700'} mb-1`}>
+        <div className="cursor-pointer" onClick={() => handleMarkAsRead(row.original.id)}>
+          <div
+            className={`${!row.original.read ? 'font-bold text-gray-900' : 'text-gray-700'} mb-1`}
+          >
             {row.original.subject}
           </div>
-          <div className="text-sm text-gray-500 truncate max-w-xs">
-            {row.original.preview}
-          </div>
+          <div className="text-sm text-gray-500 truncate max-w-xs">{row.original.preview}</div>
         </div>
-      )
+      ),
     },
     {
       id: 'priority',
       header: 'Priority',
       accessorKey: 'priority',
       cell: ({ row }) => (
-        <span className={`px-2 py-1 text-xs rounded-full ${
-          row.original.priority === 'high' 
-            ? 'bg-red-100 text-red-800'
-            : row.original.priority === 'normal'
-            ? 'bg-blue-100 text-blue-800'
-            : 'bg-gray-100 text-gray-800'
-        }`}>
+        <span
+          className={`px-2 py-1 text-xs rounded-full ${
+            row.original.priority === 'high'
+              ? 'bg-red-100 text-red-800'
+              : row.original.priority === 'normal'
+                ? 'bg-blue-100 text-blue-800'
+                : 'bg-gray-100 text-gray-800'
+          }`}
+        >
           {row.original.priority}
         </span>
-      )
+      ),
     },
     {
       id: 'timestamp',
@@ -217,21 +234,19 @@ const MessagesPage = () => {
           <Clock className="w-3 h-3" />
           {new Date(row.original.timestamp).toLocaleDateString()}
         </div>
-      )
+      ),
     },
     {
       id: 'status',
       header: 'Status',
       cell: ({ row }) => (
         <div className="flex items-center gap-1">
-          <div className={`w-2 h-2 rounded-full ${
-            !row.original.read ? 'bg-blue-500' : 'bg-gray-300'
-          }`} />
-          <span className="text-xs text-gray-500">
-            {!row.original.read ? 'New' : 'Read'}
-          </span>
+          <div
+            className={`w-2 h-2 rounded-full ${!row.original.read ? 'bg-blue-500' : 'bg-gray-300'}`}
+          />
+          <span className="text-xs text-gray-500">{!row.original.read ? 'New' : 'Read'}</span>
         </div>
-      )
+      ),
     },
     {
       id: 'actions',
@@ -262,8 +277,8 @@ const MessagesPage = () => {
         </div>
       ),
       enableSorting: false,
-      size: 120
-    }
+      size: 120,
+    },
   ];
 
   return (
@@ -291,7 +306,7 @@ const MessagesPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Inbox</p>
-              <p className="text-2xl font-bold text-gray-900">12</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.inbox}</p>
             </div>
             <div className="bg-blue-100 p-2 rounded-full">
               <Inbox className="w-5 h-5 text-blue-600" />
@@ -303,7 +318,7 @@ const MessagesPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Unread</p>
-              <p className="text-2xl font-bold text-red-600">3</p>
+              <p className="text-2xl font-bold text-red-600">{stats.unread}</p>
             </div>
             <div className="bg-red-100 p-2 rounded-full">
               <MessageCircle className="w-5 h-5 text-red-600" />
@@ -315,7 +330,7 @@ const MessagesPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Starred</p>
-              <p className="text-2xl font-bold text-yellow-600">2</p>
+              <p className="text-2xl font-bold text-yellow-600">{stats.starred}</p>
             </div>
             <div className="bg-yellow-100 p-2 rounded-full">
               <Star className="w-5 h-5 text-yellow-600" />
@@ -327,7 +342,7 @@ const MessagesPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Archived</p>
-              <p className="text-2xl font-bold text-gray-600">8</p>
+              <p className="text-2xl font-bold text-gray-600">{stats.archived}</p>
             </div>
             <div className="bg-gray-100 p-2 rounded-full">
               <Archive className="w-5 h-5 text-gray-600" />
@@ -339,19 +354,54 @@ const MessagesPage = () => {
       {/* Filter Tabs */}
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
-          <button className="border-b-2 border-blue-500 text-blue-600 py-2 px-1 text-sm font-medium">
+          <button
+            className={`border-b-2 py-2 px-1 text-sm font-medium ${
+              activeTab === 'all'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('all')}
+          >
             All Messages
           </button>
-          <button className="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 text-sm font-medium">
+          <button
+            className={`border-b-2 py-2 px-1 text-sm font-medium ${
+              activeTab === 'inbox'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('inbox')}
+          >
             Inbox
           </button>
-          <button className="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 text-sm font-medium">
+          <button
+            className={`border-b-2 py-2 px-1 text-sm font-medium ${
+              activeTab === 'sent'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('sent')}
+          >
             Sent
           </button>
-          <button className="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 text-sm font-medium">
+          <button
+            className={`border-b-2 py-2 px-1 text-sm font-medium ${
+              activeTab === 'starred'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('starred')}
+          >
             Starred
           </button>
-          <button className="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 text-sm font-medium">
+          <button
+            className={`border-b-2 py-2 px-1 text-sm font-medium ${
+              activeTab === 'archived'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('archived')}
+          >
             Archive
           </button>
         </nav>
@@ -359,14 +409,33 @@ const MessagesPage = () => {
 
       {/* Messages Table */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <DataTable
-          data={messagesData}
-          columns={columns}
-          searchPlaceholder="Search messages..."
-          onEdit={(message: Message) => console.log('Edit message:', message)}
-          onDelete={(message: Message) => console.log('Delete message:', message)}
-          onView={(message: Message) => console.log('View message:', message)}
-        />
+        {loading ? (
+          <div className="flex items-center justify-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="ml-3 text-gray-600">Loading messages...</span>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center p-8">
+            <div className="text-center">
+              <p className="text-red-600 text-lg">{error}</p>
+              <button
+                onClick={fetchMessages}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        ) : (
+          <DataTable
+            data={messages}
+            columns={columns}
+            searchPlaceholder="Search messages..."
+            onEdit={(message: Message) => console.log('Edit message:', message)}
+            onDelete={(message: Message) => console.log('Delete message:', message)}
+            onView={(message: Message) => console.log('View message:', message)}
+          />
+        )}
       </div>
 
       {/* Quick Actions */}
@@ -380,7 +449,7 @@ const MessagesPage = () => {
               <div className="text-sm text-gray-500">Broadcast to all users</div>
             </div>
           </button>
-          
+
           <button className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             <MessageCircle className="w-5 h-5 text-green-600" />
             <div className="text-left">
@@ -388,7 +457,7 @@ const MessagesPage = () => {
               <div className="text-sm text-gray-500">Send to all parents</div>
             </div>
           </button>
-          
+
           <button className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             <Archive className="w-5 h-5 text-purple-600" />
             <div className="text-left">

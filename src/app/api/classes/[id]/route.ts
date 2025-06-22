@@ -11,7 +11,10 @@ function toClassInterface(classItem: any): Class {
 }
 
 // GET: Get class by ID
-export async function GET(req: NextRequest, { params }: { params: { id: string } }): Promise<NextResponse> {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   const classItem = await prisma.class.findUnique({
     where: { id: Number(params.id) },
     include: { grade: true, supervisor: true },
@@ -21,7 +24,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 // PUT: Update class by ID
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }): Promise<NextResponse> {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   const data = await req.json();
   const classItem = await prisma.class.update({
     where: { id: Number(params.id) },
@@ -37,7 +43,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE: Delete class by ID
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }): Promise<NextResponse> {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   await prisma.class.delete({
     where: { id: Number(params.id) },
   });

@@ -1,378 +1,315 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import { startOfMonth, endOfMonth, subMonths, format, startOfWeek, endOfWeek, addDays } from 'date-fns';
+import { PrismaClient } from '@prisma/client';
+import {
+  calculateAttendancePercentage,
+  calculateStudentAverageScore,
+  calculateClassAveragePerformance,
+  calculateSchoolPerformance,
+  calculateAttendanceTrend,
+  calculateSubjectPerformance,
+  calculateFinancialOverview,
+  calculateRiskAssessment,
+  calculateUserActivity,
+  getDashboardMetrics,
+  calculateAttendanceTrends,
+  calculatePerformanceTrends,
+} from '@/lib/calculations';
 
-async function getStudentAvgScore(studentId: string) {
-  const results = await prisma.result.findMany({ where: { studentId } });
-  if (!results.length) return null;
-  const avg = results.reduce((sum, r) => sum + r.score, 0) / results.length;
-  return avg;
-}
+const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // Fetch real counts from the database
-    const [
-      totalStudents,
-      totalTeachers,
-      totalParents,
-      totalClasses,
-      totalAnnouncements,
-      totalEvents,
-      totalMedicalRecords
-    ] = await Promise.all([
-      prisma.student.count(),
-      prisma.teacher.count(),
-      prisma.parent.count(),
-      prisma.class.count(),
-      prisma.announcement.count(),
-      prisma.event.count(),
-      prisma.medicalRecord.count(),
+    const url = new URL(request.url);
+    const period = url.searchParams.get('period') || 'month'; // week, month, semester
+    const schoolId = url.searchParams.get('schoolId');
+
+    // Get school-specific data if schoolId is provided
+    const whereClause = schoolId ? { schoolId: parseInt(schoolId) } : {};
+
+    // Get total counts
+    const totalStudents = await prisma.student.count({ where: whereClause });
+    const totalTeachers = await prisma.teacher.count({ where: whereClause });
+    const totalParents = await prisma.parent.count();
+    const totalClasses = await prisma.class.count({ where: whereClause });
+    const totalSubjects = await prisma.subject.count();
+    const totalGrades = await prisma.grade.count({ where: whereClause });
+
+    // Get gender distribution
+    const genderDistribution = await Promise.all([
+      prisma.student.count({ where: { ...whereClause, sex: 'MALE' } }),
+      prisma.student.count({ where: { ...whereClause, sex: 'FEMALE' } }),
     ]);
 
-    // Example: Attendance percentage (last week)
-    const totalAttendance = await prisma.attendance.count();
-    const presentAttendance = await prisma.attendance.count({ where: { present: true } });
-    const attendancePercentage = totalAttendance > 0 ? Math.round((presentAttendance / totalAttendance) * 100) : 0;
-
-    // Example: Recent students (last 30 days)
-    const recentStudents = await prisma.student.count({
-      where: {
-        createdAt: {
-          gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-        }
-      }
-    });
-    const previousStudents = totalStudents - recentStudents;
-
-    // --- Attendance breakdown for the last 7 days (for AttendanceChart) ---
-    const today = new Date();
-    const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Monday
-    const weekEnd = endOfWeek(today, { weekStartsOn: 1 });
-    const attendanceByDay = [];
-    for (let i = 0; i < 5; i++) { // School days: Mon-Fri
-      const day = addDays(weekStart, i);
-      const present = await prisma.attendance.count({ where: { date: day, present: true } });
-      const absent = await prisma.attendance.count({ where: { date: day, present: false } });
-      attendanceByDay.push({
-        day: format(day, 'EEE'),
-        present,
-        absent
-      });
-    }
-
-    // --- Student count per month for the last 6 months (for CountChart) ---
-    const studentCountByMonth = [];
-    for (let i = 5; i >= 0; i--) {
-      const monthDate = subMonths(startOfMonth(today), i);
-      const monthStart = startOfMonth(monthDate);
-      const monthEnd = endOfMonth(monthDate);
-      const count = await prisma.student.count({
-        where: {
-          createdAt: {
-            gte: monthStart,
-            lte: monthEnd
-          }
-        }
-      });
-      studentCountByMonth.push({
-        month: format(monthDate, 'MMM'),
-        students: count
-      });
-    }
-
-    // --- Finance data aggregated by month for the last 6 months (for FinanceChart) ---
-    const financeByMonth = [];
-    for (let i = 5; i >= 0; i--) {
-      const monthDate = subMonths(startOfMonth(today), i);
-      const monthStart = startOfMonth(monthDate);
-      const monthEnd = endOfMonth(monthDate);
-      const income = await prisma.financeEntry.aggregate({
-        _sum: { amount: true },
-        where: {
-          type: 'Income',
-          date: { gte: monthStart, lte: monthEnd }
-        }
-      });
-      const expense = await prisma.financeEntry.aggregate({
-        _sum: { amount: true },
-        where: {
-          type: 'Expense',
-          date: { gte: monthStart, lte: monthEnd }
-        }
-      });
-      financeByMonth.push({
-        month: format(monthDate, 'MMM'),
-        income: income._sum.amount || 0,
-        expense: expense._sum.amount || 0
-      });
-    }
-
-    // --- Gender counts for StudentGenderPieChart ---
-    const maleCount = await prisma.student.count({ where: { gender: 'Male' } });
-    const femaleCount = await prisma.student.count({ where: { gender: 'Female' } });
-
-    // Fetch all students with health/medical info for admin overview
-    const students = await prisma.student.findMany({
-      select: {
-        id: true,
-        name: true,
-        surname: true,
-        gender: true,
-        bloodType: true,
-        allergies: true,
-        medicalInfo: true,
-        specialNeeds: true,
-        emergencyContactName: true,
-        emergencyContactPhone: true,
-        status: true,
-        class: { select: { name: true } },
-        grade: { select: { level: true } }
-      }
-    });
-
-    // Finance summary for admin dashboard
-    const totalIncome = await prisma.financeEntry.aggregate({
-      _sum: { amount: true },
-      where: { type: 'Income' }
-    });
-    const totalExpense = await prisma.financeEntry.aggregate({
-      _sum: { amount: true },
-      where: { type: 'Expense' }
-    });
-    const recentEntries = await prisma.financeEntry.findMany({
-      orderBy: { date: 'desc' },
-      take: 5
-    });
-
-    // Calculate pass rate: % of students with avg score >= 50%
-    const studentResults = await prisma.student.findMany({
-      select: {
-        id: true,
-        results: { select: { score: true } }
-      }
-    });
-    const passing = studentResults.filter(s => {
-      if (!s.results.length) return false;
-      const avg = s.results.reduce((sum, r) => sum + r.score, 0) / s.results.length;
-      return avg >= 50;
-    }).length;
-    const passRate = totalStudents > 0 ? Math.round((passing / totalStudents) * 100) : 0;
-
-    // --- Gender Pass Rates ---
-    const maleStudentsList = await prisma.student.findMany({ where: { gender: 'Male' }, select: { id: true } });
-    let malePassing = 0;
-    for (const s of maleStudentsList) {
-      const avg = await getStudentAvgScore(s.id);
-      if (avg !== null && avg >= 50) malePassing++;
-    }
-    const femaleStudentsList = await prisma.student.findMany({ where: { gender: 'Female' }, select: { id: true } });
-    let femalePassing = 0;
-    for (const s of femaleStudentsList) {
-      const avg = await getStudentAvgScore(s.id);
-      if (avg !== null && avg >= 50) femalePassing++;
-    }
-    const malePassRate = maleCount > 0 ? Math.round((malePassing / maleCount) * 100) : 0;
-    const femalePassRate = femaleCount > 0 ? Math.round((femalePassing / femaleCount) * 100) : 0;
-
-    // --- Projected Pass Rate ---
-    const weights = { Assignment: 1, Quiz: 2, 'Mid-Term': 5, Final: 10 };
-    const allStudentsList = await prisma.student.findMany({ select: { id: true } });
-    let projectedPassing = 0;
-    for (const s of allStudentsList) {
-      const results = await prisma.result.findMany({
-        where: { studentId: s.id },
-        include: { assignment: true, exam: true }
-      });
-      if (!results.length) continue;
-      let weightedSum = 0;
-      let totalWeight = 0;
-      for (const r of results) {
-        let type: keyof typeof weights = 'Assignment';
-        if (r.exam) {
-          if (r.exam.title.toLowerCase().includes('mid')) type = 'Mid-Term';
-          else if (r.exam.title.toLowerCase().includes('final')) type = 'Final';
-          else if (r.exam.title.toLowerCase().includes('quiz')) type = 'Quiz';
-          else type = 'Assignment';
-        } else if (r.assignment) {
-          if (r.assignment.title.toLowerCase().includes('quiz')) type = 'Quiz';
-        }
-        const w = weights[type] || 1;
-        weightedSum += r.score * w;
-        totalWeight += w;
-      }
-      const projected = totalWeight > 0 ? weightedSum / totalWeight : 0;
-      if (projected >= 50) projectedPassing++;
-    }
-    const projectedPassRate = totalStudents > 0 ? Math.round((projectedPassing / totalStudents) * 100) : 0;
-
-    // --- Pass Rate per Subject ---
-    // For each subject, calculate % of students with avg >= 50 in that subject
-    const subjects = await prisma.subject.findMany({ select: { id: true, name: true } });
-    const passRatePerSubject = [];
-    for (const subject of subjects) {
-      // Get all lessons for this subject
-      const lessons = await prisma.lesson.findMany({ where: { subjectId: subject.id }, select: { id: true } });
-      const lessonIds = lessons.map(l => l.id);
-      // Get all results for assignments/exams in these lessons
-      const results = await prisma.result.findMany({
-        where: {
-          OR: [
-            { assignment: { lessonId: { in: lessonIds } } },
-            { exam: { lessonId: { in: lessonIds } } }
-          ]
-        },
-        select: { studentId: true, score: true }
-      });
-      // Group by student
-      const studentScores: { [studentId: string]: number[] } = {};
-      results.forEach(r => {
-        if (!studentScores[r.studentId]) studentScores[r.studentId] = [];
-        studentScores[r.studentId].push(r.score);
-      });
-      const total = Object.keys(studentScores).length;
-      const passing = Object.values(studentScores).filter(scores => {
-        const avg = scores.reduce((sum, s) => sum + s, 0) / scores.length;
-        return avg >= 50;
-      }).length;
-      passRatePerSubject.push({
-        subject: subject.name,
-        passRate: total > 0 ? Math.round((passing / total) * 100) : 0
-      });
-    }
-
-    // Example: Events and Announcements (latest 2)
-    const events = await prisma.event.findMany({
-      orderBy: { startTime: 'asc' },
-      take: 2
-    });
-    const announcements = await prisma.announcement.findMany({
-      orderBy: { date: 'desc' },
-      take: 2
-    });
-
-    // --- Top Classes by Performance ---
-    const classes = await prisma.class.findMany({ 
-      select: { 
-        id: true, 
-        name: true,
-        students: {
+    // Get grade distribution
+    const gradeDistribution = await prisma.grade.findMany({
+      where: whereClause,
+      include: {
+        _count: {
           select: {
-            id: true,
-            results: { select: { score: true } }
-          }
-        }
-      } 
-    });
-    const topClasses = classes.map(cls => {
-      let totalScore = 0;
-      let totalResults = 0;
-      cls.students.forEach(student => {
-        student.results.forEach(result => {
-          totalScore += result.score;
-          totalResults++;
-        });
-      });
-      const avgScore = totalResults > 0 ? totalScore / totalResults : 0;
-      return {
-        class: cls.name,
-        avgScore: Math.round(avgScore),
-        studentCount: cls.students.length
-      };
-    }).sort((a, b) => b.avgScore - a.avgScore).slice(0, 5);
-
-    // --- Mock behavior and disciplinary data (to be replaced with real models) ---
-    const behaviorIncidents = Math.floor(Math.random() * 20) + 5; // Mock positive behavior reports
-    const disciplinaryCases = Math.floor(Math.random() * 8) + 1; // Mock disciplinary cases
-
-    // --- Additional metrics for enhanced dashboard ---
-    const totalSubjects = await prisma.subject.count();
-    const totalExams = await prisma.exam.count();
-    const totalAssignments = await prisma.assignment.count();
-    const totalResults = await prisma.result.count();
-
-    // --- Mock Projects Data ---
-    const totalProjects = 8;
-    const activeProjects = 3;
-    const completedProjects = 4;
-    const plannedProjects = 1;
-
-    // --- Top Achievers Data ---
-    const topAchievers = await prisma.student.findMany({
-      select: {
-        id: true,
-        name: true,
-        surname: true,
-        grade: { select: { level: true } },
-        results: { select: { score: true } }
+            students: true,
+          },
+        },
       },
-      take: 10
     });
 
-    const achieversWithAverage = topAchievers.map(student => {
-      const avgScore = student.results.length > 0 
-        ? student.results.reduce((sum, r) => sum + r.score, 0) / student.results.length 
-        : 0;
-      return {
-        id: student.id,
-        name: student.name,
-        surname: student.surname,
-        grade: student.grade?.level || 'Unknown',
-        averageScore: avgScore
-      };
-    }).sort((a, b) => b.averageScore - a.averageScore).slice(0, 5);
+    // Get recent activities (enrollments, results, etc.)
+    const recentStudents = await prisma.student.findMany({
+      where: whereClause,
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      include: {
+        grade: true,
+        class: true,
+      },
+    });
 
-    // Add rank to achievers
-    const rankedAchievers = achieversWithAverage.map((achiever, index) => ({
-      ...achiever,
-      rank: index + 1
-    }));
+    const recentResults = await prisma.result.findMany({
+      take: 10,
+      include: {
+        student: {
+          include: {
+            grade: true,
+            class: true,
+          },
+        },
+        exam: {
+          include: {
+            lesson: {
+              include: {
+                subject: true,
+              },
+            },
+          },
+        },
+        assignment: {
+          include: {
+            lesson: {
+              include: {
+                subject: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: { id: 'desc' },
+    });
+
+    // Calculate school performance metrics
+    const schoolPerformance = await calculateSchoolPerformance();
+
+    // Calculate overall attendance percentage for all students
+    const totalAttendanceRecords = await prisma.attendance.count();
+    const presentRecords = await prisma.attendance.count({
+      where: { present: true },
+    });
+    const averageAttendance =
+      totalAttendanceRecords > 0 ? (presentRecords / totalAttendanceRecords) * 100 : 0;
+
+    // Get all students for attendance and performance trends
+    const allStudents = await prisma.student.findMany({
+      where: whereClause,
+      take: 100, // Limit for performance
+    });
+
+    // Calculate trends
+    const attendanceTrendData = await calculateAttendanceTrends(
+      allStudents,
+      period as 'week' | 'month' | 'semester'
+    );
+    const performanceTrends = await calculatePerformanceTrends(
+      allStudents,
+      period as 'week' | 'month' | 'semester'
+    );
+
+    // Subject performance
+    const subjectPerformance = await calculateSubjectPerformance();
+
+    // Risk assessment
+    const riskAssessment = await calculateRiskAssessment();
+
+    // Financial overview
+    const financialOverview = await calculateFinancialOverview();
+
+    // User activity
+    const userActivity = await calculateUserActivity();
+
+    // Get upcoming events
+    const upcomingEvents = await prisma.event.findMany({
+      where: {
+        startTime: {
+          gte: new Date(),
+          lte: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Next 30 days
+        },
+      },
+      orderBy: {
+        startTime: 'asc',
+      },
+      take: 10,
+    });
+
+    // Get recent announcements
+    const announcements = await prisma.announcement.findMany({
+      where: {
+        date: {
+          gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
+        },
+      },
+      include: {
+        class: true,
+      },
+      orderBy: {
+        date: 'desc',
+      },
+      take: 5,
+    });
+
+    // System health metrics
+    const systemHealth = {
+      activeUsers: totalStudents + totalTeachers + totalParents,
+      systemLoad: Math.round(Math.random() * 100), // Simulated
+      uptime: Math.round(Math.random() * 100), // Simulated
+      errors: Math.floor(Math.random() * 10), // Simulated
+      lastBackup: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000),
+    };
+
+    // Performance analytics
+    const performanceAnalytics = {
+      overallGPA: schoolPerformance,
+      attendanceRate: averageAttendance,
+      passRate: Math.round((schoolPerformance / 100) * 100),
+      improvementRate: Math.round(Math.random() * 20 + 80), // Simulated
+    };
+
+    // Top performing students
+    const topStudents = await prisma.student.findMany({
+      include: {
+        results: {
+          include: {
+            exam: {
+              include: {
+                lesson: {
+                  include: {
+                    subject: true,
+                  },
+                },
+              },
+            },
+            assignment: {
+              include: {
+                lesson: {
+                  include: {
+                    subject: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        grade: true,
+        class: true,
+      },
+      take: 10,
+    });
+
+    // Calculate average scores for top students
+    const topStudentsWithScores = topStudents
+      .map(student => {
+        const totalScore = student.results.reduce((sum, result) => sum + result.score, 0);
+        const averageScore = student.results.length > 0 ? totalScore / student.results.length : 0;
+
+        return {
+          id: student.id,
+          name: student.name,
+          surname: student.surname,
+          grade: student.grade?.level,
+          class: student.class?.name,
+          averageScore: Math.round(averageScore),
+          totalAssessments: student.results.length,
+        };
+      })
+      .sort((a, b) => b.averageScore - a.averageScore)
+      .slice(0, 5);
 
     return NextResponse.json({
-      metrics: {
-        totalStudents,
-        totalTeachers,
-        totalParents,
-        totalClasses,
-        totalSubjects,
-        totalAnnouncements,
-        totalEvents,
-        totalExams,
-        totalAssignments,
-        totalResults,
-        attendancePercentage,
-        recentStudents,
-        previousStudents,
-        totalIncome: totalIncome._sum.amount || 0,
-        totalExpense: totalExpense._sum.amount || 0,
-        passRate,
-        malePassRate,
-        femalePassRate,
-        projectedPassRate,
-        totalMedicalRecords,
-        behaviorIncidents,
-        disciplinaryCases,
-        totalProjects,
-        activeProjects,
-        completedProjects,
-        plannedProjects,
+      success: true,
+      data: {
+        metrics: {
+          totalStudents,
+          totalTeachers,
+          totalParents,
+          totalClasses,
+          totalSubjects,
+          totalGrades,
+          averageAttendance,
+          schoolPerformance: schoolPerformance,
+        },
+        analytics: {
+          genderDistribution: {
+            male: genderDistribution[0],
+            female: genderDistribution[1],
+          },
+          gradeDistribution: gradeDistribution.map(grade => ({
+            grade: grade.level,
+            count: grade._count.students,
+          })),
+          performanceAnalytics,
+          systemHealth,
+        },
+        trends: {
+          attendanceTrendData,
+          performanceTrends,
+          subjectPerformance,
+          riskAssessment,
+          financialOverview,
+          userActivity,
+        },
+        activities: {
+          recentStudents: recentStudents.map(student => ({
+            id: student.id,
+            name: `${student.name} ${student.surname}`,
+            grade: student.grade?.level,
+            class: student.class?.name,
+            enrolledAt: student.createdAt,
+          })),
+          recentResults: recentResults.map(result => ({
+            id: result.id,
+            studentName: `${result.student.name} ${result.student.surname}`,
+            subject:
+              result.exam?.lesson?.subject?.name ||
+              result.assignment?.lesson?.subject?.name ||
+              'Unknown',
+            score: result.score,
+            type: result.exam ? 'Exam' : 'Assignment',
+            grade: result.student.grade?.level,
+            class: result.student.class?.name,
+          })),
+          topStudents: topStudentsWithScores,
+        },
+        upcomingEvents: upcomingEvents.map(event => ({
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          classId: event.classId,
+        })),
+        announcements: announcements.map(announcement => ({
+          id: announcement.id,
+          title: announcement.title,
+          description: announcement.description,
+          date: announcement.date,
+          className: announcement.class?.name || 'School-wide',
+        })),
+        period,
       },
-      chartData: studentCountByMonth,
-      financeChart: financeByMonth,
-      attendanceByDay,
-      genderCounts: { male: maleCount, female: femaleCount },
-      events: events,
-      announcements: announcements,
-      students,
-      recentEntries,
-      passRatePerSubject,
-      topClasses,
-      topAchievers: rankedAchievers
     });
   } catch (error) {
-    console.error('Dashboard API Error:', error);
+    console.error('Error fetching admin dashboard data:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard data' },
+      {
+        success: false,
+        error: 'Failed to fetch admin dashboard data',
+      },
       { status: 500 }
     );
   }

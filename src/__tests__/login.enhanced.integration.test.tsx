@@ -21,7 +21,7 @@ beforeEach(() => {
     push: mockPush,
     replace: mockReplace,
   });
-  
+
   (fetch as jest.Mock).mockClear();
   mockPush.mockClear();
   mockReplace.mockClear();
@@ -38,10 +38,10 @@ describe('Login Integration Tests', () => {
           email: 'admin@test.com',
           role: 'admin',
           firstName: 'Admin',
-          lastName: 'User'
+          lastName: 'User',
         },
-        redirectTo: '/admin'
-      })
+        redirectTo: '/admin',
+      }),
     });
 
     render(<LoginPage />);
@@ -82,10 +82,10 @@ describe('Login Integration Tests', () => {
           email: 'teacher@test.com',
           role: 'teacher',
           firstName: 'Teacher',
-          lastName: 'User'
+          lastName: 'User',
         },
-        redirectTo: '/teacher'
-      })
+        redirectTo: '/teacher',
+      }),
     });
 
     render(<LoginPage />);
@@ -108,8 +108,8 @@ describe('Login Integration Tests', () => {
       ok: false,
       json: async () => ({
         success: false,
-        error: 'Invalid credentials'
-      })
+        error: 'Invalid credentials',
+      }),
     });
 
     render(<LoginPage />);
@@ -175,10 +175,10 @@ describe('Login Integration Tests', () => {
 
   it('shows loading state during login', async () => {
     let resolveLogin: (value: any) => void;
-    const loginPromise = new Promise((resolve) => {
+    const loginPromise = new Promise(resolve => {
       resolveLogin = resolve;
     });
-    
+
     (fetch as jest.Mock).mockReturnValueOnce(loginPromise);
 
     render(<LoginPage />);
@@ -198,11 +198,11 @@ describe('Login Integration Tests', () => {
     // Resolve the promise
     resolveLogin!({
       ok: true,
-      json: async () => ({ 
-        success: true, 
+      json: async () => ({
+        success: true,
         user: { role: 'admin' },
-        redirectTo: '/admin'
-      })
+        redirectTo: '/admin',
+      }),
     });
 
     await waitFor(() => {
@@ -213,11 +213,11 @@ describe('Login Integration Tests', () => {
   it('supports keyboard navigation', async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ 
-        success: true, 
+      json: async () => ({
+        success: true,
         user: { role: 'admin' },
-        redirectTo: '/admin'
-      })
+        redirectTo: '/admin',
+      }),
     });
 
     render(<LoginPage />);

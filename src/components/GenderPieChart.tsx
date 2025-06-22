@@ -10,7 +10,11 @@ export default function GenderPieChart({ data }: GenderPieChartProps) {
     <div className="h-56 w-full bg-white dark:bg-gray-900 rounded-2xl shadow-md p-4 flex flex-col animate-fade-in hover:shadow-xl transition-shadow duration-200">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-md font-semibold text-LYNXPurple">Gender Distribution</h3>
-        <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full" data-tooltip-id="gender-tooltip" data-tooltip-content="Shows the ratio of male to female students">
+        <div
+          className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full"
+          data-tooltip-id="gender-tooltip"
+          data-tooltip-content="Shows the ratio of male to female students"
+        >
           ℹ️
         </div>
       </div>

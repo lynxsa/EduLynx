@@ -22,7 +22,11 @@ interface Props {
 
 const FinanceEntryForm = ({ initialData = {}, onSuccess }: Props) => {
   const [error, setError] = useState<string | null>(null);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FinanceEntryFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FinanceEntryFormData>({
     resolver: zodResolver(schema),
     defaultValues: initialData,
   });
@@ -51,7 +55,12 @@ const FinanceEntryForm = ({ initialData = {}, onSuccess }: Props) => {
       </div>
       <div>
         <label className="block text-sm font-medium">Amount</label>
-        <input type="number" step="0.01" {...register('amount', { valueAsNumber: true })} className="input" />
+        <input
+          type="number"
+          step="0.01"
+          {...register('amount', { valueAsNumber: true })}
+          className="input"
+        />
         {errors.amount && <span className="text-red-500 text-xs">{errors.amount.message}</span>}
       </div>
       <div>

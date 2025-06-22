@@ -7,7 +7,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const teacherId = searchParams.get('teacherId');
   const studentId = searchParams.get('studentId');
 
-  let where: any = {};
+  const where: any = {};
   if (teacherId) {
     where.teacherId = teacherId;
   }

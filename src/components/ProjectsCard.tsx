@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import { FolderOpen, Clock, CheckCircle2, AlertCircle, Users } from 'lucide-react';
 
@@ -28,7 +28,7 @@ const ProjectsCard = ({ projects = [] }: ProjectsCardProps) => {
       progress: 75,
       dueDate: '2025-09-24',
       teamSize: 12,
-      priority: 'high'
+      priority: 'high',
     },
     {
       id: '2',
@@ -38,7 +38,7 @@ const ProjectsCard = ({ projects = [] }: ProjectsCardProps) => {
       progress: 60,
       dueDate: '2025-07-15',
       teamSize: 8,
-      priority: 'high'
+      priority: 'high',
     },
     {
       id: '3',
@@ -48,7 +48,7 @@ const ProjectsCard = ({ projects = [] }: ProjectsCardProps) => {
       progress: 25,
       dueDate: '2025-08-30',
       teamSize: 15,
-      priority: 'medium'
+      priority: 'medium',
     },
     {
       id: '4',
@@ -58,8 +58,8 @@ const ProjectsCard = ({ projects = [] }: ProjectsCardProps) => {
       progress: 100,
       dueDate: '2025-06-10',
       teamSize: 6,
-      priority: 'medium'
-    }
+      priority: 'medium',
+    },
   ];
 
   const displayProjects = projects.length > 0 ? projects : mockProjects;
@@ -132,8 +132,11 @@ const ProjectsCard = ({ projects = [] }: ProjectsCardProps) => {
 
       {/* Projects List */}
       <div className="space-y-4">
-        {displayProjects.slice(0, 4).map((project) => (
-          <div key={project.id} className="border border-gray-100 rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
+        {displayProjects.slice(0, 4).map(project => (
+          <div
+            key={project.id}
+            className="border border-gray-100 rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
+          >
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-start space-x-3">
                 {getStatusIcon(project.status)}
@@ -143,8 +146,12 @@ const ProjectsCard = ({ projects = [] }: ProjectsCardProps) => {
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${getPriorityIndicator(project.priority)}`}></div>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(project.status)}`}>
+                <div
+                  className={`w-2 h-2 rounded-full ${getPriorityIndicator(project.priority)}`}
+                ></div>
+                <span
+                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(project.status)}`}
+                >
                   {project.status.replace('-', ' ')}
                 </span>
               </div>
@@ -157,7 +164,7 @@ const ProjectsCard = ({ projects = [] }: ProjectsCardProps) => {
                 <span className="text-xs font-medium text-gray-700">{project.progress}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
+                <div
                   className={`h-2 rounded-full transition-all duration-300 ${getProgressColor(project.progress)}`}
                   style={{ width: `${project.progress}%` }}
                 ></div>

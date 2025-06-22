@@ -24,8 +24,8 @@ export async function POST(request: NextRequest) {
     // Use Gemini AI API
     const geminiApiKey = process.env.GEMINI_API_KEY;
     if (!geminiApiKey) {
-      return NextResponse.json({ 
-        response: 'I apologize, but I\'m currently unavailable. The AI service is not configured.' 
+      return NextResponse.json({
+        response: "I apologize, but I'm currently unavailable. The AI service is not configured.",
       });
     }
 
@@ -39,44 +39,51 @@ Keep responses concise and actionable.`;
     const fullPrompt = `${systemPrompt}\n\nUser: ${message}\n\nProf Lynx:`;
 
     // Call Gemini API
-    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: fullPrompt
-          }]
-        }]
-      }),
-    });
+    const geminiResponse = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: fullPrompt,
+                },
+              ],
+            },
+          ],
+        }),
+      }
+    );
 
     if (!geminiResponse.ok) {
       throw new Error('Gemini API call failed');
     }
 
     const geminiData = await geminiResponse.json();
-    const aiResponse = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 
-      'I apologize, but I couldn\'t process your request at the moment. Please try again.';
+    const aiResponse =
+      geminiData.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "I apologize, but I couldn't process your request at the moment. Please try again.";
 
     return NextResponse.json({ response: aiResponse });
-
   } catch (error) {
     console.error('Prof Lynx Chat API Error:', error);
-    
+
     // Fallback responses based on common queries
     const fallbackResponses = [
-      'Based on your current data, everything seems to be running smoothly! Is there anything specific you\'d like to know about?',
+      "Based on your current data, everything seems to be running smoothly! Is there anything specific you'd like to know about?",
       'I can help you analyze attendance patterns, student performance, or provide insights about your educational data. What would you like to explore?',
-      'Your system metrics look good! Would you like me to explain any specific aspect of your dashboard?'
+      'Your system metrics look good! Would you like me to explain any specific aspect of your dashboard?',
     ];
-    
+
     const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-    
-    return NextResponse.json({ 
-      response: randomResponse
+
+    return NextResponse.json({
+      response: randomResponse,
     });
   }
 }

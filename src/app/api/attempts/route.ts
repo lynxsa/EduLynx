@@ -23,6 +23,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const attempt = await prisma.quizAttempt.create({ data });
     return NextResponse.json(attempt, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create attempt', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create attempt', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }

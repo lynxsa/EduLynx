@@ -20,15 +20,15 @@ export default function SubjectDetailPage() {
     if (!id) return;
     setLoading(true);
     fetch(`/api/subjects?id=${id}`)
-      .then(async (res) => {
+      .then(async res => {
         if (!res.ok) throw new Error('Failed to fetch subject');
         return res.json();
       })
-      .then((data) => {
+      .then(data => {
         setSubject(data);
         setError(null);
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err.message);
         setSubject(null);
       })
@@ -43,10 +43,19 @@ export default function SubjectDetailPage() {
     <div className="max-w-3xl mx-auto p-8 bg-white rounded shadow mt-8">
       <h1 className="text-2xl font-bold mb-4">Subject Details</h1>
       <div className="space-y-2">
-        <div><span className="font-semibold">ID:</span> {subject.id}</div>
-        <div><span className="font-semibold">Name:</span> {subject.name}</div>
-        <div><span className="font-semibold">Code:</span> {subject.code || '-'}</div>
-        <div><span className="font-semibold">Teacher:</span> {subject.teacher?.name || subject.teacherId || '-'}</div>
+        <div>
+          <span className="font-semibold">ID:</span> {subject.id}
+        </div>
+        <div>
+          <span className="font-semibold">Name:</span> {subject.name}
+        </div>
+        <div>
+          <span className="font-semibold">Code:</span> {subject.code || '-'}
+        </div>
+        <div>
+          <span className="font-semibold">Teacher:</span>{' '}
+          {subject.teacher?.name || subject.teacherId || '-'}
+        </div>
       </div>
       {/* Future: Edit/Delete buttons here */}
     </div>

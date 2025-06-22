@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+const GEMINI_API_URL =
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
 // Define a type for incoming messages
 interface GeminiMessage {
@@ -10,9 +11,12 @@ interface GeminiMessage {
 }
 
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json() as { messages: GeminiMessage[] };
+  const { messages } = (await req.json()) as { messages: GeminiMessage[] };
   if (!GEMINI_API_KEY) {
-    return NextResponse.json({ role: 'assistant', content: 'Gemini API key not configured.' }, { status: 500 });
+    return NextResponse.json(
+      { role: 'assistant', content: 'Gemini API key not configured.' },
+      { status: 500 }
+    );
   }
   try {
     // Prepare messages for Gemini (convert to Gemini format)
@@ -28,10 +32,15 @@ export async function POST(req: NextRequest) {
     });
     if (!geminiRes.ok) {
       const error = await geminiRes.text();
-      return NextResponse.json({ role: 'assistant', content: `Gemini error: ${error}` }, { status: 500 });
+      return NextResponse.json(
+        { role: 'assistant', content: `Gemini error: ${error}` },
+        { status: 500 }
+      );
     }
     const geminiData = await geminiRes.json();
-    const aiReply = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 'Prof. Lynx could not answer right now.';
+    const aiReply =
+      geminiData.candidates?.[0]?.content?.parts?.[0]?.text ||
+      'Prof. Lynx could not answer right now.';
     return NextResponse.json({ role: 'assistant', content: aiReply });
   } catch (err: unknown) {
     let message = 'Gemini integration failed.';

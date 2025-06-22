@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify authentication
     const token = request.cookies.get('auth_token')?.value;
@@ -33,13 +30,10 @@ export async function GET(
                 name: true,
                 surname: true,
                 email: true,
-              }
-            }
+              },
+            },
           },
-          orderBy: [
-            { day: 'asc' },
-            { startTime: 'asc' }
-          ]
+          orderBy: [{ day: 'asc' }, { startTime: 'asc' }],
         },
         grade: true,
         supervisor: {
@@ -48,7 +42,7 @@ export async function GET(
             name: true,
             surname: true,
             email: true,
-          }
+          },
         },
         students: {
           select: {
@@ -56,9 +50,9 @@ export async function GET(
             name: true,
             surname: true,
             email: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!classData) {
@@ -112,16 +106,12 @@ export async function GET(
         endTime: lesson.endTime.toISOString(),
         createdAt: lesson.createdAt.toISOString(),
         updatedAt: lesson.updatedAt.toISOString(),
-      }))
+      })),
     };
 
     return NextResponse.json(response);
-
   } catch (error) {
     console.error('Error fetching class timetable:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

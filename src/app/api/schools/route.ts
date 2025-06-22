@@ -23,7 +23,10 @@ export async function POST(req: NextRequest) {
     const school = await prisma.school.create({ data });
     return NextResponse.json(school, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to create school', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create school', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -38,7 +41,10 @@ export async function PUT(req: NextRequest) {
     const school = await prisma.school.update({ where: { id: data.id }, data });
     return NextResponse.json(school);
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to update school', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to update school', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
 
@@ -53,6 +59,9 @@ export async function DELETE(req: NextRequest) {
     await prisma.school.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (e) {
-    return NextResponse.json({ error: 'Failed to delete school', details: e instanceof Error ? e.message : e }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to delete school', details: e instanceof Error ? e.message : e },
+      { status: 400 }
+    );
   }
 }
