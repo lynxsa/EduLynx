@@ -1,0 +1,133 @@
+
+> lynxlearn-lms@1.0.0 dev
+> next dev -p 3001
+
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3001
+
+ ✓ Ready in 17.9s
+ ○ Compiling /page ...
+ ⨯ ./app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `ThemeProvider`. Expected jsx identifier
+    ,-[[36;1;4m/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/app/layout.tsx[0m:39:1]
+ [2m39[0m |   const hideNav = pathname.startsWith('/auth/') || !isAuthenticated;
+ [2m40[0m | 
+ [2m41[0m |   return (
+ [2m42[0m |     <ThemeProvider defaultTheme="system" storageKey="edulynx-theme">
+    : [31;1m     ^^^^^^^^^^^^^[0m
+ [2m43[0m |       <ErrorBoundary>
+ [2m44[0m |         {/* Skip to main content link for accessibility */}
+ [2m45[0m |               <a
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/layout.tsx
+ ⨯ ./app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `ThemeProvider`. Expected jsx identifier
+    ,-[[36;1;4m/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/app/layout.tsx[0m:39:1]
+ [2m39[0m |   const hideNav = pathname.startsWith('/auth/') || !isAuthenticated;
+ [2m40[0m | 
+ [2m41[0m |   return (
+ [2m42[0m |     <ThemeProvider defaultTheme="system" storageKey="edulynx-theme">
+    : [31;1m     ^^^^^^^^^^^^^[0m
+ [2m43[0m |       <ErrorBoundary>
+ [2m44[0m |         {/* Skip to main content link for accessibility */}
+ [2m45[0m |               <a
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/layout.tsx
+ ⨯ ./app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `ThemeProvider`. Expected jsx identifier
+    ,-[[36;1;4m/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/app/layout.tsx[0m:39:1]
+ [2m39[0m |   const hideNav = pathname.startsWith('/auth/') || !isAuthenticated;
+ [2m40[0m | 
+ [2m41[0m |   return (
+ [2m42[0m |     <ThemeProvider defaultTheme="system" storageKey="edulynx-theme">
+    : [31;1m     ^^^^^^^^^^^^^[0m
+ [2m43[0m |       <ErrorBoundary>
+ [2m44[0m |         {/* Skip to main content link for accessibility */}
+ [2m45[0m |               <a
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/layout.tsx
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/cache/webpack/client-development-fallback/0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/cache/webpack/client-development-fallback/0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/cache/webpack/client-development-fallback/0.pack.gz'
+ ⨯ ./app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `ThemeProvider`. Expected jsx identifier
+    ,-[[36;1;4m/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/app/layout.tsx[0m:39:1]
+ [2m39[0m |   const hideNav = pathname.startsWith('/auth/') || !isAuthenticated;
+ [2m40[0m | 
+ [2m41[0m |   return (
+ [2m42[0m |     <ThemeProvider defaultTheme="system" storageKey="edulynx-theme">
+    : [31;1m     ^^^^^^^^^^^^^[0m
+ [2m43[0m |       <ErrorBoundary>
+ [2m44[0m |         {/* Skip to main content link for accessibility */}
+ [2m45[0m |         <a
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/layout.tsx
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `ThemeProvider`. Expected jsx identifier
+    ,-[[36;1;4m/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/app/layout.tsx[0m:39:1]
+ [2m39[0m |   const hideNav = pathname.startsWith('/auth/') || !isAuthenticated;
+ [2m40[0m | 
+ [2m41[0m |   return (
+ [2m42[0m |     <ThemeProvider defaultTheme="system" storageKey="edulynx-theme">
+    : [31;1m     ^^^^^^^^^^^^^[0m
+ [2m43[0m |       <ErrorBoundary>
+ [2m44[0m |         {/* Skip to main content link for accessibility */}
+ [2m45[0m |         <a
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/layout.tsx
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `ThemeProvider`. Expected jsx identifier
+    ,-[[36;1;4m/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/app/layout.tsx[0m:39:1]
+ [2m39[0m |   const hideNav = pathname.startsWith('/auth/') || !isAuthenticated;
+ [2m40[0m | 
+ [2m41[0m |   return (
+ [2m42[0m |     <ThemeProvider defaultTheme="system" storageKey="edulynx-theme">
+    : [31;1m     ^^^^^^^^^^^^^[0m
+ [2m43[0m |       <ErrorBoundary>
+ [2m44[0m |         {/* Skip to main content link for accessibility */}
+ [2m45[0m |         <a
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/layout.tsx
+[?25h

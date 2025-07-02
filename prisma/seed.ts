@@ -1,5 +1,6 @@
 // prisma/seed.ts
-import { PrismaClient, UserSex, Day } from '@prisma/client';
+import { Day, PrismaClient, UserRole, UserSex } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 function rand<T>(arr: T[]): T {
@@ -24,7 +25,107 @@ async function main() {
     },
   });
 
-  // 0.1) ADMIN USERS - Enhanced with realistic data (Admin model is basic, detailed info in User model)
+  // Hash passwords for demo users
+  const hashPassword = async (password: string) => {
+    return await bcrypt.hash(password, 12);
+  };
+
+  // 0.1) CREATE DEMO USERS WITH SPECIFIED CREDENTIALS
+  console.log('🔐 Creating demo users...');
+
+  // Admin User - Derah Manyelo
+  const adminPassword = await hashPassword('adminpass');
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@lynxacademy.co.za' },
+    update: {},
+    create: {
+      email: 'admin@lynxacademy.co.za',
+      password: adminPassword,
+      firstName: 'Derah',
+      lastName: 'Manyelo',
+      preferredName: 'Derah',
+      role: UserRole.ADMIN,
+      schoolId: school.id,
+      phone: '+27 11 123 4567',
+      addressLine1: '123 Admin Street',
+      city: 'Johannesburg',
+      province: 'Gauteng',
+      country: 'South Africa',
+      isActive: true,
+    },
+  });
+
+  // Teacher User
+  const teacherPassword = await hashPassword('teacherpass');
+  const teacherUser = await prisma.user.upsert({
+    where: { email: 'teacher1@lynxacademy.co.za' },
+    update: {},
+    create: {
+      email: 'teacher1@lynxacademy.co.za',
+      password: teacherPassword,
+      firstName: 'Sarah',
+      lastName: 'Johnson',
+      preferredName: 'Ms. Johnson',
+      role: UserRole.TEACHER,
+      schoolId: school.id,
+      phone: '+27 11 123 4568',
+      addressLine1: '456 Teacher Avenue',
+      city: 'Johannesburg',
+      province: 'Gauteng',
+      country: 'South Africa',
+      isActive: true,
+    },
+  });
+
+  // Parent User
+  const parentPassword = await hashPassword('parentpass');
+  const parentUser = await prisma.user.upsert({
+    where: { email: 'parent1@lynxacademy.co.za' },
+    update: {},
+    create: {
+      email: 'parent1@lynxacademy.co.za',
+      password: parentPassword,
+      firstName: 'Michael',
+      lastName: 'Smith',
+      preferredName: 'Mike',
+      role: UserRole.PARENT,
+      schoolId: school.id,
+      phone: '+27 11 123 4569',
+      addressLine1: '789 Parent Road',
+      city: 'Johannesburg',
+      province: 'Gauteng',
+      country: 'South Africa',
+      isActive: true,
+    },
+  });
+
+  // Student User
+  const studentPassword = await hashPassword('studentpass');
+  const studentUser = await prisma.user.upsert({
+    where: { email: 'student1@lynxacademy.co.za' },
+    update: {},
+    create: {
+      email: 'student1@lynxacademy.co.za',
+      password: studentPassword,
+      firstName: 'Emma',
+      lastName: 'Smith',
+      preferredName: 'Emma',
+      role: UserRole.STUDENT,
+      schoolId: school.id,
+      phone: '+27 11 123 4570',
+      addressLine1: '789 Parent Road',
+      city: 'Johannesburg',
+      province: 'Gauteng',
+      country: 'South Africa',
+      dateOfBirth: new Date('2008-05-15'),
+      gender: 'Female',
+      isActive: true,
+    },
+  });
+
+  console.log('✅ Demo users created successfully!');
+
+  // 0.2) ADMIN USERS - Enhanced with realistic data (Admin model is basic, detailed info in User model)
   const adminUsers = [
     {
       email: 'derah.manyelo@lynxacademy.co.za',

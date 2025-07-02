@@ -6,8 +6,8 @@ services:
     image: postgres:15-alpine
     container_name: edulynx_postgres
     restart: unless-stopped
-    ports:
-      - "5432:5432"
+    # ports:  # using existing local DB instead
+    #   - "5432:5432"
     environment:
       POSTGRES_DB: edulynx_db
       POSTGRES_USER: edulynx_user
@@ -66,10 +66,89 @@ services:
     profiles:
       - production
 
+  curriculum-service:
+    build:
+      context: ./packages/curriculum-service
+      dockerfile: Dockerfile
+    container_name: curriculum_service
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=postgresql://edulynx_user:edulynx_password_2024@postgres:5432/edulynx_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - edulynx_network
+
+  assessment-service:
+    build:
+      context: ./packages/assessment-service
+      dockerfile: Dockerfile
+    container_name: assessment_service
+    restart: unless-stopped
+    ports:
+      - "4001:4001"
+    environment:
+      - DATABASE_URL=postgresql://edulynx_user:edulynx_password_2024@postgres:5432/edulynx_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - edulynx_network
+
+  career-service:
+    build:
+      context: ./packages/career-service
+      dockerfile: Dockerfile
+    container_name: career_service
+    restart: unless-stopped
+    ports:
+      - "4002:4002"
+    environment:
+      - DATABASE_URL=postgresql://edulynx_user:edulynx_password_2024@postgres:5432/edulynx_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - edulynx_network
+
+  ai-service:
+    build:
+      context: ./packages/ai-service
+      dockerfile: Dockerfile
+    container_name: ai_service
+    restart: unless-stopped
+    ports:
+      - "4003:4003"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - edulynx_network
+
+  # LMS PostgreSQL Database
+  lms_postgres:
+    image: postgres:15-alpine
+    container_name: edulynx_lms_postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: lms_db
+      POSTGRES_USER: lms_user
+      POSTGRES_PASSWORD: lms_password_2025
+    volumes:
+      - lms_postgres_data:/var/lib/postgresql/data
+    networks:
+      - edulynx_network
+
 volumes:
   postgres_data:
     driver: local
   redis_data:
+    driver: local
+  lms_postgres_data:
     driver: local
 
 networks:

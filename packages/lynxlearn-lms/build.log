@@ -1,0 +1,28 @@
+
+> lynxlearn-lms@1.0.0 build
+> next build
+
+   ▲ Next.js 14.0.0
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+TypeError: Super expression must either be null or a function
+    at _inherits (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/chunks/2515.js:9:29516)
+    at /Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/chunks/2515.js:9:30796
+    at 97214 (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/chunks/2515.js:9:33274)
+    at __webpack_require__ (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/webpack-runtime.js:1:161)
+    at 53449 (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/app/help/page.js:1:11263)
+    at __webpack_require__ (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/webpack-runtime.js:1:161)
+    at 95802 (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/app/help/page.js:1:2061)
+    at Function.__webpack_require__ (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/webpack-runtime.js:1:161)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async collectGenerateParams (/Users/derahmanyelo/Documents/GitHub/EduLynx/node_modules/.pnpm/next@14.0.0_@babel+core@7.27.4_react-dom@18.2.0_react@18.2.0__react@18.2.0/node_modules/next/dist/build/utils.js:883:17)
+
+> Build error occurred
+Error: Failed to collect page data for /help
+    at /Users/derahmanyelo/Documents/GitHub/EduLynx/node_modules/.pnpm/next@14.0.0_@babel+core@7.27.4_react-dom@18.2.0_react@18.2.0__react@18.2.0/node_modules/next/dist/build/utils.js:1211:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'Error'
+}

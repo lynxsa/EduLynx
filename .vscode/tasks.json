@@ -8,6 +8,14 @@
       "group": "build",
       "isBackground": true,
       "problemMatcher": ["$tsc"]
+    },
+    {
+      "type": "shell",
+      "label": "Run LynxLearn LMS",
+      "command": "cd packages/lynxlearn-lms && npm run dev",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": ["$tsc"]
     }
   ]
 }

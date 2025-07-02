@@ -1,0 +1,95 @@
+// Combined schema for all microservices to share same database
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// CURRICULUM SERVICE MODELS
+model CurriculumSubject {
+    id          Int      @id @default(autoincrement())
+    name        String
+    grade       Int
+    description String?
+    imageUrl    String?
+    topics      Topic[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@unique([name, grade])
+}
+
+model Topic {
+    id          Int                @id @default(autoincrement())
+    title       String
+    description String?
+    subjectId   Int
+    orderIndex  Int
+    subject     CurriculumSubject  @relation(fields: [subjectId], references: [id])
+    lessons     CurriculumLesson[]
+
+    @@index([subjectId, orderIndex])
+}
+
+model CurriculumLesson {
+    id         Int     @id @default(autoincrement())
+    title      String
+    content    String
+    videoUrl   String?
+    duration   Int?
+    difficulty String?
+    topicId    Int
+    topic      Topic   @relation(fields: [topicId], references: [id])
+}
+
+// ASSESSMENT SERVICE MODELS
+model Assessment {
+    id          Int                @id @default(autoincrement())
+    title       String
+    description String?
+    type        AssessmentType
+    grade       Int
+    subject     String
+    duration    Int? // in minutes
+    totalMarks  Int
+    results     AssessmentResult[]
+    createdAt   DateTime           @default(now())
+    updatedAt   DateTime           @updatedAt
+}
+
+model AssessmentResult {
+    id           Int        @id @default(autoincrement())
+    studentId    String
+    assessmentId Int
+    score        Int
+    maxScore     Int
+    percentage   Float
+    completedAt  DateTime
+    assessment   Assessment @relation(fields: [assessmentId], references: [id])
+
+    @@index([assessmentId])
+}
+
+enum AssessmentType {
+    QUIZ
+    TEST
+    EXAM
+    ASSIGNMENT
+}
+
+// CAREER SERVICE MODELS
+model CareerProfile {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String
+    skills      String[]
+    education   String
+    salary      String?
+    growth      String?
+    imageUrl    String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}

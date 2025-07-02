@@ -20,7 +20,7 @@ vercel --prod
 
 ### 2. Docker Deployment
 
-```dockerfile
+```bash
 # Dockerfile
 FROM node:18-alpine
 

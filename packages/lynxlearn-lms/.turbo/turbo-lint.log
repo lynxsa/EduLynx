@@ -1,0 +1,23 @@
+
+> lynxlearn-lms@1.0.0 lint /Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms
+> next lint
+
+=============
+
+WARNING: You are currently running a version of TypeScript which is not officially supported by @typescript-eslint/typescript-estree.
+
+You may find that it works just fine, or you may not.
+
+SUPPORTED TYPESCRIPT VERSIONS: >=4.3.5 <5.4.0
+
+YOUR TYPESCRIPT VERSION: 5.8.3
+
+Please only submit bug reports when using the officially supported version.
+
+=============
+
+[36m./app/messages/page.tsx[39m
+[33m79[39m:[33m16[39m  [31m[1mError[22m[39m: Parsing error: ',' expected.
+
+[36minfo[39m  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m

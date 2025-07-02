@@ -1,0 +1,37 @@
+
+> lynxlearn-lms@1.0.0 dev
+> next dev -p 3001
+
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3001
+
+ ✓ Ready in 4.9s
+ ○ Compiling /page ...
+ ✓ Compiled /page in 4.8s (662 modules)
+ ✓ Compiled in 1392ms (344 modules)
+ ○ Compiling /auth/signin/page ...
+ ✓ Compiled /auth/signin/page in 551ms (694 modules)
+ ✓ Compiled /not-found in 299ms (699 modules)
+ ✓ Compiled /middleware in 301ms (155 modules)
+ ⨯ TypeError: __webpack_modules__[moduleId] is not a function
+    at __webpack_require__ (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/webpack-runtime.js:33:42)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: __webpack_modules__[moduleId] is not a function
+    at __webpack_require__ (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/webpack-runtime.js:33:42)
+    at JSON.parse (<anonymous>)
+ ⨯ TypeError: __webpack_modules__[moduleId] is not a function
+    at __webpack_require__ (/Users/derahmanyelo/Documents/GitHub/EduLynx/packages/lynxlearn-lms/.next/server/webpack-runtime.js:33:42)
+    at JSON.parse (<anonymous>)
+ ✓ Compiled in 4.4s (366 modules)
+ ○ Compiling /not-found ...
+ ✓ Compiled /not-found in 2.1s (713 modules)
+ ✓ Compiled in 1115ms (713 modules)
+ ✓ Compiled in 1587ms (713 modules)
+   Reload env: .env
+ ✓ Compiled in 236ms (854 modules)
+   Reload env: .env
+ ✓ Compiled in 239ms (854 modules)
+   Reload env: .env
+ ✓ Compiled in 229ms (854 modules)
+ ✓ Compiled in 355ms (854 modules)
+[?25h

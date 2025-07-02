@@ -1,0 +1,867 @@
+{
+  "curriculum": {
+    "name": "South African CAPS Curriculum",
+    "description": "Comprehensive Curriculum and Assessment Policy Statements for Grades 8-12",
+    "source": "Department of Basic Education, South Africa",
+    "lastUpdated": "2025-07-01",
+    "phases": {
+      "senior": {
+        "name": "Senior Phase",
+        "grades": [8, 9],
+        "description": "Foundation phase preparing learners for Further Education and Training"
+      },
+      "fet": {
+        "name": "Further Education and Training (FET)",
+        "grades": [10, 11, 12],
+        "description": "Final three years culminating in National Senior Certificate (NSC)"
+      }
+    },
+    "grades": {
+      "8": {
+        "phase": "senior",
+        "compulsorySubjects": [
+          "english-hl",
+          "afrikaans-fal",
+          "mathematics",
+          "natural-science",
+          "social-science",
+          "technology",
+          "creative-arts",
+          "ems",
+          "life-orientation"
+        ],
+        "description": "Grade 8 subjects as per CAPS Senior Phase requirements"
+      },
+      "9": {
+        "phase": "senior",
+        "compulsorySubjects": [
+          "english-hl",
+          "afrikaans-fal",
+          "mathematics",
+          "natural-science",
+          "social-science",
+          "technology",
+          "creative-arts",
+          "ems",
+          "life-orientation"
+        ],
+        "description": "Grade 9 subjects as per CAPS Senior Phase requirements"
+      },
+      "10": {
+        "phase": "fet",
+        "compulsorySubjects": [
+          "home-language",
+          "first-additional-language",
+          "mathematics-or-math-lit",
+          "life-orientation"
+        ],
+        "electiveSubjects": [
+          "accounting",
+          "agricultural-science",
+          "agricultural-technology",
+          "business-studies",
+          "cat",
+          "civil-technology",
+          "consumer-studies",
+          "dance-studies",
+          "design",
+          "drama",
+          "economics",
+          "egd",
+          "electrical-technology",
+          "geography",
+          "history",
+          "hospitality-studies",
+          "information-technology",
+          "life-sciences",
+          "mechanical-technology",
+          "music",
+          "physical-sciences",
+          "religion-studies",
+          "technical-mathematics",
+          "technical-sciences",
+          "tourism",
+          "visual-arts"
+        ],
+        "minimumSubjects": 7,
+        "description": "Grade 10 FET Phase - Foundation year for NSC preparation"
+      },
+      "11": {
+        "phase": "fet",
+        "compulsorySubjects": [
+          "home-language",
+          "first-additional-language",
+          "mathematics-or-math-lit",
+          "life-orientation"
+        ],
+        "electiveSubjects": [
+          "accounting",
+          "agricultural-science",
+          "agricultural-technology",
+          "business-studies",
+          "cat",
+          "civil-technology",
+          "consumer-studies",
+          "dance-studies",
+          "design",
+          "drama",
+          "economics",
+          "egd",
+          "electrical-technology",
+          "geography",
+          "history",
+          "hospitality-studies",
+          "information-technology",
+          "life-sciences",
+          "mechanical-technology",
+          "music",
+          "physical-sciences",
+          "religion-studies",
+          "technical-mathematics",
+          "technical-sciences",
+          "tourism",
+          "visual-arts"
+        ],
+        "minimumSubjects": 7,
+        "description": "Grade 11 FET Phase - Intermediate year for NSC preparation"
+      },
+      "12": {
+        "phase": "fet",
+        "compulsorySubjects": [
+          "home-language",
+          "first-additional-language",
+          "mathematics-or-math-lit",
+          "life-orientation"
+        ],
+        "electiveSubjects": [
+          "accounting",
+          "agricultural-science",
+          "agricultural-technology",
+          "business-studies",
+          "cat",
+          "civil-technology",
+          "consumer-studies",
+          "dance-studies",
+          "design",
+          "drama",
+          "economics",
+          "egd",
+          "electrical-technology",
+          "geography",
+          "history",
+          "hospitality-studies",
+          "information-technology",
+          "life-sciences",
+          "mechanical-technology",
+          "music",
+          "physical-sciences",
+          "religion-studies",
+          "technical-mathematics",
+          "technical-sciences",
+          "tourism",
+          "visual-arts"
+        ],
+        "minimumSubjects": 7,
+        "description": "Grade 12 FET Phase - Final NSC examination year"
+      }
+    },
+    "subjects": {
+      "english-hl": {
+        "code": "ENGHL",
+        "name": "English Home Language",
+        "type": "compulsory",
+        "languageLevel": "home",
+        "capsPhase": ["senior", "fet"],
+        "description": "English as a home language focusing on literature, language skills, creative writing, and communication development",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20ENGLISH%20HOME%20LANGUAGE%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9, 10, 11, 12],
+        "icon": "🇬🇧",
+        "color": "#3B82F6",
+        "learningAreas": ["Language", "Literature", "Writing", "Speaking", "Listening"],
+        "assessmentTypes": [
+          "Essays",
+          "Comprehension",
+          "Creative Writing",
+          "Oral Presentations",
+          "Literature Analysis"
+        ]
+      },
+      "afrikaans-fal": {
+        "code": "AFKFAL",
+        "name": "Afrikaans First Additional Language",
+        "type": "compulsory",
+        "languageLevel": "first_additional",
+        "capsPhase": ["senior", "fet"],
+        "description": "Afrikaans as a first additional language developing communication skills and cultural understanding",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20AFRIKAANS%20EERSTE%20ADDISIONELE%20TAAL%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9, 10, 11, 12],
+        "icon": "🇿🇦",
+        "color": "#10B981",
+        "learningAreas": ["Basic Communication", "Grammar", "Reading", "Writing", "Culture"],
+        "assessmentTypes": [
+          "Language Tests",
+          "Comprehension",
+          "Oral Communication",
+          "Written Tasks"
+        ]
+      },
+      "mathematics": {
+        "code": "MATH",
+        "name": "Mathematics",
+        "type": "compulsory",
+        "languageLevel": null,
+        "capsPhase": ["senior", "fet"],
+        "description": "Pure mathematics covering algebra, geometry, trigonometry, calculus, and statistics",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20MATHEMATICS%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9, 10, 11, 12],
+        "icon": "🔢",
+        "color": "#8B5CF6",
+        "learningAreas": [
+          "Algebra",
+          "Functions",
+          "Geometry",
+          "Trigonometry",
+          "Calculus",
+          "Statistics",
+          "Probability"
+        ],
+        "assessmentTypes": ["Problem Solving", "Investigations", "Tests", "Examinations"]
+      },
+      "math-literacy": {
+        "code": "MATHLIT",
+        "name": "Mathematical Literacy",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Practical mathematics for everyday life including finance, measurements, and data handling",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20MATHEMATICAL%20LITERACY%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "📊",
+        "color": "#06B6D4",
+        "learningAreas": [
+          "Number Operations",
+          "Measurement",
+          "Data Handling",
+          "Finance",
+          "Maps and Plans"
+        ],
+        "assessmentTypes": ["Practical Applications", "Projects", "Investigations", "Tests"]
+      },
+      "physical-sciences": {
+        "code": "PHYSCI",
+        "name": "Physical Sciences",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Combines Physics and Chemistry covering matter, energy, chemical reactions, mechanics, and electricity",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20PHYSICAL%20SCIENCES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": ["mathematics"],
+        "grades": [10, 11, 12],
+        "icon": "⚗️",
+        "color": "#EF4444",
+        "learningAreas": [
+          "Chemistry",
+          "Physics",
+          "Matter and Materials",
+          "Chemical Change",
+          "Mechanics",
+          "Waves",
+          "Electricity"
+        ],
+        "assessmentTypes": [
+          "Practical Investigations",
+          "Tests",
+          "Examinations",
+          "Laboratory Reports"
+        ]
+      },
+      "life-sciences": {
+        "code": "LIFESCI",
+        "name": "Life Sciences",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Biology covering life processes, genetics, ecology, evolution, and human impact on environment",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20LIFE%20SCIENCES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🧬",
+        "color": "#22C55E",
+        "learningAreas": [
+          "Life Processes",
+          "Genetics",
+          "Evolution",
+          "Ecology",
+          "Human Impact",
+          "Biodiversity"
+        ],
+        "assessmentTypes": [
+          "Practical Investigations",
+          "Tests",
+          "Examinations",
+          "Research Projects"
+        ]
+      },
+      "accounting": {
+        "code": "ACC",
+        "name": "Accounting",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Financial accounting principles, bookkeeping, financial statements, and business analysis",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20ACCOUNTING%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "💰",
+        "color": "#F59E0B",
+        "learningAreas": [
+          "Financial Accounting",
+          "Management Accounting",
+          "Auditing",
+          "Financial Statements",
+          "Cost Accounting"
+        ],
+        "assessmentTypes": ["Case Studies", "Tests", "Examinations", "Practical Applications"]
+      },
+      "economics": {
+        "code": "ECON",
+        "name": "Economics",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Economic principles, market systems, macroeconomics, microeconomics, and economic development",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20ECONOMICS%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "📈",
+        "color": "#8B5CF6",
+        "learningAreas": [
+          "Microeconomics",
+          "Macroeconomics",
+          "Economic Development",
+          "International Trade",
+          "Economic Systems"
+        ],
+        "assessmentTypes": ["Essays", "Case Studies", "Tests", "Examinations", "Research Projects"]
+      },
+      "business-studies": {
+        "code": "BS",
+        "name": "Business Studies",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Business management, entrepreneurship, marketing, human resources, and business operations",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20BUSINESS%20STUDIES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "💼",
+        "color": "#059669",
+        "learningAreas": [
+          "Business Management",
+          "Entrepreneurship",
+          "Marketing",
+          "Human Resources",
+          "Business Operations"
+        ],
+        "assessmentTypes": ["Case Studies", "Business Plans", "Tests", "Examinations", "Projects"]
+      },
+      "geography": {
+        "code": "GEOG",
+        "name": "Geography",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Physical and human geography, spatial analysis, environmental studies, and geographic information systems",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20GEOGRAPHY%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🌍",
+        "color": "#0EA5E9",
+        "learningAreas": [
+          "Physical Geography",
+          "Human Geography",
+          "Spatial Analysis",
+          "Environmental Geography",
+          "GIS"
+        ],
+        "assessmentTypes": ["Fieldwork", "Map Work", "Tests", "Examinations", "Research Projects"]
+      },
+      "history": {
+        "code": "HIST",
+        "name": "History",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "South African and world history, historical analysis, and heritage studies",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20HISTORY%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "📚",
+        "color": "#92400E",
+        "learningAreas": [
+          "South African History",
+          "World History",
+          "Historical Analysis",
+          "Heritage Studies",
+          "Source Analysis"
+        ],
+        "assessmentTypes": [
+          "Essays",
+          "Source-based Questions",
+          "Tests",
+          "Examinations",
+          "Research Projects"
+        ]
+      },
+      "life-orientation": {
+        "code": "LO",
+        "name": "Life Orientation",
+        "type": "compulsory",
+        "languageLevel": null,
+        "capsPhase": ["senior", "fet"],
+        "description": "Personal development, health promotion, social development, and citizenship education",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20LIFE%20ORIENTATION%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9, 10, 11, 12],
+        "icon": "🌱",
+        "color": "#16A34A",
+        "learningAreas": [
+          "Personal Development",
+          "Health Promotion",
+          "Social Development",
+          "Citizenship Education",
+          "Career Development"
+        ],
+        "assessmentTypes": ["Projects", "Portfolios", "Practical Tasks", "Tests"]
+      },
+      "natural-science": {
+        "code": "NS",
+        "name": "Natural Science",
+        "type": "compulsory",
+        "languageLevel": null,
+        "capsPhase": ["senior"],
+        "description": "Foundation science covering basic physics, chemistry, biology, and earth science",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20SP%20_%20NATURAL%20SCIENCES%20_%20GR%207-9%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9],
+        "icon": "🔬",
+        "color": "#7C3AED",
+        "learningAreas": [
+          "Matter and Materials",
+          "Life and Living",
+          "Energy and Change",
+          "Earth and Beyond"
+        ],
+        "assessmentTypes": ["Practical Investigations", "Tests", "Examinations", "Projects"]
+      },
+      "social-science": {
+        "code": "SS",
+        "name": "Social Science",
+        "type": "compulsory",
+        "languageLevel": null,
+        "capsPhase": ["senior"],
+        "description": "Combined history and geography for Grades 8-9",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20SP%20_%20SOCIAL%20SCIENCES%20_%20GR%207-9%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9],
+        "icon": "🏛️",
+        "color": "#DC2626",
+        "learningAreas": ["History", "Geography", "Cultural Studies", "Citizenship", "Heritage"],
+        "assessmentTypes": ["Projects", "Tests", "Examinations", "Source Analysis"]
+      },
+      "technology": {
+        "code": "TECH",
+        "name": "Technology",
+        "type": "compulsory",
+        "languageLevel": null,
+        "capsPhase": ["senior"],
+        "description": "Design process, technological solutions, and practical problem-solving",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20SP%20_%20TECHNOLOGY%20_%20GR%207-9%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9],
+        "icon": "⚙️",
+        "color": "#6366F1",
+        "learningAreas": [
+          "Design Process",
+          "Technological Solutions",
+          "Materials and Processing",
+          "Systems and Control"
+        ],
+        "assessmentTypes": ["Design Projects", "Practical Tasks", "Tests", "Portfolios"]
+      },
+      "creative-arts": {
+        "code": "ARTS",
+        "name": "Creative Arts",
+        "type": "compulsory",
+        "languageLevel": null,
+        "capsPhase": ["senior"],
+        "description": "Visual arts, music, drama, and dance expression and appreciation",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20SP%20_%20CREATIVE%20ARTS%20_%20GR%207-9%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9],
+        "icon": "🎨",
+        "color": "#EC4899",
+        "learningAreas": ["Visual Arts", "Music", "Drama", "Dance", "Creative Expression"],
+        "assessmentTypes": ["Practical Work", "Performances", "Projects", "Portfolios"]
+      },
+      "ems": {
+        "code": "EMS",
+        "name": "Economic Management Sciences",
+        "type": "compulsory",
+        "languageLevel": null,
+        "capsPhase": ["senior"],
+        "description": "Foundation business, economics, and entrepreneurship studies",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20SP%20_%20ECONOMIC%20AND%20MANAGEMENT%20SCIENCES%20_%20GR%207-9%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [8, 9],
+        "icon": "💼",
+        "color": "#F59E0B",
+        "learningAreas": [
+          "Economics",
+          "Business Studies",
+          "Entrepreneurship",
+          "Financial Literacy"
+        ],
+        "assessmentTypes": ["Case Studies", "Projects", "Tests", "Business Plans"]
+      },
+      "agricultural-science": {
+        "code": "AGRISCI",
+        "name": "Agricultural Sciences",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Agricultural production, animal husbandry, crop science, and sustainable farming practices",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20AGRICULTURAL%20SCIENCES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🌾",
+        "color": "#059669",
+        "learningAreas": [
+          "Plant Production",
+          "Animal Production",
+          "Agricultural Technology",
+          "Sustainable Practices",
+          "Farm Management"
+        ],
+        "assessmentTypes": ["Practical Work", "Projects", "Tests", "Examinations", "Farm Visits"]
+      },
+      "consumer-studies": {
+        "code": "CONS",
+        "name": "Consumer Studies",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Consumer rights, food and nutrition, textiles, and household management",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20CONSUMER%20STUDIES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🏠",
+        "color": "#8B5CF6",
+        "learningAreas": [
+          "Consumer Rights",
+          "Food and Nutrition",
+          "Clothing and Textiles",
+          "Housing and Interior",
+          "Entrepreneurship"
+        ],
+        "assessmentTypes": [
+          "Practical Tasks",
+          "Projects",
+          "Tests",
+          "Examinations",
+          "PAT (Practical Assessment Task)"
+        ]
+      },
+      "information-technology": {
+        "code": "IT",
+        "name": "Information Technology",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Computer systems, programming, databases, and information systems",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20INFORMATION%20TECHNOLOGY%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "💻",
+        "color": "#0EA5E9",
+        "learningAreas": [
+          "Computer Systems",
+          "Programming",
+          "Database Design",
+          "Web Development",
+          "Systems Analysis"
+        ],
+        "assessmentTypes": [
+          "Practical Tasks",
+          "Programming Projects",
+          "Tests",
+          "Examinations",
+          "PAT (Practical Assessment Task)"
+        ]
+      },
+      "computer-applications-technology": {
+        "code": "CAT",
+        "name": "Computer Applications Technology",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Practical computer applications, software usage, and digital literacy",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20COMPUTER%20APPLICATIONS%20TECHNOLOGY%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🖥️",
+        "color": "#6366F1",
+        "learningAreas": [
+          "Word Processing",
+          "Spreadsheets",
+          "Databases",
+          "Presentations",
+          "Internet and Email"
+        ],
+        "assessmentTypes": [
+          "Practical Tasks",
+          "Projects",
+          "Tests",
+          "Examinations",
+          "PAT (Practical Assessment Task)"
+        ]
+      },
+      "visual-arts": {
+        "code": "VA",
+        "name": "Visual Arts",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Drawing, painting, sculpture, printmaking, and art history",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20VISUAL%20ARTS%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🎨",
+        "color": "#EC4899",
+        "learningAreas": [
+          "Drawing",
+          "Painting",
+          "Printmaking",
+          "Sculpture",
+          "Art History",
+          "Visual Culture"
+        ],
+        "assessmentTypes": [
+          "Practical Work",
+          "Portfolios",
+          "Tests",
+          "Research Projects",
+          "Exhibitions"
+        ]
+      },
+      "music": {
+        "code": "MUS",
+        "name": "Music",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Music theory, performance, composition, and music history",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20MUSIC%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🎵",
+        "color": "#F59E0B",
+        "learningAreas": [
+          "Music Theory",
+          "Performance",
+          "Composition",
+          "Music History",
+          "African Music",
+          "Technology in Music"
+        ],
+        "assessmentTypes": [
+          "Practical Performance",
+          "Compositions",
+          "Tests",
+          "Examinations",
+          "Listening Tests"
+        ]
+      },
+      "drama": {
+        "code": "DRAM",
+        "name": "Dramatic Arts",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Theatre arts, performance, scriptwriting, and drama history",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20DRAMATIC%20ARTS%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🎭",
+        "color": "#8B5CF6",
+        "learningAreas": [
+          "Acting",
+          "Scriptwriting",
+          "Theatre History",
+          "Production",
+          "South African Theatre"
+        ],
+        "assessmentTypes": [
+          "Practical Performance",
+          "Portfolios",
+          "Tests",
+          "Examinations",
+          "Group Projects"
+        ]
+      },
+      "technical-mathematics": {
+        "code": "TECHMATH",
+        "name": "Technical Mathematics",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Applied mathematics for technical and engineering applications",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20TECHNICAL%20MATHEMATICS%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "⚙️",
+        "color": "#0891B2",
+        "learningAreas": [
+          "Applied Algebra",
+          "Trigonometry",
+          "Mensuration",
+          "Statistics",
+          "Technical Drawing"
+        ],
+        "assessmentTypes": ["Problem Solving", "Tests", "Examinations", "Technical Projects"]
+      },
+      "technical-sciences": {
+        "code": "TECHSCI",
+        "name": "Technical Sciences",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Applied physics and chemistry for technical applications",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20TECHNICAL%20SCIENCES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": ["technical-mathematics"],
+        "grades": [10, 11, 12],
+        "icon": "🔬",
+        "color": "#DC2626",
+        "learningAreas": [
+          "Applied Physics",
+          "Applied Chemistry",
+          "Materials Science",
+          "Energy Systems",
+          "Measurement"
+        ],
+        "assessmentTypes": [
+          "Practical Investigations",
+          "Tests",
+          "Examinations",
+          "Technical Reports"
+        ]
+      },
+      "engineering-graphics-design": {
+        "code": "EGD",
+        "name": "Engineering Graphics & Design",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Technical drawing, CAD, engineering design, and manufacturing",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20ENGINEERING%20GRAPHICS%20AND%20DESIGN%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "📐",
+        "color": "#6366F1",
+        "learningAreas": [
+          "Technical Drawing",
+          "CAD",
+          "Engineering Design",
+          "Manufacturing Processes",
+          "Quality Control"
+        ],
+        "assessmentTypes": [
+          "Drawing Exercises",
+          "Design Projects",
+          "Tests",
+          "Examinations",
+          "PAT (Practical Assessment Task)"
+        ]
+      },
+      "tourism": {
+        "code": "TOUR",
+        "name": "Tourism",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Tourism industry, hospitality, travel planning, and destination management",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20TOURISM%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "✈️",
+        "color": "#0EA5E9",
+        "learningAreas": [
+          "Tourism Industry",
+          "Travel Services",
+          "Hospitality",
+          "South African Tourism",
+          "Sustainable Tourism"
+        ],
+        "assessmentTypes": ["Case Studies", "Projects", "Tests", "Examinations", "Research Tasks"]
+      },
+      "hospitality-studies": {
+        "code": "HOSP",
+        "name": "Hospitality Studies",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Hotel management, food service, event planning, and hospitality operations",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20HOSPITALITY%20STUDIES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🏨",
+        "color": "#F59E0B",
+        "learningAreas": [
+          "Front Office Operations",
+          "Food and Beverage",
+          "Housekeeping",
+          "Event Management",
+          "Customer Service"
+        ],
+        "assessmentTypes": [
+          "Practical Tasks",
+          "Projects",
+          "Tests",
+          "Examinations",
+          "Work Experience"
+        ]
+      },
+      "religion-studies": {
+        "code": "REL",
+        "name": "Religion Studies",
+        "type": "elective",
+        "languageLevel": null,
+        "capsPhase": ["fet"],
+        "description": "Comparative religion, ethics, spirituality, and religious practices",
+        "capsUrl": "https://www.education.gov.za/Portals/0/CD/National%20Curriculum%20Statements%20and%20Vocational/CAPS%20FET%20_%20RELIGION%20STUDIES%20_%20GR%2010-12%20_%20WEB.pdf",
+        "prerequisites": [],
+        "grades": [10, 11, 12],
+        "icon": "🕊️",
+        "color": "#8B5CF6",
+        "learningAreas": [
+          "Comparative Religion",
+          "Ethics",
+          "Spirituality",
+          "Religious Texts",
+          "Contemporary Issues"
+        ],
+        "assessmentTypes": [
+          "Essays",
+          "Research Projects",
+          "Tests",
+          "Examinations",
+          "Community Service"
+        ]
+      }
+    }
+  }
+}

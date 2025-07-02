@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database for Development
   postgres:
@@ -23,6 +21,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Assessment Service (development)
+  assessment-service:
+    build:
+      context: ./packages/assessment-service
+      dockerfile: Dockerfile
+    container_name: edulynx_assessment_service_dev
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://edulynx_dev:dev_password_123@postgres:5432/edulynx_dev_db
+      NODE_ENV: development
+    ports:
+      - "4001:4001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - edulynx_dev_network
+    volumes:
+      - ./packages/assessment-service:/usr/src/app
+      - /usr/src/app/node_modules
 
   # Adminer for database management
   adminer:

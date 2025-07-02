@@ -7,7 +7,6 @@ import {
   Brain,
   Calendar,
   CalendarDays,
-  ChartBar,
   ChevronRight,
   ClipboardCheck,
   DollarSign,
@@ -138,7 +137,7 @@ const menuItems: MenuSection[] = [
         visible: ['admin', 'teacher', 'student', 'parent'],
       },
       {
-        icon: <ChartBar className="w-5 h-5" />,
+        icon: <BarChart3 className="w-5 h-5" />,
         label: 'Attendance',
         href: '/list/attendance',
         visible: ['admin', 'teacher', 'student', 'parent'],

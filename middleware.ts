@@ -84,7 +84,7 @@ export async function middleware(request: NextRequest) {
       ADMIN: ['/admin', '/list', '/dashboard'],
       TEACHER: ['/teacher', '/dashboard'],
       PARENT: ['/parent', '/dashboard'],
-      STUDENT: ['/student', '/dashboard'],
+      STUDENT: ['/student', '/dashboard', '/courses'],
     };
 
     // Check if user has access to the route
@@ -128,7 +128,7 @@ function getDefaultRouteForRole(role: string): string {
     case 'PARENT':
       return '/parent';
     case 'STUDENT':
-      return '/student';
+      return '/dashboard'; // Redirect students to main dashboard
     default:
       return '/sign-in';
   }

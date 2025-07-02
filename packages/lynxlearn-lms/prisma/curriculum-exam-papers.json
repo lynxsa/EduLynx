@@ -1,0 +1,445 @@
+[
+  {
+    "id": "math-gr10-june-2024",
+    "title": "Grade 10 Mathematics June Examination 2024",
+    "description": "Mid-year examination covering algebra, functions, and geometry",
+    "subjectId": "math",
+    "grade": 10,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 180,
+    "totalMarks": 150,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "INTERMEDIATE",
+    "topics": [
+      "Algebraic expressions and equations",
+      "Linear and quadratic functions",
+      "Euclidean geometry",
+      "Trigonometry",
+      "Statistics"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Multiple Choice",
+        "marks": 30,
+        "questions": 15,
+        "timeAllocation": 30
+      },
+      {
+        "name": "Section B: Short Questions",
+        "marks": 60,
+        "questions": 8,
+        "timeAllocation": 75
+      },
+      {
+        "name": "Section C: Long Questions",
+        "marks": 60,
+        "questions": 3,
+        "timeAllocation": 75
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/math/grade10/june-2024-paper.pdf",
+    "memoUrl": "/exams/math/grade10/june-2024-memo.pdf",
+    "fileSize": "2.5MB",
+    "downloadCount": 0,
+    "tags": ["algebra", "geometry", "functions", "june exam"]
+  },
+  {
+    "id": "math-gr10-nov-2024",
+    "title": "Grade 10 Mathematics November Examination 2024",
+    "description": "Final examination covering the complete Grade 10 mathematics curriculum",
+    "subjectId": "math",
+    "grade": 10,
+    "examType": "FORMAL",
+    "examPeriod": "NOVEMBER",
+    "year": 2024,
+    "duration": 180,
+    "totalMarks": 150,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "INTERMEDIATE",
+    "topics": [
+      "Algebraic expressions and equations",
+      "Functions and graphs",
+      "Euclidean geometry",
+      "Analytical geometry",
+      "Trigonometry",
+      "Statistics and probability"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Multiple Choice",
+        "marks": 30,
+        "questions": 15,
+        "timeAllocation": 30
+      },
+      {
+        "name": "Section B: Short Questions",
+        "marks": 60,
+        "questions": 8,
+        "timeAllocation": 75
+      },
+      {
+        "name": "Section C: Long Questions",
+        "marks": 60,
+        "questions": 3,
+        "timeAllocation": 75
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/math/grade10/nov-2024-paper.pdf",
+    "memoUrl": "/exams/math/grade10/nov-2024-memo.pdf",
+    "fileSize": "2.8MB",
+    "downloadCount": 0,
+    "tags": ["algebra", "geometry", "functions", "final exam"]
+  },
+  {
+    "id": "math-gr12-june-2024",
+    "title": "Grade 12 Mathematics June Examination 2024",
+    "description": "NSC preparatory examination covering advanced mathematics topics",
+    "subjectId": "math",
+    "grade": 12,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 180,
+    "totalMarks": 150,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "ADVANCED",
+    "topics": [
+      "Differential calculus",
+      "Integral calculus",
+      "Financial mathematics",
+      "Statistics",
+      "Trigonometry",
+      "Analytical geometry"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Multiple Choice",
+        "marks": 30,
+        "questions": 15,
+        "timeAllocation": 30
+      },
+      {
+        "name": "Section B: Short Questions",
+        "marks": 60,
+        "questions": 8,
+        "timeAllocation": 75
+      },
+      {
+        "name": "Section C: Long Questions",
+        "marks": 60,
+        "questions": 3,
+        "timeAllocation": 75
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/math/grade12/june-2024-paper.pdf",
+    "memoUrl": "/exams/math/grade12/june-2024-memo.pdf",
+    "fileSize": "3.2MB",
+    "downloadCount": 0,
+    "tags": ["calculus", "statistics", "nsc preparation"]
+  },
+  {
+    "id": "phys-sci-gr10-june-2024",
+    "title": "Grade 10 Physical Sciences June Examination 2024",
+    "description": "Physics and Chemistry examination covering matter, forces, and chemical reactions",
+    "subjectId": "phys-sci",
+    "grade": 10,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 180,
+    "totalMarks": 150,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "INTERMEDIATE",
+    "topics": [
+      "Atomic structure and bonding",
+      "Chemical reactions",
+      "Newton's laws of motion",
+      "Work, energy and power",
+      "Waves and sound"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Multiple Choice",
+        "marks": 30,
+        "questions": 15,
+        "timeAllocation": 30
+      },
+      {
+        "name": "Section B: Physics",
+        "marks": 60,
+        "questions": 5,
+        "timeAllocation": 75
+      },
+      {
+        "name": "Section C: Chemistry",
+        "marks": 60,
+        "questions": 5,
+        "timeAllocation": 75
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/physical-sciences/grade10/june-2024-paper.pdf",
+    "memoUrl": "/exams/physical-sciences/grade10/june-2024-memo.pdf",
+    "fileSize": "2.9MB",
+    "downloadCount": 0,
+    "tags": ["physics", "chemistry", "mechanics", "bonding"]
+  },
+  {
+    "id": "phys-sci-gr12-june-2024",
+    "title": "Grade 12 Physical Sciences June Examination 2024",
+    "description": "NSC Physical Sciences examination covering advanced physics and chemistry",
+    "subjectId": "phys-sci",
+    "grade": 12,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 180,
+    "totalMarks": 150,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "ADVANCED",
+    "topics": [
+      "Electricity and magnetism",
+      "Waves and sound",
+      "Organic chemistry",
+      "Electrochemistry",
+      "Nuclear physics"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Multiple Choice",
+        "marks": 30,
+        "questions": 15,
+        "timeAllocation": 30
+      },
+      {
+        "name": "Section B: Physics",
+        "marks": 60,
+        "questions": 4,
+        "timeAllocation": 75
+      },
+      {
+        "name": "Section C: Chemistry",
+        "marks": 60,
+        "questions": 4,
+        "timeAllocation": 75
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/physical-sciences/grade12/june-2024-paper.pdf",
+    "memoUrl": "/exams/physical-sciences/grade12/june-2024-memo.pdf",
+    "fileSize": "3.5MB",
+    "downloadCount": 0,
+    "tags": ["electricity", "organic chemistry", "nuclear physics", "nsc"]
+  },
+  {
+    "id": "life-sci-gr10-june-2024",
+    "title": "Grade 10 Life Sciences June Examination 2024",
+    "description": "Biology examination covering cells, tissues, and life processes",
+    "subjectId": "life-sci",
+    "grade": 10,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 150,
+    "totalMarks": 150,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "INTERMEDIATE",
+    "topics": [
+      "Cell structure and function",
+      "Cell division",
+      "Plant and animal tissues",
+      "Photosynthesis and respiration",
+      "Basic ecology"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Multiple Choice",
+        "marks": 30,
+        "questions": 15,
+        "timeAllocation": 25
+      },
+      {
+        "name": "Section B: Short Questions",
+        "marks": 70,
+        "questions": 8,
+        "timeAllocation": 70
+      },
+      {
+        "name": "Section C: Essay Questions",
+        "marks": 50,
+        "questions": 2,
+        "timeAllocation": 55
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/life-sciences/grade10/june-2024-paper.pdf",
+    "memoUrl": "/exams/life-sciences/grade10/june-2024-memo.pdf",
+    "fileSize": "2.3MB",
+    "downloadCount": 0,
+    "tags": ["biology", "cells", "tissues", "photosynthesis"]
+  },
+  {
+    "id": "life-sci-gr12-june-2024",
+    "title": "Grade 12 Life Sciences June Examination 2024",
+    "description": "NSC Life Sciences examination covering genetics, evolution, and ecology",
+    "subjectId": "life-sci",
+    "grade": 12,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 150,
+    "totalMarks": 150,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "ADVANCED",
+    "topics": [
+      "DNA and protein synthesis",
+      "Genetics and inheritance",
+      "Evolution and natural selection",
+      "Human impact on environment",
+      "Biodiversity and conservation"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Multiple Choice",
+        "marks": 30,
+        "questions": 15,
+        "timeAllocation": 25
+      },
+      {
+        "name": "Section B: Short Questions",
+        "marks": 70,
+        "questions": 8,
+        "timeAllocation": 70
+      },
+      {
+        "name": "Section C: Essay Questions",
+        "marks": 50,
+        "questions": 2,
+        "timeAllocation": 55
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/life-sciences/grade12/june-2024-paper.pdf",
+    "memoUrl": "/exams/life-sciences/grade12/june-2024-memo.pdf",
+    "fileSize": "2.7MB",
+    "downloadCount": 0,
+    "tags": ["genetics", "evolution", "ecology", "nsc"]
+  },
+  {
+    "id": "english-hl-gr12-june-2024",
+    "title": "Grade 12 English Home Language June Examination 2024",
+    "description": "NSC English examination covering literature, language, and writing skills",
+    "subjectId": "english-hl",
+    "grade": 12,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 180,
+    "totalMarks": 80,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "ADVANCED",
+    "topics": [
+      "Literature analysis",
+      "Poetry interpretation",
+      "Essay writing",
+      "Language and editing",
+      "Comprehension"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Comprehension",
+        "marks": 30,
+        "questions": 1,
+        "timeAllocation": 45
+      },
+      {
+        "name": "Section B: Summary",
+        "marks": 10,
+        "questions": 1,
+        "timeAllocation": 25
+      },
+      {
+        "name": "Section C: Language",
+        "marks": 40,
+        "questions": 1,
+        "timeAllocation": 110
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/english/grade12/june-2024-paper1.pdf",
+    "memoUrl": "/exams/english/grade12/june-2024-paper1-memo.pdf",
+    "fileSize": "1.8MB",
+    "downloadCount": 0,
+    "tags": ["literature", "comprehension", "language", "nsc"]
+  },
+  {
+    "id": "accounting-gr12-june-2024",
+    "title": "Grade 12 Accounting June Examination 2024",
+    "description": "NSC Accounting examination covering financial statements and company accounting",
+    "subjectId": "accounting",
+    "grade": 12,
+    "examType": "FORMAL",
+    "examPeriod": "JUNE",
+    "year": 2024,
+    "duration": 180,
+    "totalMarks": 300,
+    "language": "english",
+    "province": "ALL",
+    "difficulty": "ADVANCED",
+    "topics": [
+      "Financial statements analysis",
+      "Company financial statements",
+      "Manufacturing accounts",
+      "Cash flow statements",
+      "Ratio analysis"
+    ],
+    "sections": [
+      {
+        "name": "Section A: Reconciliations",
+        "marks": 80,
+        "questions": 2,
+        "timeAllocation": 50
+      },
+      {
+        "name": "Section B: Company Financial Statements",
+        "marks": 120,
+        "questions": 1,
+        "timeAllocation": 80
+      },
+      {
+        "name": "Section C: Analysis and Interpretation",
+        "marks": 100,
+        "questions": 2,
+        "timeAllocation": 50
+      }
+    ],
+    "status": "PUBLISHED",
+    "isPublished": true,
+    "downloadUrl": "/exams/accounting/grade12/june-2024-paper.pdf",
+    "memoUrl": "/exams/accounting/grade12/june-2024-memo.pdf",
+    "fileSize": "3.8MB",
+    "downloadCount": 0,
+    "tags": ["financial statements", "company accounting", "analysis", "nsc"]
+  }
+]

@@ -1,0 +1,274 @@
+[
+  {
+    "id": "math-gr10-mod1",
+    "title": "Algebraic Expressions and Equations",
+    "description": "Learn to work with algebraic expressions, solve linear equations, and understand the fundamentals of algebra",
+    "orderIndex": 1,
+    "courseId": "math-gr10",
+    "subjectId": "math",
+    "estimatedHours": 45,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Number Patterns, Sequences and Series",
+    "learningOutcomes": [
+      "Simplify algebraic expressions",
+      "Solve linear equations in one variable",
+      "Work with inequalities",
+      "Understand and use algebraic manipulation"
+    ]
+  },
+  {
+    "id": "math-gr10-mod2",
+    "title": "Functions and Graphs",
+    "description": "Introduction to functions, their graphs, and various types of functions including linear and quadratic",
+    "orderIndex": 2,
+    "courseId": "math-gr10",
+    "subjectId": "math",
+    "estimatedHours": 50,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Functions",
+    "learningOutcomes": [
+      "Understand function notation and terminology",
+      "Draw and interpret graphs of functions",
+      "Work with linear and quadratic functions",
+      "Solve problems using functions"
+    ]
+  },
+  {
+    "id": "math-gr10-mod3",
+    "title": "Geometry and Measurement",
+    "description": "Euclidean geometry, coordinate geometry, and measurement of 2D and 3D shapes",
+    "orderIndex": 3,
+    "courseId": "math-gr10",
+    "subjectId": "math",
+    "estimatedHours": 40,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Space and Shape (Geometry)",
+    "learningOutcomes": [
+      "Apply geometric theorems and properties",
+      "Calculate area and perimeter of 2D shapes",
+      "Calculate surface area and volume of 3D objects",
+      "Work with coordinate geometry"
+    ]
+  },
+  {
+    "id": "math-gr10-mod4",
+    "title": "Trigonometry",
+    "description": "Introduction to trigonometric ratios and their applications in right-angled triangles",
+    "orderIndex": 4,
+    "courseId": "math-gr10",
+    "subjectId": "math",
+    "estimatedHours": 35,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Trigonometry",
+    "learningOutcomes": [
+      "Understand sine, cosine, and tangent ratios",
+      "Solve problems using trigonometric ratios",
+      "Apply trigonometry to real-world problems",
+      "Use special angles and their ratios"
+    ]
+  },
+  {
+    "id": "phys-sci-gr10-mod1",
+    "title": "Matter and Materials",
+    "description": "Study atomic structure, chemical bonding, and properties of matter",
+    "orderIndex": 1,
+    "courseId": "phys-sci-gr10",
+    "subjectId": "phys-sci",
+    "estimatedHours": 50,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Matter and Materials",
+    "learningOutcomes": [
+      "Understand atomic structure and electron configuration",
+      "Explain different types of chemical bonding",
+      "Describe properties of ionic and covalent compounds",
+      "Perform stoichiometric calculations"
+    ]
+  },
+  {
+    "id": "phys-sci-gr10-mod2",
+    "title": "Chemical Change",
+    "description": "Chemical reactions, reaction types, and quantitative chemistry",
+    "orderIndex": 2,
+    "courseId": "phys-sci-gr10",
+    "subjectId": "phys-sci",
+    "estimatedHours": 45,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Chemical Change",
+    "learningOutcomes": [
+      "Classify different types of chemical reactions",
+      "Balance chemical equations",
+      "Calculate quantities in chemical reactions",
+      "Understand factors affecting reaction rates"
+    ]
+  },
+  {
+    "id": "phys-sci-gr10-mod3",
+    "title": "Mechanics",
+    "description": "Motion in one dimension, forces, and Newton's laws",
+    "orderIndex": 3,
+    "courseId": "phys-sci-gr10",
+    "subjectId": "phys-sci",
+    "estimatedHours": 55,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Mechanics",
+    "learningOutcomes": [
+      "Describe motion using kinematic equations",
+      "Apply Newton's laws of motion",
+      "Calculate work, energy, and power",
+      "Understand momentum and impulse"
+    ]
+  },
+  {
+    "id": "phys-sci-gr10-mod4",
+    "title": "Waves, Sound and Light",
+    "description": "Wave properties, sound waves, and electromagnetic radiation",
+    "orderIndex": 4,
+    "courseId": "phys-sci-gr10",
+    "subjectId": "phys-sci",
+    "estimatedHours": 40,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Waves, Sound and Light",
+    "learningOutcomes": [
+      "Describe wave properties and behavior",
+      "Explain sound wave characteristics",
+      "Understand electromagnetic spectrum",
+      "Apply wave principles to real situations"
+    ]
+  },
+  {
+    "id": "life-sci-gr10-mod1",
+    "title": "The Chemistry of Life",
+    "description": "Basic chemistry, organic molecules, and cellular chemistry",
+    "orderIndex": 1,
+    "courseId": "life-sci-gr10",
+    "subjectId": "life-sci",
+    "estimatedHours": 40,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Life at the Molecular, Cellular and Tissue Level",
+    "learningOutcomes": [
+      "Understand basic chemistry relevant to life",
+      "Identify major organic molecules",
+      "Explain enzyme function and regulation",
+      "Describe cellular chemistry processes"
+    ]
+  },
+  {
+    "id": "life-sci-gr10-mod2",
+    "title": "Cells and Cell Division",
+    "description": "Cell structure, organelles, and processes of cell division",
+    "orderIndex": 2,
+    "courseId": "life-sci-gr10",
+    "subjectId": "life-sci",
+    "estimatedHours": 45,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Life at the Molecular, Cellular and Tissue Level",
+    "learningOutcomes": [
+      "Compare prokaryotic and eukaryotic cells",
+      "Identify cell organelles and their functions",
+      "Explain mitosis and meiosis",
+      "Understand cell cycle regulation"
+    ]
+  },
+  {
+    "id": "life-sci-gr10-mod3",
+    "title": "Plant and Animal Tissues",
+    "description": "Different types of tissues in plants and animals and their functions",
+    "orderIndex": 3,
+    "courseId": "life-sci-gr10",
+    "subjectId": "life-sci",
+    "estimatedHours": 35,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Life at the Molecular, Cellular and Tissue Level",
+    "learningOutcomes": [
+      "Classify different types of plant tissues",
+      "Identify animal tissue types and functions",
+      "Understand tissue organization in organs",
+      "Relate tissue structure to function"
+    ]
+  },
+  {
+    "id": "life-sci-gr10-mod4",
+    "title": "Life Processes",
+    "description": "Photosynthesis, respiration, and other essential life processes",
+    "orderIndex": 4,
+    "courseId": "life-sci-gr10",
+    "subjectId": "life-sci",
+    "estimatedHours": 50,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Life Processes in Plants and Animals",
+    "learningOutcomes": [
+      "Explain photosynthesis and cellular respiration",
+      "Understand gas exchange in plants and animals",
+      "Describe transport systems in organisms",
+      "Analyze energy flow in living systems"
+    ]
+  },
+  {
+    "id": "english-hl-gr10-mod1",
+    "title": "Reading and Comprehension",
+    "description": "Developing advanced reading skills and comprehension strategies",
+    "orderIndex": 1,
+    "courseId": "english-hl-gr10",
+    "subjectId": "english-hl",
+    "estimatedHours": 40,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Reading and Viewing",
+    "learningOutcomes": [
+      "Apply various reading strategies",
+      "Analyze different text types",
+      "Understand literary devices and techniques",
+      "Develop critical reading skills"
+    ]
+  },
+  {
+    "id": "english-hl-gr10-mod2",
+    "title": "Writing and Presentation",
+    "description": "Creative and analytical writing skills development",
+    "orderIndex": 2,
+    "courseId": "english-hl-gr10",
+    "subjectId": "english-hl",
+    "estimatedHours": 45,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Writing and Presenting",
+    "learningOutcomes": [
+      "Write various text types effectively",
+      "Develop essay writing skills",
+      "Master creative writing techniques",
+      "Improve presentation skills"
+    ]
+  },
+  {
+    "id": "english-hl-gr10-mod3",
+    "title": "Language Structures and Conventions",
+    "description": "Grammar, vocabulary, and language conventions mastery",
+    "orderIndex": 3,
+    "courseId": "english-hl-gr10",
+    "subjectId": "english-hl",
+    "estimatedHours": 35,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Language Structures and Conventions",
+    "learningOutcomes": [
+      "Master advanced grammar concepts",
+      "Expand vocabulary systematically",
+      "Understand language conventions",
+      "Apply language rules accurately"
+    ]
+  },
+  {
+    "id": "english-hl-gr10-mod4",
+    "title": "Literature Study",
+    "description": "Analysis of poetry, prose, and drama",
+    "orderIndex": 4,
+    "courseId": "english-hl-gr10",
+    "subjectId": "english-hl",
+    "estimatedHours": 40,
+    "difficulty": "INTERMEDIATE",
+    "capsUnit": "Literature",
+    "learningOutcomes": [
+      "Analyze poetry and literary devices",
+      "Study prose and narrative techniques",
+      "Understand dramatic elements",
+      "Write literary analysis essays"
+    ]
+  }
+]

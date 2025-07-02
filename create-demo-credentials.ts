@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
 
@@ -23,15 +23,15 @@ async function createDemoUsers() {
     const adminUser = await prisma.user.upsert({
       where: { email: 'admin@lynxacademy.co.za' },
       update: {
-        firstName: 'Admin',
-        lastName: 'User',
+        firstName: 'Derah',
+        lastName: 'Manyelo',
         password: adminHash,
         role: 'ADMIN',
       },
       create: {
         email: 'admin@lynxacademy.co.za',
-        firstName: 'Admin',
-        lastName: 'User',
+        firstName: 'Derah',
+        lastName: 'Manyelo',
         password: adminHash,
         role: 'ADMIN',
         schoolId: school.id,
@@ -73,8 +73,8 @@ async function createDemoUsers() {
         data: {
           id: `TCH_${teacherUser.id}`,
           username: `teacher_${teacherUser.email.split('@')[0]}`,
-          name: 'John',
-          surname: 'Smith',
+          name: 'Lebo',
+          surname: 'Matsetela',
           email: 'teacher1@lynxacademy.co.za',
           phone: '+27111234567',
           address: '123 Teacher Street, Johannesburg',
@@ -93,13 +93,13 @@ async function createDemoUsers() {
       where: { email: 'parent1@lynxacademy.co.za' },
       update: {
         firstName: 'Sarah',
-        lastName: 'Johnson',
+        lastName: 'Dube',
         password: parentHash,
         role: 'PARENT',
       },
       create: {
         email: 'parent1@lynxacademy.co.za',
-        firstName: 'Sarah',
+        firstName: 'Thabo',
         lastName: 'Johnson',
         password: parentHash,
         role: 'PARENT',

@@ -1,0 +1,334 @@
+
+> edulynx-ecosystem@2.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.30
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 7.8s
+ ✓ Compiled /src/middleware in 369ms (72 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 19.7s (1349 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 25021ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 517ms
+ ○ Compiling /sign-in ...
+ ✓ Compiled /sign-in in 1979ms (1379 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 1361ms (806 modules)
+🔍 Login API called
+📧 Login attempt for: student1@lynxacademy.co.za
+🔍 Searching for user in database...
+prisma:query SELECT "public"."User"."id", "public"."User"."email", "public"."User"."password", "public"."User"."firstName", "public"."User"."lastName", "public"."User"."role"::text, "public"."User"."schoolId", "public"."User"."isActive" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+🔐 Verifying password...
+✅ Password verified, generating token...
+✅ Login successful for: student1@lynxacademy.co.za
+ POST /api/auth/login 200 in 3220ms
+ ○ Compiling /student ...
+ ✓ Compiled /student in 32.2s (3478 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /student. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/dashboard/student ...
+ ✓ Compiled /api/dashboard/student in 11.5s (1802 modules)
+ ✓ Compiled (1804 modules)
+ GET /api/dashboard/student?studentId=student1 200 in 26604ms
+ GET /api/dashboard/student?studentId=student1 200 in 6222ms
+ GET /api/weather 500 in 29088ms
+ GET /api/weather 500 in 8928ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 371ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /student. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/dashboard/student?studentId=student1 200 in 60ms
+ GET /api/dashboard/student?studentId=student1 200 in 40ms
+ GET /api/weather 500 in 1046ms
+ GET /api/weather 500 in 295ms
+ ○ Compiling /api/auth/logout ...
+ ✓ Compiled /api/auth/logout in 1908ms (1712 modules)
+ POST /api/auth/logout 200 in 2450ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /sign-in 200 in 336ms
+ ✓ Compiled in 8.6s (1692 modules)
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 2.1s (1796 modules)
+🔍 Login API called
+📧 Login attempt for: admin@lynxacademy.co.za
+🔍 Searching for user in database...
+prisma:query SELECT "public"."User"."id", "public"."User"."email", "public"."User"."password", "public"."User"."firstName", "public"."User"."lastName", "public"."User"."role"::text, "public"."User"."schoolId", "public"."User"."isActive" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+🔐 Verifying password...
+✅ Password verified, generating token...
+✅ Login successful for: admin@lynxacademy.co.za
+ POST /api/auth/login 200 in 5993ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 11.3s (3511 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /sign-in 200 in 1228ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/dashboard/admin ...
+ ✓ Compiled /api/dashboard/admin in 2.4s (1818 modules)
+ ✓ Compiled (1821 modules)
+ GET /api/weather 500 in 4404ms
+ GET /api/weather 500 in 261ms
+ GET /api/dashboard/admin?period=week&timestamp=1750782759962 200 in 12456ms
+ GET /api/dashboard/admin?period=week&timestamp=1750782759976 200 in 12491ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1021ms (3434 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin/alerts. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /admin/alerts 404 in 278ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /admin 200 in 552ms
+ GET /api/weather 500 in 1746ms
+ GET /api/weather 500 in 644ms
+ GET /api/dashboard/admin?period=week&timestamp=1750782812768 200 in 4822ms
+ GET /api/dashboard/admin?period=week&timestamp=1750782812774 200 in 4926ms
+ GET /api/dashboard/admin?period=month&timestamp=1750782875173 200 in 4789ms
+ ○ Compiling /list/teachers ...
+ ✓ Compiled /list/teachers in 14.1s (3424 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /list/teachers. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/teachers ...
+ ✓ Compiled /api/teachers in 3s (1748 modules)
+prisma:query SELECT "public"."Teacher"."id", "public"."Teacher"."username", "public"."Teacher"."name", "public"."Teacher"."surname", "public"."Teacher"."email", "public"."Teacher"."phone", "public"."Teacher"."address", "public"."Teacher"."img", "public"."Teacher"."bloodType", "public"."Teacher"."sex"::text, "public"."Teacher"."createdAt", "public"."Teacher"."birthday", "public"."Teacher"."classId", "public"."Teacher"."schoolId", "public"."Teacher"."userId" FROM "public"."Teacher" WHERE 1=1 ORDER BY "public"."Teacher"."name" ASC LIMIT $1 OFFSET $2
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Teacher"."id" FROM "public"."Teacher" WHERE 1=1 OFFSET $1) AS "sub"
+ GET /api/teachers 200 in 3889ms
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Teacher"."id" FROM "public"."Teacher" WHERE 1=1 OFFSET $1) AS "sub"
+ GET /api/teachers 200 in 146ms
+prisma:query SELECT "public"."Teacher"."id", "public"."Teacher"."username", "public"."Teacher"."name", "public"."Teacher"."surname", "public"."Teacher"."email", "public"."Teacher"."phone", "public"."Teacher"."address", "public"."Teacher"."img", "public"."Teacher"."bloodType", "public"."Teacher"."sex"::text, "public"."Teacher"."createdAt", "public"."Teacher"."birthday", "public"."Teacher"."classId", "public"."Teacher"."schoolId", "public"."Teacher"."userId" FROM "public"."Teacher" WHERE 1=1 ORDER BY "public"."Teacher"."name" ASC LIMIT $1 OFFSET $2
+ ○ Compiling /list/students ...
+ ✓ Compiled /list/students in 4.7s (3466 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /list/students. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/students ...
+ ✓ Compiled /api/students in 2.7s (1839 modules)
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Student"."id" FROM "public"."Student" WHERE "public"."Student"."schoolId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT "public"."Student"."id", "public"."Student"."username", "public"."Student"."name", "public"."Student"."surname", "public"."Student"."email", "public"."Student"."phone", "public"."Student"."address", "public"."Student"."img", "public"."Student"."bloodType", "public"."Student"."sex"::text, "public"."Student"."gender", "public"."Student"."homeLanguage", "public"."Student"."allergies", "public"."Student"."medicalInfo", "public"."Student"."emergencyContactName", "public"."Student"."emergencyContactPhone", "public"."Student"."guardianRelationship", "public"."Student"."specialNeeds", "public"."Student"."extracurriculars", "public"."Student"."admissionYear", "public"."Student"."status", "public"."Student"."profileImage", "public"."Student"."createdAt", "public"."Student"."birthday", "public"."Student"."parentId", "public"."Student"."classId", "public"."Student"."gradeId", "public"."Student"."schoolId", "public"."Student"."userId" FROM "public"."Student" WHERE "public"."Student"."schoolId" = $1 ORDER BY "public"."Student"."createdAt" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Class"."id", "public"."Class"."name" FROM "public"."Class" WHERE "public"."Class"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9) OFFSET $10
+prisma:query SELECT "public"."Grade"."id", "public"."Grade"."level" FROM "public"."Grade" WHERE "public"."Grade"."id" IN ($1,$2,$3,$4,$5) OFFSET $6
+prisma:query SELECT "public"."Parent"."id", "public"."Parent"."name", "public"."Parent"."surname", "public"."Parent"."phone", "public"."Parent"."email" FROM "public"."Parent" WHERE "public"."Parent"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9) OFFSET $10
+ GET /api/students 200 in 4785ms
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Student"."id" FROM "public"."Student" WHERE "public"."Student"."schoolId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT "public"."Student"."id", "public"."Student"."username", "public"."Student"."name", "public"."Student"."surname", "public"."Student"."email", "public"."Student"."phone", "public"."Student"."address", "public"."Student"."img", "public"."Student"."bloodType", "public"."Student"."sex"::text, "public"."Student"."gender", "public"."Student"."homeLanguage", "public"."Student"."allergies", "public"."Student"."medicalInfo", "public"."Student"."emergencyContactName", "public"."Student"."emergencyContactPhone", "public"."Student"."guardianRelationship", "public"."Student"."specialNeeds", "public"."Student"."extracurriculars", "public"."Student"."admissionYear", "public"."Student"."status", "public"."Student"."profileImage", "public"."Student"."createdAt", "public"."Student"."birthday", "public"."Student"."parentId", "public"."Student"."classId", "public"."Student"."gradeId", "public"."Student"."schoolId", "public"."Student"."userId" FROM "public"."Student" WHERE "public"."Student"."schoolId" = $1 ORDER BY "public"."Student"."createdAt" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Class"."id", "public"."Class"."name" FROM "public"."Class" WHERE "public"."Class"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9) OFFSET $10
+prisma:query SELECT "public"."Grade"."id", "public"."Grade"."level" FROM "public"."Grade" WHERE "public"."Grade"."id" IN ($1,$2,$3,$4,$5) OFFSET $6
+prisma:query SELECT "public"."Parent"."id", "public"."Parent"."name", "public"."Parent"."surname", "public"."Parent"."phone", "public"."Parent"."email" FROM "public"."Parent" WHERE "public"."Parent"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9) OFFSET $10
+ GET /api/students 200 in 133ms
+ ○ Compiling /list/parents ...
+ ✓ Compiled /list/parents in 6.4s (3559 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /list/parents. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/parents ...
+ ✓ Compiled /api/parents in 1411ms (1846 modules)
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Parent"."id" FROM "public"."Parent" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."Parent"."id", "public"."Parent"."username", "public"."Parent"."name", "public"."Parent"."surname", "public"."Parent"."email", "public"."Parent"."phone", "public"."Parent"."address", "public"."Parent"."img", "public"."Parent"."sex"::text, "public"."Parent"."createdAt", "public"."Parent"."schoolId", "public"."Parent"."userId" FROM "public"."Parent" WHERE 1=1 ORDER BY "public"."Parent"."name" ASC LIMIT $1 OFFSET $2
+ GET /api/parents 200 in 1947ms
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Parent"."id" FROM "public"."Parent" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."Parent"."id", "public"."Parent"."username", "public"."Parent"."name", "public"."Parent"."surname", "public"."Parent"."email", "public"."Parent"."phone", "public"."Parent"."address", "public"."Parent"."img", "public"."Parent"."sex"::text, "public"."Parent"."createdAt", "public"."Parent"."schoolId", "public"."Parent"."userId" FROM "public"."Parent" WHERE 1=1 ORDER BY "public"."Parent"."name" ASC LIMIT $1 OFFSET $2
+ GET /api/parents 200 in 87ms
+ ○ Compiling /list/health ...
+ ✓ Compiled /list/health in 5.7s (3754 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /list/health. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/health ...
+ ✓ Compiled /api/health in 1501ms (1979 modules)
+prisma:query SELECT 1
+prisma:query SELECT "public"."MedicalRecord"."id", "public"."MedicalRecord"."studentId", "public"."MedicalRecord"."bloodType", "public"."MedicalRecord"."allergies", "public"."MedicalRecord"."medications", "public"."MedicalRecord"."conditions", "public"."MedicalRecord"."emergencyContactName", "public"."MedicalRecord"."emergencyContactPhone", "public"."MedicalRecord"."emergencyContactRelationship", "public"."MedicalRecord"."doctorName", "public"."MedicalRecord"."doctorPhone", "public"."MedicalRecord"."notes", "public"."MedicalRecord"."createdAt", "public"."MedicalRecord"."updatedAt" FROM "public"."MedicalRecord" WHERE 1=1 OFFSET $1
+prisma:query SELECT "public"."Student"."id", "public"."Student"."name", "public"."Student"."surname", "public"."Student"."img" FROM "public"."Student" WHERE "public"."Student"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$90,$91,$92,$93,$94,$95,$96,$97,$98,$99,$100,$101,$102,$103,$104,$105,$106,$107,$108,$109,$110,$111,$112,$113,$114,$115,$116,$117,$118,$119,$120,$121,$122,$123,$124,$125,$126,$127,$128,$129,$130,$131,$132,$133,$134,$135,$136,$137,$138,$139,$140,$141,$142,$143,$144,$145,$146,$147,$148,$149,$150,$151,$152,$153,$154,$155,$156,$157,$158,$159,$160,$161,$162,$163,$164,$165,$166,$167,$168,$169,$170,$171,$172,$173,$174,$175,$176,$177,$178,$179,$180,$181,$182,$183,$184,$185,$186,$187,$188,$189,$190,$191,$192,$193,$194,$195,$196,$197,$198,$199,$200) OFFSET $201
+ GET /api/health 200 in 2002ms
+prisma:query SELECT "public"."MedicalRecord"."id", "public"."MedicalRecord"."studentId", "public"."MedicalRecord"."bloodType", "public"."MedicalRecord"."allergies", "public"."MedicalRecord"."medications", "public"."MedicalRecord"."conditions", "public"."MedicalRecord"."emergencyContactName", "public"."MedicalRecord"."emergencyContactPhone", "public"."MedicalRecord"."emergencyContactRelationship", "public"."MedicalRecord"."doctorName", "public"."MedicalRecord"."doctorPhone", "public"."MedicalRecord"."notes", "public"."MedicalRecord"."createdAt", "public"."MedicalRecord"."updatedAt" FROM "public"."MedicalRecord" WHERE 1=1 OFFSET $1
+prisma:query SELECT "public"."Student"."id", "public"."Student"."name", "public"."Student"."surname", "public"."Student"."img" FROM "public"."Student" WHERE "public"."Student"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$90,$91,$92,$93,$94,$95,$96,$97,$98,$99,$100,$101,$102,$103,$104,$105,$106,$107,$108,$109,$110,$111,$112,$113,$114,$115,$116,$117,$118,$119,$120,$121,$122,$123,$124,$125,$126,$127,$128,$129,$130,$131,$132,$133,$134,$135,$136,$137,$138,$139,$140,$141,$142,$143,$144,$145,$146,$147,$148,$149,$150,$151,$152,$153,$154,$155,$156,$157,$158,$159,$160,$161,$162,$163,$164,$165,$166,$167,$168,$169,$170,$171,$172,$173,$174,$175,$176,$177,$178,$179,$180,$181,$182,$183,$184,$185,$186,$187,$188,$189,$190,$191,$192,$193,$194,$195,$196,$197,$198,$199,$200) OFFSET $201
+ GET /api/health 200 in 173ms
+ ○ Compiling /api/weather ...
+ ✓ Compiled /api/weather in 3s (948 modules)
+ GET /api/weather 500 in 4495ms
+ ○ Compiling /api/auth/logout ...
+ ✓ Compiled /api/auth/logout in 1050ms (948 modules)
+ POST /api/auth/logout 200 in 1339ms
+ ○ Compiling /sign-in ...
+ ✓ Compiled /sign-in in 1312ms (956 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /sign-in 200 in 1874ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 2.4s (1016 modules)
+🔍 Login API called
+📧 Login attempt for: admin@lynxacademy.co.za
+🔍 Searching for user in database...
+prisma:query SELECT "public"."User"."id", "public"."User"."email", "public"."User"."password", "public"."User"."firstName", "public"."User"."lastName", "public"."User"."role"::text, "public"."User"."schoolId", "public"."User"."isActive" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+🔐 Verifying password...
+✅ Password verified, generating token...
+✅ Login successful for: admin@lynxacademy.co.za
+ POST /api/auth/login 200 in 3780ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 515ms (1037 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/dashboard/admin ...
+ ✓ Compiled /api/dashboard/admin in 1361ms (1039 modules)
+ ✓ Compiled (1042 modules)
+ GET /api/weather 500 in 3580ms
+ GET /api/weather 500 in 713ms
+ GET /api/dashboard/admin?period=week&timestamp=1750787224113 200 in 8714ms
+ GET /api/dashboard/admin?period=week&timestamp=1750787224119 200 in 8778ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /sign-in 200 in 1301ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/weather 500 in 1582ms
+ GET /api/weather 500 in 441ms
+ ○ Compiling /api/auth/logout ...
+ ✓ Compiled /api/auth/logout in 3.8s (957 modules)
+ POST /api/auth/logout 200 in 4506ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/dashboard/admin?period=week&timestamp=1750787289177 200 in 19380ms
+ GET /sign-in 200 in 772ms
+ GET /api/dashboard/admin?period=week&timestamp=1750787289165 200 in 19462ms
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 781ms (1032 modules)
+🔍 Login API called
+📧 Login attempt for: admin@lynxacademy.co.za
+🔍 Searching for user in database...
+prisma:query SELECT 1
+prisma:query SELECT "public"."User"."id", "public"."User"."email", "public"."User"."password", "public"."User"."firstName", "public"."User"."lastName", "public"."User"."role"::text, "public"."User"."schoolId", "public"."User"."isActive" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+🔐 Verifying password...
+✅ Password verified, generating token...
+✅ Login successful for: admin@lynxacademy.co.za
+ POST /api/auth/login 200 in 1518ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/dashboard/admin ...
+ ✓ Compiled /api/dashboard/admin in 701ms (1034 modules)
+ ✓ Compiled (1037 modules)
+ GET /api/weather 500 in 4010ms
+ GET /api/weather 500 in 989ms
+ GET /api/dashboard/admin?period=week&timestamp=1750787412337 200 in 14868ms
+ GET /api/dashboard/admin?period=week&timestamp=1750787412330 200 in 15098ms
+ ○ Compiling /api/auth/logout ...
+ ✓ Compiled /api/auth/logout in 7.3s (951 modules)
+ POST /api/auth/logout 200 in 7912ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /sign-in 200 in 1009ms
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 1056ms (1034 modules)
+🔍 Login API called
+📧 Login attempt for: admin@lynxacademy.co.za
+🔍 Searching for user in database...
+🔐 Verifying password...
+prisma:query SELECT "public"."User"."id", "public"."User"."email", "public"."User"."password", "public"."User"."firstName", "public"."User"."lastName", "public"."User"."role"::text, "public"."User"."schoolId", "public"."User"."isActive" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+✅ Password verified, generating token...
+✅ Login successful for: admin@lynxacademy.co.za
+ POST /api/auth/login 200 in 2651ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/dashboard/admin ...
+ ✓ Compiled /api/dashboard/admin in 3.1s (1036 modules)
+ ✓ Compiled (1039 modules)
+ GET /api/weather 500 in 13151ms
+ GET /api/weather 500 in 3711ms
+ ○ Compiling /dashboard/performance ...
+ ✓ Compiled /dashboard/performance in 14.6s (2824 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /dashboard/performance. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/dashboard/performance ...
+ ✓ Compiled /api/dashboard/performance in 10.1s (1046 modules)
+ GET /api/dashboard/performance 200 in 13457ms
+ GET /api/dashboard/admin?period=week&timestamp=1750787540600 200 in 52831ms
+ GET /api/dashboard/admin?period=week&timestamp=1750787540691 200 in 53415ms
+ GET /api/dashboard/performance 200 in 2239ms
+ ○ Compiling /dashboard/proflynx ...
+ ✓ Compiled /dashboard/proflynx in 6.3s (2710 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /dashboard/proflynx. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /list/lessons ...
+ ✓ Compiled /list/lessons in 3s (2711 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /list/lessons. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/lessons ...
+ ✓ Compiled /api/lessons in 1774ms (960 modules)
+prisma:query SELECT "public"."Lesson"."id", "public"."Lesson"."name", "public"."Lesson"."day"::text, "public"."Lesson"."startTime", "public"."Lesson"."endTime", "public"."Lesson"."subjectId", "public"."Lesson"."classId", "public"."Lesson"."teacherId", "public"."Lesson"."createdAt", "public"."Lesson"."updatedAt" FROM "public"."Lesson" WHERE 1=1 ORDER BY "public"."Lesson"."startTime" ASC OFFSET $1
+prisma:query SELECT "public"."Subject"."id", "public"."Subject"."name", "public"."Subject"."createdAt", "public"."Subject"."updatedAt" FROM "public"."Subject" WHERE "public"."Subject"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20) OFFSET $21
+prisma:query SELECT "public"."Class"."id", "public"."Class"."name", "public"."Class"."capacity", "public"."Class"."roomNumber", "public"."Class"."timetable", "public"."Class"."classTeacher", "public"."Class"."supervisorId", "public"."Class"."gradeId", "public"."Class"."schoolId", "public"."Class"."createdAt", "public"."Class"."updatedAt" FROM "public"."Class" WHERE "public"."Class"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25) OFFSET $26
+prisma:query SELECT "public"."Teacher"."id", "public"."Teacher"."username", "public"."Teacher"."name", "public"."Teacher"."surname", "public"."Teacher"."email", "public"."Teacher"."phone", "public"."Teacher"."address", "public"."Teacher"."img", "public"."Teacher"."bloodType", "public"."Teacher"."sex"::text, "public"."Teacher"."gender", "public"."Teacher"."nationality", "public"."Teacher"."idNumber", "public"."Teacher"."qualifications", "public"."Teacher"."yearsExperience", "public"."Teacher"."employmentStatus", "public"."Teacher"."nextOfKinName", "public"."Teacher"."nextOfKinPhone", "public"."Teacher"."createdAt", "public"."Teacher"."birthday", "public"."Teacher"."classId", "public"."Teacher"."schoolId", "public"."Teacher"."userId" FROM "public"."Teacher" WHERE "public"."Teacher"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40) OFFSET $41
+ GET /api/lessons 200 in 3356ms
+prisma:query SELECT "public"."Lesson"."id", "public"."Lesson"."name", "public"."Lesson"."day"::text, "public"."Lesson"."startTime", "public"."Lesson"."endTime", "public"."Lesson"."subjectId", "public"."Lesson"."classId", "public"."Lesson"."teacherId", "public"."Lesson"."createdAt", "public"."Lesson"."updatedAt" FROM "public"."Lesson" WHERE 1=1 ORDER BY "public"."Lesson"."startTime" ASC OFFSET $1
+prisma:query SELECT "public"."Subject"."id", "public"."Subject"."name", "public"."Subject"."createdAt", "public"."Subject"."updatedAt" FROM "public"."Subject" WHERE "public"."Subject"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20) OFFSET $21
+prisma:query SELECT "public"."Class"."id", "public"."Class"."name", "public"."Class"."capacity", "public"."Class"."roomNumber", "public"."Class"."timetable", "public"."Class"."classTeacher", "public"."Class"."supervisorId", "public"."Class"."gradeId", "public"."Class"."schoolId", "public"."Class"."createdAt", "public"."Class"."updatedAt" FROM "public"."Class" WHERE "public"."Class"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25) OFFSET $26
+prisma:query SELECT "public"."Teacher"."id", "public"."Teacher"."username", "public"."Teacher"."name", "public"."Teacher"."surname", "public"."Teacher"."email", "public"."Teacher"."phone", "public"."Teacher"."address", "public"."Teacher"."img", "public"."Teacher"."bloodType", "public"."Teacher"."sex"::text, "public"."Teacher"."gender", "public"."Teacher"."nationality", "public"."Teacher"."idNumber", "public"."Teacher"."qualifications", "public"."Teacher"."yearsExperience", "public"."Teacher"."employmentStatus", "public"."Teacher"."nextOfKinName", "public"."Teacher"."nextOfKinPhone", "public"."Teacher"."createdAt", "public"."Teacher"."birthday", "public"."Teacher"."classId", "public"."Teacher"."schoolId", "public"."Teacher"."userId" FROM "public"."Teacher" WHERE "public"."Teacher"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40) OFFSET $41
+ GET /api/lessons 200 in 843ms
+ ○ Compiling /api/weather ...
+ ✓ Compiled /api/weather in 779ms (816 modules)
+ GET /api/weather 500 in 2104ms
+ ○ Compiling /api/auth/logout ...
+ ✓ Compiled /api/auth/logout in 4.9s (816 modules)
+ POST /api/auth/logout 200 in 6925ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /sign-in 200 in 937ms
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 1409ms (900 modules)
+🔍 Login API called
+📧 Login attempt for: admin@lynxacademy.co.za
+🔍 Searching for user in database...
+prisma:query SELECT "public"."User"."id", "public"."User"."email", "public"."User"."password", "public"."User"."firstName", "public"."User"."lastName", "public"."User"."role"::text, "public"."User"."schoolId", "public"."User"."isActive" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+🔐 Verifying password...
+✅ Password verified, generating token...
+✅ Login successful for: admin@lynxacademy.co.za
+ POST /api/auth/login 200 in 2971ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /admin. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ○ Compiling /api/dashboard/admin ...
+ ✓ Compiled /api/dashboard/admin in 869ms (902 modules)
+ ✓ Compiled (905 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /list/lessons. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/weather 200 in 5695ms
+ GET /api/dashboard/admin?period=week&timestamp=1750791746223 200 in 5772ms
+ GET /api/dashboard/admin?period=week&timestamp=1750791746217 200 in 5773ms
+ GET /list/lessons 200 in 771ms
+ GET /api/weather 500 in 618ms
+ ○ Compiling /api/lessons ...
+ ✓ Compiled /api/lessons in 1063ms (907 modules)
+prisma:query SELECT "public"."Lesson"."id", "public"."Lesson"."name", "public"."Lesson"."day"::text, "public"."Lesson"."startTime", "public"."Lesson"."endTime", "public"."Lesson"."subjectId", "public"."Lesson"."classId", "public"."Lesson"."teacherId", "public"."Lesson"."createdAt", "public"."Lesson"."updatedAt" FROM "public"."Lesson" WHERE 1=1 ORDER BY "public"."Lesson"."startTime" ASC OFFSET $1
+prisma:query SELECT "public"."Subject"."id", "public"."Subject"."name", "public"."Subject"."createdAt", "public"."Subject"."updatedAt" FROM "public"."Subject" WHERE "public"."Subject"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20) OFFSET $21
+prisma:query SELECT "public"."Class"."id", "public"."Class"."name", "public"."Class"."capacity", "public"."Class"."roomNumber", "public"."Class"."timetable", "public"."Class"."classTeacher", "public"."Class"."supervisorId", "public"."Class"."gradeId", "public"."Class"."schoolId", "public"."Class"."createdAt", "public"."Class"."updatedAt" FROM "public"."Class" WHERE "public"."Class"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25) OFFSET $26
+prisma:query SELECT "public"."Teacher"."id", "public"."Teacher"."username", "public"."Teacher"."name", "public"."Teacher"."surname", "public"."Teacher"."email", "public"."Teacher"."phone", "public"."Teacher"."address", "public"."Teacher"."img", "public"."Teacher"."bloodType", "public"."Teacher"."sex"::text, "public"."Teacher"."gender", "public"."Teacher"."nationality", "public"."Teacher"."idNumber", "public"."Teacher"."qualifications", "public"."Teacher"."yearsExperience", "public"."Teacher"."employmentStatus", "public"."Teacher"."nextOfKinName", "public"."Teacher"."nextOfKinPhone", "public"."Teacher"."createdAt", "public"."Teacher"."birthday", "public"."Teacher"."classId", "public"."Teacher"."schoolId", "public"."Teacher"."userId" FROM "public"."Teacher" WHERE "public"."Teacher"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40) OFFSET $41
+ GET /api/lessons 200 in 2183ms
+prisma:query SELECT "public"."Lesson"."id", "public"."Lesson"."name", "public"."Lesson"."day"::text, "public"."Lesson"."startTime", "public"."Lesson"."endTime", "public"."Lesson"."subjectId", "public"."Lesson"."classId", "public"."Lesson"."teacherId", "public"."Lesson"."createdAt", "public"."Lesson"."updatedAt" FROM "public"."Lesson" WHERE 1=1 ORDER BY "public"."Lesson"."startTime" ASC OFFSET $1
+prisma:query SELECT "public"."Subject"."id", "public"."Subject"."name", "public"."Subject"."createdAt", "public"."Subject"."updatedAt" FROM "public"."Subject" WHERE "public"."Subject"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20) OFFSET $21
+ GET /api/weather 500 in 1591ms
+prisma:query SELECT "public"."Class"."id", "public"."Class"."name", "public"."Class"."capacity", "public"."Class"."roomNumber", "public"."Class"."timetable", "public"."Class"."classTeacher", "public"."Class"."supervisorId", "public"."Class"."gradeId", "public"."Class"."schoolId", "public"."Class"."createdAt", "public"."Class"."updatedAt" FROM "public"."Class" WHERE "public"."Class"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25) OFFSET $26
+prisma:query SELECT "public"."Teacher"."id", "public"."Teacher"."username", "public"."Teacher"."name", "public"."Teacher"."surname", "public"."Teacher"."email", "public"."Teacher"."phone", "public"."Teacher"."address", "public"."Teacher"."img", "public"."Teacher"."bloodType", "public"."Teacher"."sex"::text, "public"."Teacher"."gender", "public"."Teacher"."nationality", "public"."Teacher"."idNumber", "public"."Teacher"."qualifications", "public"."Teacher"."yearsExperience", "public"."Teacher"."employmentStatus", "public"."Teacher"."nextOfKinName", "public"."Teacher"."nextOfKinPhone", "public"."Teacher"."createdAt", "public"."Teacher"."birthday", "public"."Teacher"."classId", "public"."Teacher"."schoolId", "public"."Teacher"."userId" FROM "public"."Teacher" WHERE "public"."Teacher"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40) OFFSET $41
+ GET /api/lessons 200 in 224ms
+ GET /api/weather 500 in 2113ms
+ ○ Compiling /api/auth/logout ...
+ ✓ Compiled /api/auth/logout in 1390ms (818 modules)
+ POST /api/auth/logout 200 in 1568ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /sign-in. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /sign-in 200 in 355ms

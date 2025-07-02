@@ -1,0 +1,23 @@
+
+> edulynx-ecosystem@2.0.0 dev /Users/derahmanyelo/Documents/GitHub/EduLynx
+> next dev
+
+  ▲ Next.js 14.2.30
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 4.5s
+ ✓ Compiled /src/middleware in 236ms (72 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 4.2s (1349 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 4710ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 105ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /?id=c9b4a5bf-faaa-4103-a170-fec8052e79f4&vscodeBrowserReqId=1750920497907 200 in 63ms
+[?25h

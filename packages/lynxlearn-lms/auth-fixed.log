@@ -1,0 +1,10 @@
+
+> lynxlearn-lms@1.0.0 dev
+> next dev -p 3001
+
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3001
+   - Environments: .env
+
+ ✓ Ready in 5.9s
+[?25h

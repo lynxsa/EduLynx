@@ -1,0 +1,934 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// USER MANAGEMENT & AUTHENTICATION
+// =============================================================================
+
+model User {
+    id                String    @id @default(cuid())
+    email             String    @unique
+    emailVerified     DateTime?
+    name              String?
+    image             String?
+    hashedPassword    String?
+    role              UserRole  @default(STUDENT)
+    isActive          Boolean   @default(true)
+    lastLoginAt       DateTime?
+    preferredLanguage String    @default("english")
+    timezone          String    @default("Africa/Johannesburg")
+    createdAt         DateTime  @default(now())
+    updatedAt         DateTime  @updatedAt
+
+    // Profile Information
+    profile UserProfile?
+
+    // Academic Information
+    studentProfile StudentProfile?
+    teacherProfile TeacherProfile?
+    adminProfile   AdminProfile?
+
+    // Learning & Progress
+    enrollments  Enrollment[]
+    submissions  AssignmentSubmission[]
+    quizAttempts QuizAttempt[]
+    progress     LessonProgress[]
+    studyPoints  StudyPoint[]
+    achievements UserAchievement[]
+    studyGroups  StudyGroupMember[]
+
+    // Communication & Social
+    sentMessages     Message[]      @relation("MessageSender")
+    receivedMessages Message[]      @relation("MessageReceiver")
+    forumPosts       ForumPost[]
+    forumComments    ForumComment[]
+
+    // Content Creation (for teachers)
+    createdCourses     Course[]     @relation("CourseCreator")
+    createdLessons     Lesson[]     @relation("LessonCreator")
+    createdQuizzes     Quiz[]       @relation("QuizCreator")
+    createdAssignments Assignment[] @relation("AssignmentCreator")
+
+    // System
+    sessions Session[]
+    accounts Account[]
+
+    @@map("users")
+}
+
+model UserProfile {
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    firstName   String?
+    lastName    String?
+    dateOfBirth DateTime?
+    phoneNumber String?
+    address     String?
+    city        String?
+    province    String?
+    postalCode  String?
+    country     String    @default("South Africa")
+    avatar      String?
+    bio         String?
+
+    // Emergency Contact
+    emergencyContactName  String?
+    emergencyContactPhone String?
+    emergencyContactEmail String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("user_profiles")
+}
+
+model StudentProfile {
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    studentNumber String  @unique
+    grade         Int
+    currentYear   Int     @default(2025)
+    school        String?
+    parentEmail   String?
+    parentPhone   String?
+    medicalInfo   String?
+    specialNeeds  String?
+
+    // Academic Goals
+    targetGrade String? // A, B, C, etc.
+    careerGoals String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("student_profiles")
+}
+
+model TeacherProfile {
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    employeeNumber  String   @unique
+    department      String?
+    school          String?
+    qualifications  String[]
+    subjects        String[]
+    yearsExperience Int?
+    bio             String?
+
+    // Teaching Preferences
+    teachingStyle   String?
+    specializations String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("teacher_profiles")
+}
+
+model AdminProfile {
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    adminLevel  AdminLevel @default(SCHOOL)
+    permissions String[]
+    department  String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("admin_profiles")
+}
+
+// =============================================================================
+// CURRICULUM & COURSES
+// =============================================================================
+
+model Subject {
+    id          String  @id @default(cuid())
+    name        String
+    code        String  @unique // e.g., "MATH", "PHYS", "ENGL"
+    description String?
+    icon        String?
+    color       String? @default("#8B5CF6")
+    isCore      Boolean @default(true)
+    grades      Int[] // Grades this subject is offered for
+    language    String  @default("english")
+
+    // CAPS Alignment
+    capsCode     String?
+    learningArea String? // e.g., "Mathematics", "Languages", "Sciences"
+
+    courses Course[]
+    modules Module[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([name, language])
+    @@map("subjects")
+}
+
+model Course {
+    id          String  @id @default(cuid())
+    title       String
+    description String?
+    slug        String  @unique
+
+    // Basic Information
+    subjectId String
+    subject   Subject @relation(fields: [subjectId], references: [id])
+    grade     Int
+    semester  Int? // 1 or 2, null for full year
+
+    // Content & Structure
+    modules Module[]
+
+    // Metadata
+    thumbnailUrl String?
+    difficulty   DifficultyLevel @default(INTERMEDIATE)
+    language     String          @default("english")
+    tags         String[]
+
+    // Academic Information
+    credits          Int?
+    estimatedHours   Int?
+    prerequisites    String[]
+    learningOutcomes String[]
+
+    // Publishing
+    status      CourseStatus @default(DRAFT)
+    isPublished Boolean      @default(false)
+    publishedAt DateTime?
+
+    // Ownership
+    createdById String
+    createdBy   User   @relation("CourseCreator", fields: [createdById], references: [id])
+
+    // Student Engagement
+    enrollments Enrollment[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([subjectId, grade])
+    @@index([status, isPublished])
+    @@map("courses")
+}
+
+model Module {
+    id          String  @id @default(cuid())
+    title       String
+    description String?
+    orderIndex  Int
+
+    // Relationships
+    courseId  String?
+    course    Course?  @relation(fields: [courseId], references: [id])
+    subjectId String? // Allow modules to exist independently
+    subject   Subject? @relation(fields: [subjectId], references: [id])
+
+    lessons Lesson[]
+
+    // Metadata
+    estimatedHours Int?
+    difficulty     DifficultyLevel @default(INTERMEDIATE)
+
+    // CAPS Alignment
+    capsUnit           String?
+    learningObjectives String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([courseId, orderIndex])
+    @@map("modules")
+}
+
+model Lesson {
+    id          String  @id @default(cuid())
+    title       String
+    description String?
+    content     Json? // Rich content (text, media, etc.)
+    orderIndex  Int
+
+    // Relationships
+    moduleId String
+    module   Module @relation(fields: [moduleId], references: [id])
+
+    // Content
+    lessonType  LessonType @default(TEXT)
+    videoUrl    String?
+    audioUrl    String?
+    documentUrl String?
+    duration    Int? // in minutes
+
+    // Metadata
+    difficulty         DifficultyLevel @default(INTERMEDIATE)
+    tags               String[]
+    prerequisites      String[]
+    learningObjectives String[]
+
+    // Publishing
+    status      ContentStatus @default(DRAFT)
+    isPublished Boolean       @default(false)
+    publishedAt DateTime?
+
+    // Ownership
+    createdById String
+    createdBy   User   @relation("LessonCreator", fields: [createdById], references: [id])
+
+    // Student Engagement
+    progress    LessonProgress[]
+    quizzes     Quiz[]
+    assignments Assignment[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([moduleId, orderIndex])
+    @@map("lessons")
+}
+
+// =============================================================================
+// ASSESSMENTS
+// =============================================================================
+
+model Quiz {
+    id           String  @id @default(cuid())
+    title        String
+    description  String?
+    instructions String?
+
+    // Relationships
+    lessonId String?
+    lesson   Lesson? @relation(fields: [lessonId], references: [id])
+    courseId String? // Can be standalone or part of lesson
+
+    questions QuizQuestion[]
+    attempts  QuizAttempt[]
+
+    // Configuration
+    timeLimit          Int? // in minutes
+    allowedAttempts    Int     @default(3)
+    passingScore       Int     @default(70)
+    showCorrectAnswers Boolean @default(true)
+    shuffleQuestions   Boolean @default(false)
+    shuffleOptions     Boolean @default(false)
+
+    // Metadata
+    difficulty DifficultyLevel @default(INTERMEDIATE)
+    totalMarks Int             @default(0)
+
+    // Publishing
+    status      ContentStatus @default(DRAFT)
+    isPublished Boolean       @default(false)
+
+    // Ownership
+    createdById String
+    createdBy   User   @relation("QuizCreator", fields: [createdById], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("quizzes")
+}
+
+model QuizQuestion {
+    id     String @id @default(cuid())
+    quizId String
+    quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+    question     String
+    questionType QuestionType @default(MULTIPLE_CHOICE)
+    orderIndex   Int
+    marks        Int          @default(1)
+
+    // Options for multiple choice/multiple select
+    options QuizOption[]
+
+    // For other types
+    correctAnswer String?
+    explanation   String?
+    hint          String?
+
+    // Media
+    imageUrl String?
+    audioUrl String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([quizId, orderIndex])
+    @@map("quiz_questions")
+}
+
+model QuizOption {
+    id         String       @id @default(cuid())
+    questionId String
+    question   QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+    text        String
+    isCorrect   Boolean @default(false)
+    orderIndex  Int
+    explanation String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([questionId, orderIndex])
+    @@map("quiz_options")
+}
+
+model QuizAttempt {
+    id        String @id @default(cuid())
+    quizId    String
+    quiz      Quiz   @relation(fields: [quizId], references: [id])
+    studentId String
+    student   User   @relation(fields: [studentId], references: [id])
+
+    // Results
+    score      Int
+    totalMarks Int
+    percentage Float
+    passed     Boolean @default(false)
+
+    // Answers
+    answers Json // Store student answers
+
+    // Timing
+    startedAt   DateTime  @default(now())
+    submittedAt DateTime?
+    duration    Int? // in seconds
+
+    // Metadata
+    attemptNumber Int     @default(1)
+    isCompleted   Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([quizId, studentId])
+    @@map("quiz_attempts")
+}
+
+model Assignment {
+    id           String  @id @default(cuid())
+    title        String
+    description  String
+    instructions String?
+
+    // Relationships
+    lessonId String?
+    lesson   Lesson? @relation(fields: [lessonId], references: [id])
+    courseId String? // Can be standalone
+
+    // Configuration
+    dueDate               DateTime
+    totalMarks            Int      @default(100)
+    allowLateSubmission   Boolean  @default(true)
+    lateSubmissionPenalty Int? // percentage deduction per day
+
+    // Files & Resources
+    attachments String[] // URLs to files
+    rubric      Json? // Grading rubric
+
+    // Publishing
+    status      ContentStatus @default(DRAFT)
+    isPublished Boolean       @default(false)
+    publishedAt DateTime?
+
+    // Ownership
+    createdById String
+    createdBy   User   @relation("AssignmentCreator", fields: [createdById], references: [id])
+
+    submissions AssignmentSubmission[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("assignments")
+}
+
+model AssignmentSubmission {
+    id           String     @id @default(cuid())
+    assignmentId String
+    assignment   Assignment @relation(fields: [assignmentId], references: [id])
+    studentId    String
+    student      User       @relation(fields: [studentId], references: [id])
+
+    // Submission Content
+    content     String? // Text submission
+    attachments String[] // URLs to submitted files
+
+    // Grading
+    score      Int?
+    totalMarks Int?
+    feedback   String?
+    gradedAt   DateTime?
+    gradedById String?
+
+    // Status & Timing
+    status      SubmissionStatus @default(DRAFT)
+    submittedAt DateTime?
+    isLate      Boolean          @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([assignmentId, studentId])
+    @@map("assignment_submissions")
+}
+
+// =============================================================================
+// STUDENT PROGRESS & GAMIFICATION
+// =============================================================================
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  studentId String
+  courseId  String
+  student   User     @relation(fields: [studentId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  status      EnrollmentStatus @default(ACTIVE)
+  enrolledAt  DateTime         @default(now())
+  completedAt DateTime?
+
+  progressPercentage Float     @default(0)
+  lastAccessedAt     DateTime?
+
+  currentGrade String? // A, B, C, etc.
+  finalScore   Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, courseId])
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id        String @id @default(cuid())
+  studentId String
+  lessonId  String
+  student   User   @relation(fields: [studentId], references: [id])
+  lesson    Lesson @relation(fields: [lessonId], references: [id])
+
+  status             ProgressStatus @default(NOT_STARTED)
+  progressPercentage Float          @default(0)
+  timeSpent          Int            @default(0)
+
+  lastAccessedAt DateTime?
+  completedAt    DateTime?
+
+  @@unique([studentId, lessonId])
+  @@map("lesson_progress")
+}
+
+model StudyPoint {
+  id        String @id @default(cuid())
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id])
+  points    Int
+  category  PointCategory
+  reason    String
+
+  earnedAt DateTime @default(now())
+
+  @@map("study_points")
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  achievementId String
+  earnedAt DateTime @default(now())
+
+  @@map("user_achievements")
+}
+
+// =============================================================================
+// SOCIAL LEARNING & COMMUNICATION
+// =============================================================================
+
+model StudyGroup {
+    id          String  @id @default(cuid())
+    name        String
+    description String?
+
+    // Configuration
+    maxMembers Int     @default(10)
+    isPrivate  Boolean @default(false)
+    joinCode   String? @unique
+
+    // Relationships
+    subjectId String?
+    courseId  String?
+    grade     Int?
+
+    members  StudyGroupMember[]
+    messages Message[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("study_groups")
+}
+
+model StudyGroupMember {
+    id      String     @id @default(cuid())
+    groupId String
+    group   StudyGroup @relation(fields: [groupId], references: [id])
+    userId  String
+    user    User       @relation(fields: [userId], references: [id])
+
+    role     GroupRole @default(MEMBER)
+    joinedAt DateTime  @default(now())
+
+    @@unique([groupId, userId])
+    @@map("study_group_members")
+}
+
+model Message {
+    id      String @id @default(cuid())
+    content String
+
+    // Relationships
+    senderId     String
+    sender       User        @relation("MessageSender", fields: [senderId], references: [id])
+    receiverId   String? // For direct messages
+    receiver     User?       @relation("MessageReceiver", fields: [receiverId], references: [id])
+    studyGroupId String? // For group messages
+    studyGroup   StudyGroup? @relation(fields: [studyGroupId], references: [id])
+
+    // Message Type
+    messageType MessageType @default(TEXT)
+    attachments String[] // URLs to files
+
+    // Status
+    isRead Boolean   @default(false)
+    readAt DateTime?
+
+    sentAt DateTime @default(now())
+
+    @@index([senderId])
+    @@index([receiverId])
+    @@index([studyGroupId])
+    @@map("messages")
+}
+
+model ForumCategory {
+    id          String  @id @default(cuid())
+    name        String
+    description String?
+    icon        String?
+    color       String?
+    orderIndex  Int
+
+    // Access Control
+    allowedRoles UserRole[] @default([STUDENT, TEACHER, ADMIN])
+
+    posts ForumPost[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("forum_categories")
+}
+
+model ForumPost {
+    id      String @id @default(cuid())
+    title   String
+    content String
+
+    // Relationships
+    categoryId String
+    category   ForumCategory @relation(fields: [categoryId], references: [id])
+    authorId   String
+    author     User          @relation(fields: [authorId], references: [id])
+
+    comments ForumComment[]
+
+    // Engagement
+    views Int @default(0)
+    likes Int @default(0)
+
+    // Status
+    isPinned Boolean @default(false)
+    isLocked Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([categoryId])
+    @@map("forum_posts")
+}
+
+model ForumComment {
+    id      String @id @default(cuid())
+    content String
+
+    // Relationships
+    postId   String
+    post     ForumPost      @relation(fields: [postId], references: [id])
+    authorId String
+    author   User           @relation(fields: [authorId], references: [id])
+    parentId String? // For nested comments
+    parent   ForumComment?  @relation("CommentReplies", fields: [parentId], references: [id])
+    replies  ForumComment[] @relation("CommentReplies")
+
+    // Engagement
+    likes Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([postId])
+    @@map("forum_comments")
+}
+
+// =============================================================================
+// SYSTEM & ANALYTICS
+// =============================================================================
+
+model Notification {
+    id      String           @id @default(cuid())
+    userId  String
+    title   String
+    message String
+    type    NotificationType
+
+    // Context
+    relatedId   String? // ID of related entity
+    relatedType String? // Type of related entity
+    actionUrl   String? // Where to navigate when clicked
+
+    // Status
+    isRead Boolean   @default(false)
+    readAt DateTime?
+
+    createdAt DateTime @default(now())
+
+    @@index([userId, isRead])
+    @@map("notifications")
+}
+
+model SystemSetting {
+    id          String  @id @default(cuid())
+    key         String  @unique
+    value       String
+    description String?
+    category    String  @default("general")
+
+    updatedAt DateTime @updatedAt
+
+    @@map("system_settings")
+}
+
+model AuditLog {
+    id        String  @id @default(cuid())
+    userId    String?
+    action    String
+    entity    String
+    entityId  String?
+    oldValues Json?
+    newValues Json?
+    ipAddress String?
+    userAgent String?
+
+    createdAt DateTime @default(now())
+
+    @@index([userId])
+    @@index([entity, entityId])
+    @@map("audit_logs")
+}
+
+// =============================================================================
+// NEXT AUTH MODELS
+// =============================================================================
+
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String?
+    access_token      String?
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String?
+    session_state     String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@map("accounts")
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("sessions")
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+    @@map("verification_tokens")
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+enum UserRole {
+    STUDENT
+    TEACHER
+    ADMIN
+    SUPER_ADMIN
+}
+
+enum AdminLevel {
+    SCHOOL
+    DISTRICT
+    PROVINCIAL
+    NATIONAL
+}
+
+enum DifficultyLevel {
+    BEGINNER
+    INTERMEDIATE
+    ADVANCED
+}
+
+enum CourseStatus {
+    DRAFT
+    IN_REVIEW
+    PUBLISHED
+    ARCHIVED
+}
+
+enum ContentStatus {
+    DRAFT
+    IN_REVIEW
+    PUBLISHED
+    ARCHIVED
+}
+
+enum LessonType {
+    TEXT
+    VIDEO
+    AUDIO
+    INTERACTIVE
+    QUIZ
+    ASSIGNMENT
+}
+
+enum QuestionType {
+    MULTIPLE_CHOICE
+    MULTIPLE_SELECT
+    TRUE_FALSE
+    SHORT_ANSWER
+    ESSAY
+    FILL_IN_THE_BLANK
+    MATCHING
+    ORDERING
+}
+
+enum SubmissionStatus {
+    DRAFT
+    SUBMITTED
+    GRADED
+    RETURNED
+}
+
+enum EnrollmentStatus {
+    ACTIVE
+    COMPLETED
+    WITHDRAWN
+    SUSPENDED
+}
+
+enum ProgressStatus {
+    NOT_STARTED
+    IN_PROGRESS
+    COMPLETED
+    MASTERED
+}
+
+enum PointCategory {
+    LESSON_COMPLETION
+    QUIZ_SCORE
+    ASSIGNMENT_SUBMISSION
+    DAILY_LOGIN
+    STREAK
+    ACHIEVEMENT
+    BONUS
+}
+
+enum AchievementCategory {
+    ACADEMIC
+    PARTICIPATION
+    SOCIAL
+    STREAK
+    MILESTONE
+    SPECIAL
+}
+
+enum AchievementRarity {
+    BRONZE
+    SILVER
+    GOLD
+    PLATINUM
+    DIAMOND
+}
+
+enum GroupRole {
+    OWNER
+    MODERATOR
+    MEMBER
+}
+
+enum MessageType {
+    TEXT
+    IMAGE
+    VIDEO
+    AUDIO
+    DOCUMENT
+    LINK
+}
+
+enum NotificationType {
+    ASSIGNMENT_DUE
+    QUIZ_AVAILABLE
+    GRADE_RELEASED
+    MESSAGE_RECEIVED
+    ACHIEVEMENT_EARNED
+    COURSE_UPDATE
+    SYSTEM_ANNOUNCEMENT
+    STUDY_GROUP_INVITATION
+    FORUM_REPLY
+}

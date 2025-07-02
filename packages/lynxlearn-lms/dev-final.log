@@ -1,0 +1,35 @@
+
+> lynxlearn-lms@1.0.0 dev
+> next dev -p 3001
+
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3001
+
+ ✓ Ready in 5s
+ ○ Compiling /page ...
+ ✓ Compiled /page in 8.1s (662 modules)
+ ✓ Compiled in 1326ms (344 modules)
+ ○ Compiling /auth/login/page ...
+ ✓ Compiled /auth/login/page in 2.8s (666 modules)
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1210ms (155 modules)
+ ○ Compiling /auth/signin/page ...
+ ✓ Compiled /auth/signin/page in 2.4s (705 modules)
+ ✓ Compiled /api/auth/route in 392ms (377 modules)
+ ○ Compiling /study-groups/page ...
+ ✓ Compiled /study-groups/page in 6.5s (2002 modules)
+ ✓ Compiled in 1918ms (1018 modules)
+ ○ Compiling /not-found ...
+ ✓ Compiled /not-found in 902ms (2002 modules)
+ ✓ Compiled in 639ms (2002 modules)
+ ✓ Compiled in 1153ms (1018 modules)
+ ✓ Compiled in 1063ms (1997 modules)
+ ✓ Compiled in 1710ms (1018 modules)
+ ✓ Compiled in 3.2s (2017 modules)
+ ✓ Compiled in 2.6s (2017 modules)
+ ✓ Compiled in 1528ms (2146 modules)
+ ✓ Compiled in 2.4s (2005 modules)
+ ○ Compiling /not-found ...
+ ✓ Compiled /not-found in 736ms (1996 modules)
+ ✓ Compiled in 2.3s (1018 modules)
+[?25h

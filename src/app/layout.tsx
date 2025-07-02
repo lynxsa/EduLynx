@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/error/ErrorBoundary';
 import { GlobalErrorHandler } from '@/components/GlobalErrorHandler';
 import { AuthProvider } from '@/contexts/AuthContext';
 import '@/styles/enhanced-cards.css';
@@ -74,11 +74,11 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className} aria-label="EduLynx App Root">
-        <ErrorBoundary level="critical">
+        <ErrorBoundary>
           <GlobalErrorHandler>
             <ThemeProvider>
               <AuthProvider>
-                <ErrorBoundary level="page">{children}</ErrorBoundary>
+                <ErrorBoundary>{children}</ErrorBoundary>
               </AuthProvider>
             </ThemeProvider>
           </GlobalErrorHandler>

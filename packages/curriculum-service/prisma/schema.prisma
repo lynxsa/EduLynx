@@ -1,0 +1,45 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "./client"
+}
+
+model CurriculumSubject {
+    id          Int      @id @default(autoincrement())
+    name        String
+    grade       Int
+    description String?
+    imageUrl    String?
+    topics      Topic[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@unique([name, grade])
+}
+
+model Topic {
+    id          Int               @id @default(autoincrement())
+    title       String
+    description String?
+    subjectId   Int
+    orderIndex  Int
+    subject     CurriculumSubject @relation(fields: [subjectId], references: [id])
+    lessons     Lesson[]
+
+    @@index([subjectId, orderIndex])
+}
+
+model Lesson {
+    id         Int     @id @default(autoincrement())
+    title      String
+    content    String
+    videoUrl   String?
+    duration   Int?
+    difficulty String?
+    topicId    Int
+    topic      Topic   @relation(fields: [topicId], references: [id])
+}
