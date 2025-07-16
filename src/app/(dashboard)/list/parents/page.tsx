@@ -1,20 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { ModernTable } from '@/components/ui/ModernTable';
 import {
-  Phone,
-  Mail,
-  Users,
-  MapPin,
-  Calendar,
-  Briefcase,
-  Heart,
-  GraduationCap,
   Activity,
+  Briefcase,
+  GraduationCap,
+  Heart,
+  Mail,
+  MapPin,
+  Phone,
+  Users,
 } from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface Parent {
   id: string;
@@ -49,13 +48,21 @@ const ParentsPage = () => {
   useEffect(() => {
     const fetchParents = async () => {
       try {
-        const response = await fetch('/api/parents');
+        // Request all parents with a high limit to show full data instead of paginated
+        const response = await fetch('/api/parents?limit=2000&page=1');
         if (!response.ok) {
           throw new Error('Failed to fetch parents');
         }
         const data = await response.json();
-        setParents(data.data || data);
+
+        console.log('Parents API Response:', data);
+
+        // Handle response structure
+        const parentsData = data.data?.data || data.data || data;
+        console.log(`✅ Loaded ${parentsData.length} parents from database`);
+        setParents(parentsData);
       } catch (err) {
+        console.error('Error fetching parents:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);

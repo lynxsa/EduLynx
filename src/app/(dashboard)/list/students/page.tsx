@@ -61,19 +61,24 @@ const StudentsPage = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch('/api/students');
+        // Request all students with a high limit to show full data instead of paginated
+        const response = await fetch('/api/students?limit=2000&page=1');
         if (!response.ok) {
           throw new Error('Failed to fetch students');
         }
         const result = await response.json();
 
+        console.log('Students API Response:', result);
+
         // Handle paginated response structure
         if (result.success && result.data) {
           // If it's a paginated response, extract the data array
           const studentsData = result.data.data || result.data;
+          console.log(`✅ Loaded ${studentsData.length} students from database`);
           setStudents(Array.isArray(studentsData) ? studentsData : []);
         } else {
           // Fallback for direct array response
+          console.log(`✅ Loaded ${result.length} students (direct response)`);
           setStudents(Array.isArray(result) ? result : []);
         }
       } catch (err) {

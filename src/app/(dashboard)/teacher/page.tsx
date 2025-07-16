@@ -28,19 +28,32 @@ const TeacherPage = () => {
   const [upcomingLessons, setUpcomingLessons] = useState<any[]>([]);
   const [teacher, setTeacher] = useState<any>(null);
   const [students, setStudents] = useState<any[]>([]);
+  const [subjectPerformance, setSubjectPerformance] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // TODO: Replace with real teacherId from session/cookie
-        const response = await fetch('/api/dashboard/teacher?teacherId=teacher1');
+        const response = await fetch('/api/dashboard/teacher');
         if (response.ok) {
           const data = await response.json();
-          setMetrics(data.metrics);
+          console.log('Teacher Dashboard API Response:', data);
+
+          // Map the API response to our expected format
+          setMetrics({
+            totalAssignments: data.totalAssignments || 0,
+            totalExams: data.totalExams || 0,
+            totalStudents: data.myStudents || 0,
+            attendancePercentage: data.attendancePercentage || 0,
+            totalSubjects: data.totalSubjects || 0,
+            totalClasses: data.myClasses || 0,
+          });
           setUpcomingLessons(data.upcomingLessons || []);
-          setTeacher(data.teacher);
+          setTeacher(data.teacherInfo);
           setStudents(data.students || []);
+          setSubjectPerformance(data.subjectPerformance || []);
+        } else {
+          console.error('Teacher API response not OK:', response.status);
         }
       } catch (error) {
         console.error('Failed to fetch teacher data:', error);
@@ -51,7 +64,7 @@ const TeacherPage = () => {
     fetchData();
   }, []);
 
-  // Example data for charts (replace with real API data as available)
+  // Live data for charts from API
   const genderPieData = [
     {
       id: 'Male',
@@ -66,8 +79,17 @@ const TeacherPage = () => {
       color: '#f472b6',
     },
   ];
-  const passRatePerSubject: { subject: string; passRate: number }[] = [];
-  const topClasses: { className: string; avgScore: number }[] = [];
+
+  const passRatePerSubject = subjectPerformance.map(subject => ({
+    subject: subject.subjectName,
+    passRate: subject.passRate || 0,
+  }));
+
+  // Generate top classes data from subject performance
+  const topClasses = subjectPerformance.map(subject => ({
+    className: subject.subjectName,
+    avgScore: subject.averageScore || 0,
+  }));
 
   if (loading) {
     return (
@@ -111,11 +133,14 @@ const TeacherPage = () => {
               )}
               {(upcomingLessons || []).map((lesson, idx) => (
                 <li key={lesson.id || idx} className="mb-2">
-                  <span className="font-semibold">{lesson.name}</span> &mdash; {lesson.class?.name}{' '}
-                  ({lesson.subject?.name})<br />
+                  <span className="font-semibold">{lesson.subject}</span> &mdash; {lesson.class}{' '}
+                  <br />
                   <span className="text-xs text-gray-500">
                     {lesson.startTime ? new Date(lesson.startTime).toLocaleString() : ''}
                   </span>
+                  {lesson.description && (
+                    <span className="text-sm text-gray-600 block">{lesson.description}</span>
+                  )}
                 </li>
               ))}
             </ul>

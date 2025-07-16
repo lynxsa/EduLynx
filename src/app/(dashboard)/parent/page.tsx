@@ -29,11 +29,18 @@ const ParentDashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // TODO: Replace with real parentId from session/cookie
-        const response = await fetch('/api/dashboard/parent?parentId=parent1');
+        const response = await fetch('/api/dashboard/parent');
         if (response.ok) {
           const data = await response.json();
-          setMetrics(data.metrics);
+          console.log('Parent Dashboard API Response:', data);
+          setMetrics(
+            data.metrics || {
+              totalChildren: 0,
+              notifications: 0,
+              overallAttendance: 0,
+              totalResults: 0,
+            }
+          );
           setChildren(data.children || []);
           setParent(data.parent);
           setUpcomingEvents(
@@ -61,6 +68,8 @@ const ParentDashboardPage = () => {
               description: a.description ?? '',
             }))
           );
+        } else {
+          console.error('Parent API response not OK:', response.status);
         }
       } catch (error) {
         console.error('Failed to fetch parent data:', error);

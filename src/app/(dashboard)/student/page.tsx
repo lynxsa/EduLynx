@@ -31,11 +31,19 @@ const StudentPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // TODO: Replace with real studentId from session/cookie
-        const response = await fetch('/api/dashboard/student?studentId=student1');
+        const response = await fetch('/api/dashboard/student');
         if (response.ok) {
           const data = await response.json();
-          setMetrics(data.metrics);
+          console.log('Student Dashboard API Response:', data);
+          setMetrics(
+            data.metrics || {
+              totalAssignments: 0,
+              totalExams: 0,
+              attendancePercentage: 0,
+              totalResults: 0,
+              className: '',
+            }
+          );
           setUpcomingAssignments(data.upcomingAssignments || []);
           setRecentResults(data.recentResults || []);
           setStudent(data.student);
@@ -64,6 +72,8 @@ const StudentPage = () => {
               description: a.description ?? '',
             }))
           );
+        } else {
+          console.error('Student API response not OK:', response.status);
         }
       } catch (error) {
         console.error('Failed to fetch student data:', error);

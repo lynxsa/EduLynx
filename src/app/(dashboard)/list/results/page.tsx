@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { ModernTable } from '@/components/ui/ModernTable';
-import { Trophy, User, GraduationCap, BookOpen, TrendingUp, FileText } from 'lucide-react';
+import { BookOpen, FileText, GraduationCap, TrendingUp, Trophy, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 type ResultRow = {
   id: number;
@@ -32,13 +32,21 @@ const ResultsPage = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await fetch('/api/results');
+        // Request all results with a high limit to show full data instead of paginated
+        const response = await fetch('/api/results?limit=2000&page=1');
         if (!response.ok) {
           throw new Error('Failed to fetch results');
         }
         const data = await response.json();
-        setResults(data.data || data);
+
+        console.log('Results API Response:', data);
+
+        // Handle response structure
+        const resultsData = data.data?.data || data.data || data;
+        console.log(`✅ Loaded ${resultsData.length} results from database`);
+        setResults(resultsData);
       } catch (err) {
+        console.error('Error fetching results:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);

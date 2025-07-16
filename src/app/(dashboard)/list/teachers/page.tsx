@@ -1,24 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ModernTable } from '@/components/ui/ModernTable';
+import { Activity, Award, BookOpen, Briefcase, Calendar, Mail, Phone, Users } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ModernTable } from '@/components/ui/ModernTable';
-import {
-  Eye,
-  Edit,
-  Trash2,
-  Phone,
-  Mail,
-  MapPin,
-  GraduationCap,
-  Calendar,
-  Activity,
-  BookOpen,
-  Users,
-  Award,
-  Briefcase,
-} from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface Teacher {
   id: string;
@@ -60,13 +46,21 @@ const TeachersPage = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const response = await fetch('/api/teachers');
+        // Request all teachers with a high limit to show full data instead of paginated
+        const response = await fetch('/api/teachers?limit=2000&page=1');
         if (!response.ok) {
           throw new Error('Failed to fetch teachers');
         }
         const data = await response.json();
-        setTeachers(data.data || data);
+
+        console.log('Teachers API Response:', data);
+
+        // Handle response structure
+        const teachersData = data.data?.data || data.data || data;
+        console.log(`✅ Loaded ${teachersData.length} teachers from database`);
+        setTeachers(teachersData);
       } catch (err) {
+        console.error('Error fetching teachers:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);

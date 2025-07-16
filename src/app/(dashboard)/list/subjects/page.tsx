@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { ModernTable } from '@/components/ui/ModernTable';
-import { BookOpen, Users, Clock, Award, TrendingUp, Activity, Hash } from 'lucide-react';
+import { Activity, Award, BookOpen, Clock, Hash, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface Subject {
   id: number;
@@ -41,13 +41,21 @@ const SubjectsPage = () => {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await fetch('/api/subjects');
+        // Request all subjects with a high limit to show full data instead of paginated
+        const response = await fetch('/api/subjects?limit=2000&page=1');
         if (!response.ok) {
           throw new Error('Failed to fetch subjects');
         }
         const data = await response.json();
-        setSubjects(data.data || data);
+
+        console.log('Subjects API Response:', data);
+
+        // Handle response structure
+        const subjectsData = data.data?.data || data.data || data;
+        console.log(`✅ Loaded ${subjectsData.length} subjects from database`);
+        setSubjects(subjectsData);
       } catch (err) {
+        console.error('Error fetching subjects:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);

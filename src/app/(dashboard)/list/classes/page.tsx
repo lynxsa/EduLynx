@@ -49,13 +49,21 @@ const ClassesPage = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch('/api/classes');
+        // Request all classes with a high limit to show full data instead of paginated
+        const response = await fetch('/api/classes?limit=2000&page=1');
         if (!response.ok) {
           throw new Error('Failed to fetch classes');
         }
         const data = await response.json();
-        setClasses(data.data || data);
+
+        console.log('Classes API Response:', data);
+
+        // Handle response structure
+        const classesData = data.data?.data || data.data || data;
+        console.log(`✅ Loaded ${classesData.length} classes from database`);
+        setClasses(classesData);
       } catch (err) {
+        console.error('Error fetching classes:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);

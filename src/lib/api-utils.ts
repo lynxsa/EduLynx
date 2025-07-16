@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentUser, TokenPayload, hasPermission } from './auth';
+import { getCurrentUser, hasPermission, TokenPayload } from './auth';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -144,7 +144,8 @@ export interface PaginationParams {
 export function getPaginationParams(request: NextRequest): PaginationParams {
   const url = new URL(request.url);
   const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'));
-  const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '10')));
+  // Increased limit cap from 100 to 5000 to allow full dataset display
+  const limit = Math.min(5000, Math.max(1, parseInt(url.searchParams.get('limit') || '10')));
   const skip = (page - 1) * limit;
 
   return { page, limit, skip };
