@@ -19,38 +19,38 @@ import { useEffect, useState } from 'react';
 import EduLynxLogo from '../../components/EduLynxLogo';
 import StandardLoadingScreen from '../../components/StandardLoadingScreen';
 
-// Demo credentials for quick login
+// Demo credentials for quick login - Updated with South African database
 const demoCredentials = [
   {
     title: 'Admin',
     email: 'admin@lynxacademy.co.za',
-    password: 'adminpass',
+    password: 'admin123',
     icon: ShieldCheck,
     description: 'Derah Manyelo - System Admin',
     gradient: 'from-purple-500 to-indigo-600',
   },
   {
     title: 'Teacher',
-    email: 'teacher1@lynxacademy.co.za',
-    password: 'teacherpass',
+    email: 'nomsa.dlamini@lynxacademy.co.za',
+    password: 'teacher123',
     icon: GraduationCap,
-    description: 'Naledi Mokoena - Mathematics',
+    description: 'Nomsa Dlamini - Mathematics',
     gradient: 'from-blue-500 to-cyan-600',
   },
   {
     title: 'Parent',
-    email: 'parent1@lynxacademy.co.za',
-    password: 'parentpass',
+    email: 'amy.singh.0@gmail.com',
+    password: 'parent123',
     icon: Users,
-    description: 'Sipho Ndlovu - Parent',
+    description: 'Amy Singh - Parent',
     gradient: 'from-green-500 to-emerald-600',
   },
   {
     title: 'Student',
-    email: 'student1@lynxacademy.co.za',
-    password: 'studentpass',
+    email: 'johann.singh.8a.0@student.lynxacademy.co.za',
+    password: 'student123',
     icon: UserCheck,
-    description: 'Amahle Ndlovu - Grade 8',
+    description: 'Johann Singh - Grade 8A',
     gradient: 'from-orange-500 to-red-600',
   },
 ];

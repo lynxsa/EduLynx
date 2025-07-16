@@ -1,11 +1,1 @@
-{
-  "/not-found": "app/not-found.js",
-  "/auth/signin/page": "app/auth/signin/page.js",
-  "/courses/page": "app/courses/page.js",
-  "/courses/[id]/page": "app/courses/[id]/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/leaderboard/page": "app/leaderboard/page.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/api/courses/route": "app/api/courses/route.js",
-  "/api/subjects/route": "app/api/subjects/route.js"
-}
+{}

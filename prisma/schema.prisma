@@ -73,6 +73,7 @@ model Subject {
   lessons   Lesson[]
   projects  Project[]
   teachers  SubjectToTeacher[]
+  students  StudentSubject[]
 }
 
 model Teacher {
@@ -119,23 +120,23 @@ model SubjectToTeacher {
 }
 
 model Student {
-  id                    String         @id @default(uuid())
-  username              String         @unique
+  id                    String           @id @default(uuid())
+  username              String           @unique
   name                  String
   surname               String
-  email                 String         @unique
-  phone                 String         @unique
+  email                 String           @unique
+  phone                 String           @unique
   address               String
   img                   String?
   bloodType             String
   sex                   UserSex
-  createdAt             DateTime       @default(now())
+  createdAt             DateTime         @default(now())
   birthday              DateTime
   parentId              String?
   classId               Int?
   gradeId               Int?
   schoolId              Int?
-  userId                String?        @unique
+  userId                String?          @unique
   admissionYear         Int?
   allergies             String?
   emergencyContactName  String?
@@ -148,17 +149,18 @@ model Student {
   profileImage          String?
   specialNeeds          String?
   status                String?
-  attendances           Attendance[]   @relation("StudentAttendances")
+  attendances           Attendance[]     @relation("StudentAttendances")
   medicalRecord         MedicalRecord?
-  quizAttempts          QuizAttempt[]  @relation("StudentQuizAttempts")
-  results               Result[]       @relation("StudentResults")
-  class                 Class?         @relation("ClassStudents", fields: [classId], references: [id])
-  grade                 Grade?         @relation(fields: [gradeId], references: [id])
-  parent                Parent?        @relation(fields: [parentId], references: [id])
-  school                School?        @relation(fields: [schoolId], references: [id])
-  user                  User?          @relation("StudentUser", fields: [userId], references: [id], onDelete: Cascade)
-  submissions           Submission[]   @relation("StudentSubmissions")
-  projects              Project[]      @relation("ProjectStudents")
+  quizAttempts          QuizAttempt[]    @relation("StudentQuizAttempts")
+  results               Result[]         @relation("StudentResults")
+  studentSubjects       StudentSubject[]
+  class                 Class?           @relation("ClassStudents", fields: [classId], references: [id])
+  grade                 Grade?           @relation(fields: [gradeId], references: [id])
+  parent                Parent?          @relation(fields: [parentId], references: [id])
+  school                School?          @relation(fields: [schoolId], references: [id])
+  user                  User?            @relation("StudentUser", fields: [userId], references: [id], onDelete: Cascade)
+  submissions           Submission[]     @relation("StudentSubmissions")
+  projects              Project[]        @relation("ProjectStudents")
 }
 
 model MedicalRecord {
@@ -442,6 +444,18 @@ model Project {
   @@index([teacherId])
   @@index([dueDate])
   @@index([status])
+}
+
+model StudentSubject {
+  id        Int      @id @default(autoincrement())
+  studentId String
+  subjectId Int
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, subjectId])
+  @@map("StudentSubject")
 }
 
 enum UserSex {
