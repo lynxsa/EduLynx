@@ -1,7 +1,9 @@
 'use client';
 
 import { ModernTable } from '@/components/ui/ModernTable';
+import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, FileText, GraduationCap, TrendingUp, Trophy, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type ResultRow = {
@@ -28,34 +30,52 @@ const ResultsPage = () => {
   const [results, setResults] = useState<ResultRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  // Redirect if not authenticated or authorized
+  useEffect(() => {
+    if (!isLoading && (!user || !['ADMIN', 'TEACHER'].includes(user.role))) {
+      router.push('/sign-in');
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        // **ADMIN DASHBOARD - Live Data Fetch**
+        // **ROLE-BASED ACCESS**: Use role and userId for filtered data
+        const roleParam = user?.role ? `role=${user.role}` : '';
+        const userIdParam = user?.id ? `userId=${user.id}` : '';
+        const params = [roleParam, userIdParam].filter(Boolean).join('&');
+
         // For admin users, fetch all results with role-based access
-        const response = await fetch('/api/results');
+        const response = await fetch(`/api/results${params ? `?${params}` : ''}`);
         if (!response.ok) {
           throw new Error('Failed to fetch results');
         }
         const data = await response.json();
 
-        console.log('✅ [Admin Results] API Response:', data);
+        console.log(`✅ [${user?.role} Results] API Response:`, data);
 
         // Handle response structure from role-based API
         const resultsData = data.data || data;
-        console.log(`✅ [Admin Results] Loaded ${resultsData.length} results from database`);
+        console.log(
+          `✅ [${user?.role} Results] Loaded ${resultsData.length} results from database`
+        );
         setResults(resultsData);
       } catch (err) {
-        console.error('❌ [Admin Results] Error fetching results:', err);
+        console.error(`❌ [${user?.role} Results] Error fetching results:`, err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchResults();
-  }, []);
+    // Only fetch if user is authenticated and authorized
+    if (!isLoading && user && ['ADMIN', 'TEACHER'].includes(user.role)) {
+      fetchResults();
+    }
+  }, [user, isLoading]);
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600 bg-green-100';

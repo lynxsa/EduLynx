@@ -61,8 +61,12 @@ const StudentsPage = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        // Request all students with a high limit to show full data instead of paginated
-        const response = await fetch('/api/students?limit=2000&page=1');
+        // **ROLE-BASED ACCESS**: Use role and userId for filtered data
+        const roleParam = user?.role ? `&role=${user.role}` : '';
+        const userIdParam = user?.id ? `&userId=${user.id}` : '';
+
+        // Request students based on user role with high limit for full data
+        const response = await fetch(`/api/students?limit=2000&page=1${roleParam}${userIdParam}`);
         if (!response.ok) {
           throw new Error('Failed to fetch students');
         }

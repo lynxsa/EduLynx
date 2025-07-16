@@ -1,7 +1,9 @@
 'use client';
 
 import { ModernTable } from '@/components/ui/ModernTable';
+import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, Calendar, Clock, GraduationCap, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 // Assignment type based on Prisma model
@@ -23,32 +25,48 @@ const AssignmentsPage = () => {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  // Redirect if not authenticated or authorized
+  useEffect(() => {
+    if (!isLoading && (!user || !['ADMIN', 'TEACHER'].includes(user.role))) {
+      router.push('/sign-in');
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        // **ADMIN DASHBOARD - Live Data Fetch**
-        console.log('🔄 [Admin Assignments] Fetching live assignment data...');
-        const response = await fetch('/api/assignments');
+        // **ROLE-BASED ACCESS**: Use role and userId for filtered data
+        const roleParam = user?.role ? `role=${user.role}` : '';
+        const userIdParam = user?.id ? `userId=${user.id}` : '';
+        const params = [roleParam, userIdParam].filter(Boolean).join('&');
+
+        console.log(`🔄 [${user?.role} Assignments] Fetching live assignment data...`);
+        const response = await fetch(`/api/assignments${params ? `?${params}` : ''}`);
         if (!response.ok) {
           throw new Error('Failed to fetch assignments');
         }
         const data = await response.json();
-        console.log('✅ [Admin Assignments] API Response:', data);
+        console.log(`✅ [${user?.role} Assignments] API Response:`, data);
         console.log(
-          `✅ [Admin Assignments] Loaded ${data.data?.length || data.length} assignments from database`
+          `✅ [${user?.role} Assignments] Loaded ${data.data?.length || data.length} assignments from database`
         );
         setAssignments(data.data || data);
       } catch (err) {
-        console.error('❌ [Admin Assignments] Error fetching assignments:', err);
+        console.error(`❌ [${user?.role} Assignments] Error fetching assignments:`, err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAssignments();
-  }, []);
+    // Only fetch if user is authenticated and authorized
+    if (!isLoading && user && ['ADMIN', 'TEACHER'].includes(user.role)) {
+      fetchAssignments();
+    }
+  }, [user, isLoading]);
 
   const columns = [
     {

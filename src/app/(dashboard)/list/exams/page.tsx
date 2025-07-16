@@ -1,7 +1,9 @@
 'use client';
 
 import { ModernTable } from '@/components/ui/ModernTable';
+import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, Calendar, Clock, FileText, GraduationCap, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type ExamRow = {
@@ -22,22 +24,35 @@ const ExamsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [totalExams, setTotalExams] = useState(0);
   const [upcomingExams, setUpcomingExams] = useState(0);
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  // Redirect if not authenticated or authorized
+  useEffect(() => {
+    if (!isLoading && (!user || !['ADMIN', 'TEACHER'].includes(user.role))) {
+      router.push('/sign-in');
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        // **ADMIN DASHBOARD - Live Data Fetch**
-        console.log('🔄 [Admin Exams] Fetching live exam data...');
+        // **ROLE-BASED ACCESS**: Use role and userId for filtered data
+        const roleParam = user?.role ? `role=${user.role}` : '';
+        const userIdParam = user?.id ? `userId=${user.id}` : '';
+        const params = [roleParam, userIdParam].filter(Boolean).join('&');
+
+        console.log(`🔄 [${user?.role} Exams] Fetching live exam data...`);
         setLoading(true);
         setError(null);
 
-        const response = await fetch('/api/exams');
+        const response = await fetch(`/api/exams${params ? `?${params}` : ''}`);
         if (!response.ok) {
           throw new Error('Failed to fetch exams');
         }
         const data = await response.json();
-        console.log('✅ [Admin Exams] API Response:', data);
-        console.log(`✅ [Admin Exams] Loaded ${data.length} exams from database`);
+        console.log(`✅ [${user?.role} Exams] API Response:`, data);
+        console.log(`✅ [${user?.role} Exams] Loaded ${data.length} exams from database`);
 
         setExams(data.data || data);
         setTotalExams(data.length);
@@ -49,14 +64,17 @@ const ExamsPage = () => {
 
         setLoading(false);
       } catch (err) {
-        console.error('❌ [Admin Exams] Error fetching exams:', err);
+        console.error(`❌ [${user?.role} Exams] Error fetching exams:`, err);
         setError(err instanceof Error ? err.message : 'An error occurred');
         setLoading(false);
       }
     };
 
-    fetchExams();
-  }, []);
+    // Only fetch if user is authenticated and authorized
+    if (!isLoading && user && ['ADMIN', 'TEACHER'].includes(user.role)) {
+      fetchExams();
+    }
+  }, [user, isLoading]);
 
   const columns = [
     {

@@ -1,7 +1,9 @@
 'use client';
 
 import { ModernTable } from '@/components/ui/ModernTable';
+import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, Clock, GraduationCap, MapPin } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type EventRow = {
@@ -20,22 +22,36 @@ const EventsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [totalEvents, setTotalEvents] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState(0);
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  // Redirect if not authenticated or authorized
+  useEffect(() => {
+    if (!isLoading && (!user || !['ADMIN', 'TEACHER'].includes(user.role))) {
+      router.push('/sign-in');
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        console.log('🔄 [Admin Events] Fetching live events data...');
+        // **ROLE-BASED ACCESS**: Use role and userId for filtered data
+        const roleParam = user?.role ? `role=${user.role}` : '';
+        const userIdParam = user?.id ? `userId=${user.id}` : '';
+        const params = [roleParam, userIdParam].filter(Boolean).join('&');
+
+        console.log(`🔄 [${user?.role} Events] Fetching live events data...`);
         setLoading(true);
         setError(null);
 
-        const response = await fetch('/api/events');
+        const response = await fetch(`/api/events${params ? `?${params}` : ''}`);
         if (!response.ok) {
           throw new Error('Failed to fetch events');
         }
         const data = await response.json();
 
-        console.log('✅ [Admin Events] API Response:', data);
-        console.log(`✅ [Admin Events] Loaded ${data.length} events from database`);
+        console.log(`✅ [${user?.role} Events] API Response:`, data);
+        console.log(`✅ [${user?.role} Events] Loaded ${data.length} events from database`);
 
         setEvents(data);
         setTotalEvents(data.length);
@@ -47,14 +63,17 @@ const EventsPage = () => {
 
         setLoading(false);
       } catch (err) {
-        console.error('❌ [Admin Events] Error fetching events:', err);
+        console.error(`❌ [${user?.role} Events] Error fetching events:`, err);
         setError(err instanceof Error ? err.message : 'An error occurred');
         setLoading(false);
       }
     };
 
-    fetchEvents();
-  }, []);
+    // Only fetch if user is authenticated and authorized
+    if (!isLoading && user && ['ADMIN', 'TEACHER'].includes(user.role)) {
+      fetchEvents();
+    }
+  }, [user, isLoading]);
 
   const columns = [
     {
