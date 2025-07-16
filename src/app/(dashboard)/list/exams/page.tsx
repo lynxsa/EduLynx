@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { ModernTable } from '@/components/ui/ModernTable';
-import { FileText, Clock, GraduationCap, User, BookOpen } from 'lucide-react';
+import { BookOpen, Clock, FileText, GraduationCap, User, Calendar } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 type ExamRow = {
   id: number;
@@ -20,19 +20,39 @@ const ExamsPage = () => {
   const [exams, setExams] = useState<ExamRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalExams, setTotalExams] = useState(0);
+  const [upcomingExams, setUpcomingExams] = useState(0);
 
   useEffect(() => {
     const fetchExams = async () => {
       try {
+        // **ADMIN DASHBOARD - Live Data Fetch**
+        console.log('🔄 [Admin Exams] Fetching live exam data...');
+        setLoading(true);
+        setError(null);
+        
         const response = await fetch('/api/exams');
         if (!response.ok) {
           throw new Error('Failed to fetch exams');
         }
         const data = await response.json();
+        console.log('✅ [Admin Exams] API Response:', data);
+        console.log(`✅ [Admin Exams] Loaded ${data.length} exams from database`);
+        
         setExams(data.data || data);
+        setTotalExams(data.length);
+        
+        // Calculate upcoming exams
+        const now = new Date();
+        const upcoming = data.filter((exam: ExamRow) => 
+          new Date(exam.startTime) > now
+        ).length;
+        setUpcomingExams(upcoming);
+        
+        setLoading(false);
       } catch (err) {
+        console.error('❌ [Admin Exams] Error fetching exams:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
         setLoading(false);
       }
     };
@@ -171,6 +191,63 @@ const ExamsPage = () => {
 
   return (
     <div className="p-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Total Exams</p>
+              <p className="text-2xl font-semibold text-gray-900">{totalExams}</p>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-6 h-6 text-blue-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Upcoming Exams</p>
+              <p className="text-2xl font-semibold text-gray-900">{upcomingExams}</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <Clock className="w-6 h-6 text-green-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Completed Exams</p>
+              <p className="text-2xl font-semibold text-gray-900">{totalExams - upcomingExams}</p>
+            </div>
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+              <BookOpen className="w-6 h-6 text-gray-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">This Month</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {exams.filter(exam => {
+                  const examDate = new Date(exam.startTime);
+                  const now = new Date();
+                  return examDate.getMonth() === now.getMonth() && examDate.getFullYear() === now.getFullYear();
+                }).length}
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <Calendar className="w-6 h-6 text-purple-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <ModernTable
         data={exams}
         columns={columns}

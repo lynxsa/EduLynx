@@ -3,7 +3,7 @@
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface AttendanceItem {
   id: number;
@@ -32,21 +32,31 @@ const AttendancePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch('/api/attendance')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch attendance');
-        return res.json();
-      })
-      .then(data => {
+    const fetchAttendance = async () => {
+      try {
+        // **ADMIN DASHBOARD - Live Data Fetch**
+        console.log('🔄 [Admin Attendance] Fetching live attendance data...');
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch('/api/attendance');
+        if (!response.ok) {
+          throw new Error('Failed to fetch attendance');
+        }
+
+        const data = await response.json();
+        console.log('✅ [Admin Attendance] API Response:', data);
+        console.log(`✅ [Admin Attendance] Loaded ${data.length} attendance records from database`);
         setAttendance(data);
         setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message || 'Unknown error');
+      } catch (err) {
+        console.error('❌ [Admin Attendance] Error fetching attendance:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
         setLoading(false);
-      });
+      }
+    };
+
+    fetchAttendance();
   }, []);
 
   const filteredAttendance = attendance.filter(

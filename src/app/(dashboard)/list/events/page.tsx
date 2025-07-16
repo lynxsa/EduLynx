@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { ModernTable } from '@/components/ui/ModernTable';
 import { Calendar, Clock, GraduationCap, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 type EventRow = {
   id: number;
@@ -18,19 +18,37 @@ const EventsPage = () => {
   const [events, setEvents] = useState<EventRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalEvents, setTotalEvents] = useState(0);
+  const [upcomingEvents, setUpcomingEvents] = useState(0);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        console.log('🔄 [Admin Events] Fetching live events data...');
+        setLoading(true);
+        setError(null);
+
         const response = await fetch('/api/events');
         if (!response.ok) {
           throw new Error('Failed to fetch events');
         }
         const data = await response.json();
-        setEvents(data.data || data);
+
+        console.log('✅ [Admin Events] API Response:', data);
+        console.log(`✅ [Admin Events] Loaded ${data.length} events from database`);
+
+        setEvents(data);
+        setTotalEvents(data.length);
+
+        // Calculate upcoming events
+        const now = new Date();
+        const upcoming = data.filter((event: EventRow) => new Date(event.startTime) > now).length;
+        setUpcomingEvents(upcoming);
+
+        setLoading(false);
       } catch (err) {
+        console.error('❌ [Admin Events] Error fetching events:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
         setLoading(false);
       }
     };
@@ -160,6 +178,68 @@ const EventsPage = () => {
 
   return (
     <div className="p-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Total Events</p>
+              <p className="text-2xl font-semibold text-gray-900">{totalEvents}</p>
+            </div>
+            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <Calendar className="w-6 h-6 text-indigo-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Upcoming Events</p>
+              <p className="text-2xl font-semibold text-gray-900">{upcomingEvents}</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <Clock className="w-6 h-6 text-green-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Past Events</p>
+              <p className="text-2xl font-semibold text-gray-900">{totalEvents - upcomingEvents}</p>
+            </div>
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+              <Calendar className="w-6 h-6 text-gray-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">This Month</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {
+                  events.filter(event => {
+                    const eventDate = new Date(event.startTime);
+                    const now = new Date();
+                    return (
+                      eventDate.getMonth() === now.getMonth() &&
+                      eventDate.getFullYear() === now.getFullYear()
+                    );
+                  }).length
+                }
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <Calendar className="w-6 h-6 text-blue-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <ModernTable
         data={events}
         columns={columns}

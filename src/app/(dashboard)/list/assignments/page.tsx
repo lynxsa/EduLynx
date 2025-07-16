@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { ModernTable } from '@/components/ui/ModernTable';
-import { BookOpen, Calendar, Clock, User, GraduationCap } from 'lucide-react';
+import { BookOpen, Calendar, Clock, GraduationCap, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 // Assignment type based on Prisma model
 interface Assignment {
@@ -27,13 +27,20 @@ const AssignmentsPage = () => {
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
+        // **ADMIN DASHBOARD - Live Data Fetch**
+        console.log('🔄 [Admin Assignments] Fetching live assignment data...');
         const response = await fetch('/api/assignments');
         if (!response.ok) {
           throw new Error('Failed to fetch assignments');
         }
         const data = await response.json();
+        console.log('✅ [Admin Assignments] API Response:', data);
+        console.log(
+          `✅ [Admin Assignments] Loaded ${data.data?.length || data.length} assignments from database`
+        );
         setAssignments(data.data || data);
       } catch (err) {
+        console.error('❌ [Admin Assignments] Error fetching assignments:', err);
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);

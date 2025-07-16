@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, useMemo } from 'react';
 import {
+  ArrowUpDown,
   ChevronDown,
   ChevronUp,
-  Search,
-  Filter,
   Download,
-  Eye,
   Edit,
+  Eye,
+  Filter,
+  Search,
   Trash2,
-  MoreHorizontal,
-  ArrowUpDown,
 } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 interface Column<T> {
   key: string;
@@ -57,6 +56,7 @@ export function ModernTable<T extends Record<string, any>>({
 
   // Filter data based on search term
   const filteredData = useMemo(() => {
+    if (!data || !Array.isArray(data)) return [];
     if (!searchTerm) return data;
 
     return data.filter(item =>
@@ -69,6 +69,7 @@ export function ModernTable<T extends Record<string, any>>({
 
   // Sort data
   const sortedData = useMemo(() => {
+    if (!Array.isArray(filteredData)) return [];
     if (!sortField) return filteredData;
 
     return [...filteredData].sort((a, b) => {
@@ -83,11 +84,12 @@ export function ModernTable<T extends Record<string, any>>({
 
   // Paginate data
   const paginatedData = useMemo(() => {
+    if (!Array.isArray(sortedData)) return [];
     const startIndex = (currentPage - 1) * itemsPerPage;
     return sortedData.slice(startIndex, startIndex + itemsPerPage);
   }, [sortedData, currentPage, itemsPerPage]);
 
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+  const totalPages = Math.ceil((sortedData?.length || 0) / itemsPerPage);
 
   const handleSort = (field: string) => {
     if (sortField === field) {

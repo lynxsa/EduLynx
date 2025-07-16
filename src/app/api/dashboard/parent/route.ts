@@ -1,13 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import {
   calculateAttendancePercentage,
-  calculateStudentAverageScore,
-  calculateAttendanceTrend,
-  calculateSubjectPerformance,
   calculateAttendanceTrends,
   calculatePerformanceTrends,
+  calculateStudentAverageScore,
 } from '@/lib/calculations';
+import { getAuthorizedResults, getAuthorizedStudents } from '@/lib/role-based-access';
+import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
@@ -35,6 +34,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // **OPERATION VOLCANOFOUNTAIN - PHASE 4: Parent Role-Based Access**
+    console.log(`🏠 [Parent Dashboard] Fetching data for parent: ${parentId}`);
+
     // Get parent info
     const parent = await prisma.parent.findUnique({
       where: { id: parentId },
@@ -53,49 +55,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get children with comprehensive data
-    const children = await prisma.student.findMany({
-      where: { parentId },
-      include: {
-        class: {
-          include: {
-            grade: true,
-          },
-        },
-        grade: true,
-        results: {
-          include: {
-            exam: {
-              include: {
-                lesson: {
-                  include: {
-                    subject: true,
-                  },
-                },
-              },
-            },
-            assignment: {
-              include: {
-                lesson: {
-                  include: {
-                    subject: true,
-                  },
-                },
-              },
-            },
-          },
-          orderBy: {
-            id: 'desc',
-          },
-          take: 10, // Last 10 results
-        },
-        attendances: {
-          orderBy: {
-            date: 'desc',
-          },
-          take: 30, // Last 30 days
-        },
-      },
+    // **OPERATION VOLCANOFOUNTAIN - PHASE 4: Use Role-Based Access for Children**
+    // Get children using authorized access system to ensure parent sees only their children
+    const children = await getAuthorizedStudents({
+      role: 'PARENT',
+      userId: parentId,
+    });
+
+    console.log(`✅ [Parent Dashboard] Found ${children.length} children for parent ${parentId}`);
+
+    // Get additional results data for children using role-based access
+    const childrenResults = await getAuthorizedResults({
+      role: 'PARENT',
+      userId: parentId,
     });
 
     // Calculate comprehensive metrics for each child

@@ -54,8 +54,29 @@ const menuItems: MenuSection[] = [
       {
         icon: <Home className="w-5 h-5" />,
         label: 'Dashboard',
-        href: '/admin',
-        visible: ['admin', 'teacher', 'student', 'parent'],
+        href: '/admin', // Default for admin
+        visible: ['admin'],
+        badge: 'New',
+      },
+      {
+        icon: <Home className="w-5 h-5" />,
+        label: 'Dashboard',
+        href: '/teacher', // **VOLCANOFOUNTAIN: Teacher-specific dashboard**
+        visible: ['teacher'],
+        badge: 'New',
+      },
+      {
+        icon: <Home className="w-5 h-5" />,
+        label: 'Dashboard',
+        href: '/student', // **VOLCANOFOUNTAIN: Student-specific dashboard**
+        visible: ['student'],
+        badge: 'New',
+      },
+      {
+        icon: <Home className="w-5 h-5" />,
+        label: 'Dashboard',
+        href: '/parent', // **VOLCANOFOUNTAIN: Parent-specific dashboard**
+        visible: ['parent'],
         badge: 'New',
       },
     ],
@@ -68,19 +89,25 @@ const menuItems: MenuSection[] = [
         icon: <Users className="w-5 h-5" />,
         label: 'Teachers',
         href: '/list/teachers',
-        visible: ['admin', 'teacher'],
+        visible: ['admin'], // **VOLCANOFOUNTAIN: Only admin sees all teachers**
       },
       {
         icon: <GraduationCap className="w-5 h-5" />,
         label: 'Students',
         href: '/list/students',
-        visible: ['admin', 'teacher'],
+        visible: ['admin', 'teacher'], // **VOLCANOFOUNTAIN: Teacher sees only their students**
       },
       {
         icon: <UserCheck className="w-5 h-5" />,
         label: 'Parents',
         href: '/list/parents',
-        visible: ['admin', 'teacher'],
+        visible: ['admin'], // **VOLCANOFOUNTAIN: Only admin manages parents**
+      },
+      {
+        icon: <User className="w-5 h-5" />,
+        label: 'My Children',
+        href: '/list/students',
+        visible: ['parent'], // **VOLCANOFOUNTAIN: Parent sees only their children**
       },
     ],
   },
@@ -104,43 +131,61 @@ const menuItems: MenuSection[] = [
         icon: <BookOpen className="w-5 h-5" />,
         label: 'Subjects',
         href: '/list/subjects',
-        visible: ['admin'],
+        visible: ['admin'], // **VOLCANOFOUNTAIN: Only admin manages subjects**
       },
       {
         icon: <School className="w-5 h-5" />,
         label: 'Classes',
         href: '/list/classes',
-        visible: ['admin', 'teacher'],
+        visible: ['admin', 'teacher'], // **VOLCANOFOUNTAIN: Teacher sees only their classes**
       },
       {
         icon: <Calendar className="w-5 h-5" />,
         label: 'Lessons',
         href: '/list/lessons',
-        visible: ['admin', 'teacher'],
+        visible: ['admin', 'teacher'], // **VOLCANOFOUNTAIN: Teacher sees only their lessons**
       },
       {
         icon: <ClipboardCheck className="w-5 h-5" />,
         label: 'Exams',
         href: '/list/exams',
-        visible: ['admin', 'teacher', 'student', 'parent'],
+        visible: ['admin', 'teacher', 'student', 'parent'], // **VOLCANOFOUNTAIN: Role-filtered data**
       },
       {
         icon: <FileText className="w-5 h-5" />,
         label: 'Assignments',
         href: '/list/assignments',
-        visible: ['admin', 'teacher', 'student', 'parent'],
+        visible: ['admin', 'teacher', 'student', 'parent'], // **VOLCANOFOUNTAIN: Role-filtered data**
       },
       {
         icon: <BarChart3 className="w-5 h-5" />,
         label: 'Results',
         href: '/list/results',
-        visible: ['admin', 'teacher', 'student', 'parent'],
+        visible: ['admin', 'teacher', 'student', 'parent'], // **VOLCANOFOUNTAIN: Role-filtered data**
       },
       {
         icon: <BarChart3 className="w-5 h-5" />,
         label: 'Attendance',
         href: '/list/attendance',
-        visible: ['admin', 'teacher', 'student', 'parent'],
+        visible: ['admin', 'teacher', 'student', 'parent'], // **VOLCANOFOUNTAIN: Role-filtered data**
+      },
+      {
+        icon: <Calendar className="w-5 h-5" />,
+        label: 'My Timetable',
+        href: '/teacher/timetable',
+        visible: ['teacher'], // **VOLCANOFOUNTAIN: Teacher-specific timetable**
+      },
+      {
+        icon: <TrendingUp className="w-5 h-5" />,
+        label: 'My Progress',
+        href: '/student/progress',
+        visible: ['student'], // **VOLCANOFOUNTAIN: Student-specific progress**
+      },
+      {
+        icon: <Users className="w-5 h-5" />,
+        label: 'My Students',
+        href: '/teacher/students',
+        visible: ['teacher'], // **VOLCANOFOUNTAIN: Teacher-specific student list**
       },
     ],
   },

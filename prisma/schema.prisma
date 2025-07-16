@@ -72,8 +72,8 @@ model Subject {
   updatedAt DateTime           @default(now()) @updatedAt
   lessons   Lesson[]
   projects  Project[]
-  teachers  SubjectToTeacher[]
   students  StudentSubject[]
+  teachers  SubjectToTeacher[]
 }
 
 model Teacher {
@@ -153,12 +153,12 @@ model Student {
   medicalRecord         MedicalRecord?
   quizAttempts          QuizAttempt[]    @relation("StudentQuizAttempts")
   results               Result[]         @relation("StudentResults")
-  studentSubjects       StudentSubject[]
   class                 Class?           @relation("ClassStudents", fields: [classId], references: [id])
   grade                 Grade?           @relation(fields: [gradeId], references: [id])
   parent                Parent?          @relation(fields: [parentId], references: [id])
   school                School?          @relation(fields: [schoolId], references: [id])
   user                  User?            @relation("StudentUser", fields: [userId], references: [id], onDelete: Cascade)
+  studentSubjects       StudentSubject[]
   submissions           Submission[]     @relation("StudentSubmissions")
   projects              Project[]        @relation("ProjectStudents")
 }
@@ -450,9 +450,9 @@ model StudentSubject {
   id        Int      @id @default(autoincrement())
   studentId String
   subjectId Int
+  createdAt DateTime @default(now())
   student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   subject   Subject  @relation(fields: [subjectId], references: [id])
-  createdAt DateTime @default(now())
 
   @@unique([studentId, subjectId])
   @@map("StudentSubject")
