@@ -7,6 +7,113 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(req.url);
     const format = searchParams.get('format'); // 'summary' or 'records'
+    const role = searchParams.get('role') as 'ADMIN' | 'TEACHER' | 'STUDENT' | 'PARENT';
+    const userId = searchParams.get('userId');
+
+    // **ROLE-BASED ACCESS**: Filter attendance records by user role
+    if (role && userId && (!format || format === 'records')) {
+      console.log(`🔧 [Attendance API] Fetching attendance records for ${role} ${userId}`);
+
+      let attendanceRecords;
+
+      switch (role) {
+        case 'ADMIN':
+          attendanceRecords = await prisma.attendance.findMany({
+            include: {
+              student: { select: { name: true, surname: true } },
+              lesson: {
+                include: {
+                  subject: { select: { name: true } },
+                  class: { select: { name: true } },
+                  teacher: { select: { name: true, surname: true } },
+                },
+              },
+            },
+            orderBy: { date: 'desc' },
+            take: 1000,
+          });
+          break;
+
+        case 'TEACHER':
+          // Teacher sees attendance for their lessons only
+          const teacherLessons = await prisma.lesson.findMany({
+            where: { teacherId: userId },
+            select: { id: true },
+          });
+
+          const lessonIds = teacherLessons.map(lesson => lesson.id);
+
+          attendanceRecords = await prisma.attendance.findMany({
+            where: { lessonId: { in: lessonIds } },
+            include: {
+              student: { select: { name: true, surname: true } },
+              lesson: {
+                include: {
+                  subject: { select: { name: true } },
+                  class: { select: { name: true } },
+                  teacher: { select: { name: true, surname: true } },
+                },
+              },
+            },
+            orderBy: { date: 'desc' },
+            take: 1000,
+          });
+          break;
+
+        case 'STUDENT':
+          // Student sees only their own attendance
+          attendanceRecords = await prisma.attendance.findMany({
+            where: { studentId: userId },
+            include: {
+              student: { select: { name: true, surname: true } },
+              lesson: {
+                include: {
+                  subject: { select: { name: true } },
+                  class: { select: { name: true } },
+                  teacher: { select: { name: true, surname: true } },
+                },
+              },
+            },
+            orderBy: { date: 'desc' },
+            take: 1000,
+          });
+          break;
+
+        case 'PARENT':
+          // Parent sees attendance for their children
+          const children = await prisma.student.findMany({
+            where: { parentId: userId },
+            select: { id: true },
+          });
+
+          const childIds = children.map(child => child.id);
+
+          attendanceRecords = await prisma.attendance.findMany({
+            where: { studentId: { in: childIds } },
+            include: {
+              student: { select: { name: true, surname: true } },
+              lesson: {
+                include: {
+                  subject: { select: { name: true } },
+                  class: { select: { name: true } },
+                  teacher: { select: { name: true, surname: true } },
+                },
+              },
+            },
+            orderBy: { date: 'desc' },
+            take: 1000,
+          });
+          break;
+
+        default:
+          attendanceRecords = [];
+      }
+
+      console.log(
+        `✅ [Attendance API] ${role} ${userId} fetched ${attendanceRecords.length} attendance records`
+      );
+      return NextResponse.json(attendanceRecords);
+    }
 
     // **ADMIN DASHBOARD**: Default to individual records for admin dashboard
     if (!format || format === 'records') {

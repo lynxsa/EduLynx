@@ -1,7 +1,7 @@
 'use client';
 
 import { ModernTable } from '@/components/ui/ModernTable';
-import { BookOpen, Clock, FileText, GraduationCap, User, Calendar } from 'lucide-react';
+import { BookOpen, Calendar, Clock, FileText, GraduationCap, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type ExamRow = {
@@ -30,7 +30,7 @@ const ExamsPage = () => {
         console.log('🔄 [Admin Exams] Fetching live exam data...');
         setLoading(true);
         setError(null);
-        
+
         const response = await fetch('/api/exams');
         if (!response.ok) {
           throw new Error('Failed to fetch exams');
@@ -38,17 +38,15 @@ const ExamsPage = () => {
         const data = await response.json();
         console.log('✅ [Admin Exams] API Response:', data);
         console.log(`✅ [Admin Exams] Loaded ${data.length} exams from database`);
-        
+
         setExams(data.data || data);
         setTotalExams(data.length);
-        
+
         // Calculate upcoming exams
         const now = new Date();
-        const upcoming = data.filter((exam: ExamRow) => 
-          new Date(exam.startTime) > now
-        ).length;
+        const upcoming = data.filter((exam: ExamRow) => new Date(exam.startTime) > now).length;
         setUpcomingExams(upcoming);
-        
+
         setLoading(false);
       } catch (err) {
         console.error('❌ [Admin Exams] Error fetching exams:', err);
@@ -204,7 +202,7 @@ const ExamsPage = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
@@ -216,7 +214,7 @@ const ExamsPage = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
@@ -228,17 +226,22 @@ const ExamsPage = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">This Month</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {exams.filter(exam => {
-                  const examDate = new Date(exam.startTime);
-                  const now = new Date();
-                  return examDate.getMonth() === now.getMonth() && examDate.getFullYear() === now.getFullYear();
-                }).length}
+                {
+                  exams.filter(exam => {
+                    const examDate = new Date(exam.startTime);
+                    const now = new Date();
+                    return (
+                      examDate.getMonth() === now.getMonth() &&
+                      examDate.getFullYear() === now.getFullYear()
+                    );
+                  }).length
+                }
               </p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
