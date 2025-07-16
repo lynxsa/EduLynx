@@ -74,16 +74,25 @@ const StudentsPage = () => {
 
         console.log('Students API Response:', result);
 
-        // Handle paginated response structure
-        if (result.success && result.data) {
-          // If it's a paginated response, extract the data array
+        // Handle the response structure based on the API implementation
+        if (result.data) {
+          // Handle role-based access response format
+          const studentsData = result.data;
+          console.log(`✅ Loaded ${studentsData.length} students from database`);
+          setStudents(Array.isArray(studentsData) ? studentsData : []);
+        } else if (result.success && result.data) {
+          // Handle paginated response structure
           const studentsData = result.data.data || result.data;
           console.log(`✅ Loaded ${studentsData.length} students from database`);
           setStudents(Array.isArray(studentsData) ? studentsData : []);
-        } else {
-          // Fallback for direct array response
+        } else if (Array.isArray(result)) {
+          // Handle direct array response
           console.log(`✅ Loaded ${result.length} students (direct response)`);
-          setStudents(Array.isArray(result) ? result : []);
+          setStudents(result);
+        } else {
+          // Fallback to empty array
+          console.log('⚠️ Unexpected response format, using empty array');
+          setStudents([]);
         }
       } catch (err) {
         console.error('Error fetching students:', err);
