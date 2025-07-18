@@ -832,13 +832,17 @@ async function comprehensiveSeed() {
   ];
 
   for (const title of announcementTitles) {
+    const randomClass = classes[Math.floor(Math.random() * classes.length)];
     const announcement = await prisma.announcement.create({
       data: {
         title: title,
         description: `Important announcement regarding ${title.toLowerCase()}`,
         date: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000),
-        classId: classes[Math.floor(Math.random() * classes.length)].id,
-        createdAt: new Date(),
+        class: {
+          connect: {
+            id: randomClass.id,
+          },
+        },
       },
     });
     announcements.push(announcement);
@@ -861,6 +865,7 @@ async function comprehensiveSeed() {
   ];
 
   for (const title of eventTitles) {
+    const randomClass = classes[Math.floor(Math.random() * classes.length)];
     const event = await prisma.event.create({
       data: {
         title: title,
@@ -869,8 +874,11 @@ async function comprehensiveSeed() {
         endTime: new Date(
           Date.now() + Math.random() * 60 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000
         ),
-        classId: classes[Math.floor(Math.random() * classes.length)].id,
-        createdAt: new Date(),
+        class: {
+          connect: {
+            id: randomClass.id,
+          },
+        },
       },
     });
     events.push(event);
@@ -881,7 +889,7 @@ async function comprehensiveSeed() {
   // 13. Create Projects
   console.log('🚀 Creating projects...');
   const projects = [];
-  const projectTypes = ['Research', 'Presentation', 'Group Work', 'Individual', 'Practical'];
+  const projectTypes = ['INDIVIDUAL', 'GROUP', 'CLASS'];
 
   for (let i = 0; i < 60; i++) {
     const randomClass = classes[Math.floor(Math.random() * classes.length)];
@@ -892,9 +900,19 @@ async function comprehensiveSeed() {
       data: {
         title: `${randomSubject.name} ${projectType} Project ${i + 1}`,
         description: `A comprehensive ${projectType.toLowerCase()} project for ${randomSubject.name}`,
+        startDate: new Date(),
         dueDate: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000),
-        classId: randomClass.id,
-        createdAt: new Date(),
+        type: projectType,
+        class: {
+          connect: {
+            id: randomClass.id,
+          },
+        },
+        subject: {
+          connect: {
+            id: randomSubject.id,
+          },
+        },
       },
     });
     projects.push(project);

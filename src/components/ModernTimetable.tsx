@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  addWeeks,
-  eachDayOfInterval,
-  endOfWeek,
-  format,
-  parseISO,
-  startOfWeek,
-  subWeeks,
-} from 'date-fns';
+import { addWeeks, eachDayOfInterval, endOfWeek, format, startOfWeek, subWeeks } from 'date-fns';
 import { BookOpen, Calendar, ChevronLeft, ChevronRight, Clock, MapPin, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -107,8 +99,16 @@ export default function ModernTimetable({
 
   const formatTime = (timeString: string) => {
     try {
-      const date = parseISO(`2000-01-01T${timeString}`);
-      return format(date, 'HH:mm');
+      // Handle both ISO datetime and time-only strings
+      if (timeString.includes('T') || timeString.includes('Z')) {
+        // It's an ISO datetime string
+        const date = new Date(timeString);
+        return format(date, 'HH:mm');
+      } else {
+        // It's a time-only string like "08:00:00"
+        const [hours, minutes] = timeString.split(':');
+        return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+      }
     } catch {
       return timeString;
     }
