@@ -67,118 +67,121 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
               {children}
             </main>
 
-            <footer className="bg-gray-900 text-white">
-              <div className="max-w-7xl mx-auto px-6 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                  <div className="md:col-span-2">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl flex items-center justify-center">
-                        <span className="text-white font-bold text-xl">L</span>
+            {/* Hide footer for authenticated users */}
+            {!isAuthenticated && (
+              <footer className="bg-gray-900 text-white">
+                <div className="max-w-7xl mx-auto px-6 py-12">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div className="md:col-span-2">
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl flex items-center justify-center">
+                          <span className="text-white font-bold text-xl">L</span>
+                        </div>
+                        <span className="text-2xl font-bold">LYNXLearn LMS</span>
                       </div>
-                      <span className="text-2xl font-bold">LYNXLearn LMS</span>
+                      <p className="text-gray-300 mb-6 leading-relaxed">
+                        Empowering students with world-class education technology. Part of LYNX
+                        Consulting South Africa's commitment to educational excellence.
+                      </p>
+                      <div className="flex space-x-4">
+                        <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
+                          <span className="text-lg">📧</span>
+                        </div>
+                        <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
+                          <span className="text-lg">🌐</span>
+                        </div>
+                        <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
+                          <span className="text-lg">📱</span>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-gray-300 mb-6 leading-relaxed">
-                      Empowering students with world-class education technology. Part of LYNX
-                      Consulting South Africa's commitment to educational excellence.
+
+                    <div>
+                      <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
+                      <ul className="space-y-2">
+                        <li>
+                          <Link
+                            href="/courses"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Browse Courses
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/dashboard"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Student Dashboard
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/calendar"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Academic Calendar
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/support"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Help & Support
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-lg mb-4">Resources</h4>
+                      <ul className="space-y-2">
+                        <li>
+                          <Link
+                            href="/library"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Digital Library
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/tutorials"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Video Tutorials
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/downloads"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Downloads
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/mobile"
+                            className="text-gray-300 hover:text-white transition-colors"
+                          >
+                            Mobile App
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-700 mt-12 pt-8 text-center">
+                    <p className="text-gray-400">
+                      &copy; 2025 LYNXLearn LMS. Part of LYNX Consulting South Africa (Pty) Ltd. All
+                      rights reserved.
                     </p>
-                    <div className="flex space-x-4">
-                      <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
-                        <span className="text-lg">📧</span>
-                      </div>
-                      <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
-                        <span className="text-lg">🌐</span>
-                      </div>
-                      <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
-                        <span className="text-lg">📱</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/courses"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Browse Courses
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/dashboard"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Student Dashboard
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/calendar"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Academic Calendar
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/support"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Help & Support
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-lg mb-4">Resources</h4>
-                    <ul className="space-y-2">
-                      <li>
-                        <Link
-                          href="/library"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Digital Library
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/tutorials"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Video Tutorials
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/downloads"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Downloads
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/mobile"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Mobile App
-                        </Link>
-                      </li>
-                    </ul>
                   </div>
                 </div>
-
-                <div className="border-t border-gray-700 mt-12 pt-8 text-center">
-                  <p className="text-gray-400">
-                    &copy; 2025 LYNXLearn LMS. Part of LYNX Consulting South Africa (Pty) Ltd. All
-                    rights reserved.
-                  </p>
-                </div>
-              </div>
-            </footer>
+              </footer>
+            )}
           </div>
         </div>
       </ErrorBoundary>

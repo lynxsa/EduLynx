@@ -45,10 +45,12 @@ export default function AIChatPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20 bg-slate-50 dark:bg-slate-900 p-6 flex flex-col">
-      <div className="max-w-3xl mx-auto flex-1 flex flex-col bg-white dark:bg-slate-800 rounded-lg shadow">
-        <div className="p-4 border-b dark:border-slate-700 font-bold text-lg">ProfLynx AI Chat</div>
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <main className="w-full h-full min-h-screen flex flex-col -m-4 sm:-m-6 lg:-m-8">
+      <div className="flex-1 flex flex-col bg-white dark:bg-slate-800 shadow">
+        <div className="p-4 border-b dark:border-slate-700 font-bold text-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+          ProfLynx AI Chat
+        </div>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-slate-900 min-h-[400px]">
           {messages.map((msg, idx) => (
             <div key={idx} className={msg.sender === 'user' ? 'text-right' : 'text-left'}>
               <div
@@ -60,7 +62,7 @@ export default function AIChatPage() {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <div className="p-4 border-t dark:border-slate-700 flex space-x-2">
+        <div className="p-4 border-t dark:border-slate-700 flex space-x-2 bg-white dark:bg-slate-800">
           <input
             type="text"
             value={input}
