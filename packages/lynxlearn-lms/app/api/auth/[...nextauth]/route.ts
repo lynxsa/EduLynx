@@ -33,7 +33,7 @@ export const authOptions = {
 
           console.log('Attempting to authenticate:', credentials.email);
 
-          const result = await client.query('SELECT * FROM users WHERE email = $1', [
+          const result = await client.query('SELECT * FROM "User" WHERE email = $1', [
             credentials.email,
           ]);
 
@@ -45,13 +45,13 @@ export const authOptions = {
           const user = result.rows[0];
           console.log('User found:', user.email, 'Role:', user.role);
 
-          if (!user.hashedPassword) {
+          if (!user.password) {
             console.log('No password found for user:', credentials.email);
             throw new Error('User account is not properly configured');
           }
 
           console.log('Checking password...');
-          const isValid = await bcrypt.compare(credentials.password, user.hashedPassword);
+          const isValid = await bcrypt.compare(credentials.password, user.password);
 
           if (!isValid) {
             console.log('Invalid password for user:', credentials.email);

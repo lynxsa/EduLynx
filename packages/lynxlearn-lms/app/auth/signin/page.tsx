@@ -1,15 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  CheckCircle,
-  Eye,
-  EyeOff,
-  GraduationCap,
-  ShieldCheck,
-  UserCheck,
-  Users,
-} from 'lucide-react';
+import { CheckCircle, Eye, EyeOff, GraduationCap, ShieldCheck, UserCheck } from 'lucide-react';
 import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -28,35 +20,27 @@ type SigninData = z.infer<typeof signinSchema>;
 const demoCredentials = [
   {
     title: 'Admin',
-    email: 'admin@lynxacademy.co.za',
-    password: 'adminpass',
+    email: 'admin@lynxlearn.co.za',
+    password: 'admin123',
     icon: ShieldCheck,
     description: 'System Administrator',
     gradient: 'from-purple-500 to-indigo-600',
   },
   {
     title: 'Teacher',
-    email: 'teacher1@lynxacademy.co.za',
-    password: 'teacherpass',
+    email: 'teacher@lynxlearn.co.za',
+    password: 'teacher123',
     icon: GraduationCap,
     description: 'Course Instructor',
     gradient: 'from-blue-500 to-cyan-600',
   },
   {
-    title: 'Parent',
-    email: 'parent1@lynxacademy.co.za',
-    password: 'parentpass',
-    icon: Users,
-    description: 'Parent Account',
-    gradient: 'from-green-500 to-emerald-600',
-  },
-  {
     title: 'Student',
-    email: 'student1@lynxacademy.co.za',
-    password: 'studentpass',
+    email: 'student@lynxlearn.co.za',
+    password: 'student123',
     icon: UserCheck,
     description: 'Student Account',
-    gradient: 'from-orange-500 to-red-600',
+    gradient: 'from-green-500 to-emerald-600',
   },
 ];
 
@@ -205,15 +189,16 @@ export default function SignInPage() {
             <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 text-center">
               Quick Demo Login:
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2">
               {demoCredentials.map((cred, index) => (
                 <button
                   key={index}
                   onClick={() => handleDemoLogin(cred)}
-                  className={`p-3 rounded-lg bg-gradient-to-r ${cred.gradient} text-white text-xs font-medium hover:shadow-lg transition-all transform hover:scale-105 flex flex-col items-center space-y-1`}
+                  className={`p-3 rounded-lg bg-gradient-to-r ${cred.gradient} text-white text-xs font-medium hover:shadow-lg transition-all transform hover:scale-105 flex items-center justify-center space-x-2`}
                 >
                   <cred.icon className="h-4 w-4" />
                   <span>{cred.title}</span>
+                  <span className="text-xs opacity-80">({cred.description})</span>
                 </button>
               ))}
             </div>

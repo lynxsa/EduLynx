@@ -319,7 +319,10 @@ export default function EnhancedNavigation() {
         // Format segment for display
         const name = segment
           .split('-')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .map(word =>
+            word && word.length > 0 ? word.charAt(0).toUpperCase() + word.slice(1) : ''
+          )
+          .filter(word => word.length > 0)
           .join(' ');
         breadcrumbs.push({ name, href: currentPath });
       }
@@ -330,6 +333,7 @@ export default function EnhancedNavigation() {
 
   // Helper functions for user display
   const getUserSubtitle = (user: any) => {
+    if (!user) return 'Unknown';
     switch (user.role) {
       case 'teacher':
         return user.subject || 'Teacher';
@@ -448,6 +452,11 @@ export default function EnhancedNavigation() {
     }
   };
 
+  // Don't render navigation if user is not authenticated
+  if (!isAuthenticated || !user) {
+    return null;
+  }
+
   return (
     <>
       {/* Mobile Top Bar */}
@@ -516,10 +525,10 @@ export default function EnhancedNavigation() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
-                    {user.name.charAt(0)}
+                    {user?.name?.charAt(0) || '?'}
                   </div>
                   <div className="hidden sm:block">
-                    <div className="text-sm font-medium">{user.name}</div>
+                    <div className="text-sm font-medium">{user?.name || 'Unknown User'}</div>
                     <div className="text-xs text-gray-500">{getUserSubtitle(user)}</div>
                   </div>
                 </div>
@@ -538,11 +547,11 @@ export default function EnhancedNavigation() {
                   <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700">
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        {user.name.charAt(0)}
+                        {user?.name?.charAt(0) || '?'}
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900 dark:text-white">
-                          {user.name}
+                          {user?.name || 'Unknown User'}
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
                           {getUserSubtitle(user)}
@@ -626,10 +635,10 @@ export default function EnhancedNavigation() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
-                  {user.name.charAt(0)}
+                  {user?.name?.charAt(0) || '?'}
                 </div>
                 <div className="hidden sm:block">
-                  <div className="text-sm font-medium">{user.name}</div>
+                  <div className="text-sm font-medium">{user?.name || 'Unknown User'}</div>
                   <div className="text-xs text-gray-500">{getUserSubtitle(user)}</div>
                 </div>
               </div>
@@ -648,10 +657,12 @@ export default function EnhancedNavigation() {
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                      {user.name.charAt(0)}
+                      {user?.name?.charAt(0) || '?'}
                     </div>
                     <div>
-                      <div className="font-semibold text-gray-900 dark:text-white">{user.name}</div>
+                      <div className="font-semibold text-gray-900 dark:text-white">
+                        {user?.name || 'Unknown User'}
+                      </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
                         {getUserSubtitle(user)}
                       </div>

@@ -21,7 +21,6 @@
     "seed:all": "npm run seed:curriculum && npm run seed:assessment && npm run seed:career"
   },
   "dependencies": {
-    "@edulynx/ui-primitives": "workspace:1.0.0",
     "@google/generative-ai": "^0.24.1",
     "@hello-pangea/dnd": "^18.0.1",
     "@heroicons/react": "^2.2.0",
