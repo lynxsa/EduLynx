@@ -204,11 +204,32 @@ export default function CourseDetailPage() {
   const { id } = useParams();
   const [activeModule, setActiveModule] = useState<string | null>(null);
 
-  // Fetch course data
+  // Find course from our course data
+  const courseFromData = relatedCourses.find(c => c.id === id);
+
+  // Adapt course data to expected structure
+  const adaptCourseData = (courseData: any) => {
+    if (!courseData) return mockCourse;
+
+    return {
+      ...courseData,
+      students: courseData.students || 1200,
+      instructor: courseData.instructor || courseData.teacher || 'Expert Teacher',
+      level: courseData.level || `Grade ${courseData.grade}`,
+      enrolled: courseData.enrolled || false,
+      progress: courseData.progress || 0,
+      // Ensure modules have proper structure or fallback to empty array
+      modules: courseData.modules || [],
+    };
+  };
+
+  // Fetch course data with proper fallback
   const { data: course, error: courseError } = useSWR(`/api/courses/${id}`, fetcher, {
-    fallbackData: mockCourse,
+    fallbackData: adaptCourseData(courseFromData),
   });
 
+  // Ensure course data is properly adapted
+  const adaptedCourse = adaptCourseData(course);
   if (!course)
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -244,15 +265,18 @@ export default function CourseDetailPage() {
     }
   };
 
-  const totalLessons = course.modules.reduce(
-    (total: number, module: Module) => total + module.lessons.length,
-    0
-  );
-  const completedLessons = course.modules.reduce(
-    (total: number, module: Module) =>
-      total + module.lessons.filter((lesson: Lesson) => lesson.completed).length,
-    0
-  );
+  const totalLessons =
+    adaptedCourse.modules?.reduce(
+      (total: number, module: Module) => total + (module.lessons?.length || 0),
+      0
+    ) || 0;
+  const completedLessons =
+    adaptedCourse.modules?.reduce((total: number, module: Module) => {
+      if (module.lessons && Array.isArray(module.lessons)) {
+        return total + (module.lessons.filter((lesson: Lesson) => lesson.completed)?.length || 0);
+      }
+      return total;
+    }, 0) || 0;
   const overallProgress = (completedLessons / totalLessons) * 100;
 
   // Select 3 random related courses
@@ -270,28 +294,30 @@ export default function CourseDetailPage() {
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
                 <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                  {course.level}
+                  {adaptedCourse.level || `Grade ${adaptedCourse.grade}`}
                 </Badge>
                 <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
                   CAPS Aligned
                 </Badge>
               </div>
 
-              <h1 className="text-4xl font-bold mb-4">{course.title}</h1>
-              <p className="text-xl text-purple-100 mb-6 leading-relaxed">{course.description}</p>
+              <h1 className="text-4xl font-bold mb-4">{adaptedCourse.title}</h1>
+              <p className="text-xl text-purple-100 mb-6 leading-relaxed">
+                {adaptedCourse.description}
+              </p>
 
               <div className="flex flex-wrap items-center gap-6 text-purple-100">
                 <div className="flex items-center">
                   <Users className="w-5 h-5 mr-2" />
-                  <span>{course.students.toLocaleString()} students</span>
+                  <span>{adaptedCourse.students?.toLocaleString() || '1,200+'} students</span>
                 </div>
                 <div className="flex items-center">
                   <Clock className="w-5 h-5 mr-2" />
-                  <span>{course.duration}</span>
+                  <span>{adaptedCourse.duration}</span>
                 </div>
                 <div className="flex items-center">
                   <Star className="w-5 h-5 mr-2 fill-current" />
-                  <span>{course.rating} rating</span>
+                  <span>{adaptedCourse.rating} rating</span>
                 </div>
               </div>
 
@@ -311,10 +337,12 @@ export default function CourseDetailPage() {
                     <GraduationCap className="w-10 h-10" />
                   </div>
                   <h3 className="text-lg font-semibold mb-2">Instructor</h3>
-                  <p className="text-purple-100">{course.instructor}</p>
+                  <p className="text-purple-100">
+                    {adaptedCourse.instructor || adaptedCourse.teacher || 'Expert Teacher'}
+                  </p>
                 </div>
 
-                {course.enrolled ? (
+                {adaptedCourse.enrolled ? (
                   <Button className="w-full bg-white text-purple-600 hover:bg-gray-100">
                     Continue Learning
                   </Button>
@@ -335,7 +363,7 @@ export default function CourseDetailPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Modules</h2>
 
             <div className="space-y-6">
-              {course.modules.map((module: Module, index: number) => (
+              {adaptedCourse.modules?.map((module: Module, index: number) => (
                 <Card key={module.id} className="overflow-hidden">
                   <div className="p-6">
                     <div
@@ -371,7 +399,7 @@ export default function CourseDetailPage() {
                     {activeModule === module.id && (
                       <div className="mt-6 border-t pt-6">
                         <div className="space-y-3">
-                          {module.lessons.map((lesson: Lesson) => (
+                          {module.lessons?.map((lesson: Lesson) => (
                             <div
                               key={lesson.id}
                               className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -405,12 +433,33 @@ export default function CourseDetailPage() {
                               </div>
                             </div>
                           ))}
+
+                          {/* Fallback when no lessons are available */}
+                          {(!module.lessons || module.lessons.length === 0) && (
+                            <div className="text-center py-4 text-gray-500">
+                              <BookOpen className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                              <p>Lessons for this module are being prepared.</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
                   </div>
                 </Card>
               ))}
+
+              {/* Fallback when no detailed modules are available */}
+              {(!adaptedCourse.modules || adaptedCourse.modules.length === 0) && (
+                <Card className="p-6 text-center">
+                  <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Course Content Loading
+                  </h3>
+                  <p className="text-gray-600">
+                    Course modules and lessons are being prepared. Check back soon!
+                  </p>
+                </Card>
+              )}
             </div>
           </div>
 
